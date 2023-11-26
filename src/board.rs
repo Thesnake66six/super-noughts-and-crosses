@@ -1,5 +1,5 @@
 use anyhow::{bail, Ok, Result};
-use raylib::{core::math::Rectangle, ffi::GL_MAX_FRAGMENT_INPUT_COMPONENTS, prelude::*};
+use raylib::{core::math::Rectangle, prelude::*};
 
 use crate::{
     cell::{Cell, Value},
@@ -39,14 +39,14 @@ impl Board {
         if let Cell::Board(board) = &self.cells[pos[0]] {
             board.get(&pos[1..])
         } else {
-            return None;
+            None
         }
     }
 
     pub fn set(&mut self, pos: &[usize], value: Cell) -> Result<()> {
         if pos.len() > 1 {
             if let Cell::Board(x) = &mut self.cells[pos[0]] {
-                return x.set(&pos[1..], value);
+                x.set(&pos[1..], value)
             } else {
                 bail!("No cell at specified depth")
             }
@@ -62,13 +62,20 @@ impl Board {
             .iter()
             .map(|cell| cell.value())
             .collect::<Vec<Value>>();
-        let sets = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 4, 8], [2, 4, 6]];
+        let sets = [
+            [0, 1, 2], 
+            [3, 4, 5], 
+            [6, 7, 8], 
+            [0, 3, 6], 
+            [1, 4, 7], 
+            [2, 5, 8], 
+            [0, 4, 8], 
+            [2, 4, 6],
+        ];
 
         for set in sets {
-            if vals[set[0]] == vals[set[1]] && vals[set[1]] == vals[set[2]] {
-                if [Value::Player1, Value::Player2].contains(&vals[set[0]]) {
-                    return vals[set[0]];
-                }
+            if vals[set[0]] == vals[set[1]] && vals[set[1]] == vals[set[2]] && [Value::Player1, Value::Player2].contains(&vals[set[0]]) {
+                return vals[set[0]];
             }
         }
 
@@ -79,96 +86,31 @@ impl Board {
         Value::None
     }
 
-    pub fn draw_old<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T) {
+    pub fn draw_old<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, no_check: bool, alpha: bool) {
         let gap = rect.width * BOARD_CELL_MARGIN;
         let cw = (rect.width - 2.0 * gap) / 3.0;
-
-        self.cells[0].draw_old(
-            Rectangle {
-                x: rect.x,
-                y: rect.y,
-                width: cw,
-                height: cw,
-            },
-            d,
-        );
-        self.cells[1].draw_old(
-            Rectangle {
-                x: rect.x + cw + gap,
-                y: rect.y,
-                width: cw,
-                height: cw,
-            },
-            d,
-        );
-        self.cells[2].draw_old(
-            Rectangle {
-                x: rect.x + 2.0 * cw + 2.0 * gap,
-                y: rect.y,
-                width: cw,
-                height: cw,
-            },
-            d,
-        );
-
-        self.cells[3].draw_old(
-            Rectangle {
-                x: rect.x,
-                y: rect.y + cw + gap,
-                width: cw,
-                height: cw,
-            },
-            d,
-        );
-        self.cells[4].draw_old(
-            Rectangle {
-                x: rect.x + cw + gap,
-                y: rect.y + cw + gap,
-                width: cw,
-                height: cw,
-            },
-            d,
-        );
-        self.cells[5].draw_old(
-            Rectangle {
-                x: rect.x + 2.0 * cw + 2.0 * gap,
-                y: rect.y + cw + gap,
-                width: cw,
-                height: cw,
-            },
-            d,
-        );
-
-        self.cells[6].draw_old(
-            Rectangle {
-                x: rect.x,
-                y: rect.y + 2.0 * cw + 2.0 * gap,
-                width: cw,
-                height: cw,
-            },
-            d,
-        );
-        self.cells[7].draw_old(
-            Rectangle {
-                x: rect.x + cw + gap,
-                y: rect.y + 2.0 * cw + 2.0 * gap,
-                width: cw,
-                height: cw,
-            },
-            d,
-        );
-        self.cells[8].draw_old(
-            Rectangle {
-                x: rect.x + 2.0 * cw + 2.0 * gap,
-                y: rect.y + 2.0 * cw + 2.0 * gap,
-                width: cw,
-                height: cw,
-            },
-            d,
-        );
+    
+        for r in 0..3 {
+            for c in 0..3 {
+                let x = rect.x + c as f32 * (cw + gap);
+                let y = rect.y + r as f32 * (cw + gap);
+    
+                self.cells[3 * r + c].draw_old(
+                    Rectangle {
+                        x,
+                        y,
+                        width: cw,
+                        height: cw,
+                    },
+                    d,
+                    no_check,
+                    alpha,
+                );
+            }
+        }
     }
 
-    pub fn draw<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T) {
+    pub fn draw<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, no_check: bool, alpha: bool) {
         d.draw_rectangle(
             rect.x as i32,
             rect.y as i32,
@@ -251,6 +193,8 @@ impl Board {
                         height: c - 2.0 * m,
                     },
                     d,
+                    no_check,
+                    alpha,
                 )
             }
         }

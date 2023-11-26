@@ -1,8 +1,8 @@
-use raylib::{drawing::RaylibDraw, math::Rectangle};
+use raylib::{drawing::RaylibDraw, math::Rectangle, color::Color};
 
 use crate::{
     board::Board,
-    styles::{draw_cross, draw_draw, draw_none, draw_nought},
+    styles::{draw_cross, draw_draw, draw_none, draw_nought, draw_draw_alpha, draw_nought_alpha, draw_cross_alpha},
 };
 
 #[derive(Debug, Copy, Clone, PartialEq)]
@@ -20,12 +20,30 @@ pub enum Value {
 
 impl Value {
     /// Draws the value onto `T`, inside the given `Rectangle`
-    pub fn draw<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T) {
+    pub fn draw<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, alpha: bool) {
+        if alpha {
+            match self {
+                Value::None => draw_none(rect, d),
+                Value::Player1 => draw_cross_alpha(rect, d),
+                Value::Player2 => draw_nought_alpha(rect, d),
+                Value::Draw => draw_draw_alpha(rect, d),
+            }
+        } else {
+            match self {
+                Value::None => draw_none(rect, d),
+                Value::Player1 => draw_cross(rect, d),
+                Value::Player2 => draw_nought(rect, d),
+                Value::Draw => draw_draw(rect, d),
+            }
+        }
+    }
+
+    pub fn draw_alpha<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, alpha: u8) {
         match self {
             Value::None => draw_none(rect, d),
-            Value::Player1 => draw_cross(rect, d),
-            Value::Player2 => draw_nought(rect, d),
-            Value::Draw => draw_draw(rect, d),
+            Value::Player1 => draw_cross_alpha(rect, d),
+            Value::Player2 => draw_nought_alpha(rect, d),
+            Value::Draw => draw_draw_alpha(rect, d),
         }
     }
 }
@@ -55,32 +73,41 @@ impl Cell {
     }
 
     /// An alternate draw function
-    pub fn draw_old<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T) {
+    pub fn draw_old<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, no_check: bool, alpha: bool) {
         match self {
             Cell::None => draw_none(rect, d),
             Cell::Player1 => draw_cross(rect, d),
             Cell::Player2 => draw_nought(rect, d),
             Cell::Board(b) => {
                 if let Value::None = b.check() {
-                    b.draw_old(rect, d) // Draw the board, if it is still playable...
+                    b.draw_old(rect, d, no_check, alpha) // Draw the board, if it is still playable...
                 } else {
-                    b.check().draw(rect, d) // ...else draw it's corresponding value
+                    if no_check {
+                        b.draw_old(rect, d, no_check, alpha) // ...or if we're told not to check...
+                    } else {
+                        b.check().draw(rect, d, alpha) // ...else draw the corresponding value
+                    }
                 }
             }
         }
     }
 
     /// Draws the value onto `T`, inside the given `Rectangle`
-    pub fn draw<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T) {
+    pub fn draw<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, no_check: bool, alpha: bool) {
         match self {
             Cell::None => draw_none(rect, d),
             Cell::Player1 => draw_cross(rect, d),
             Cell::Player2 => draw_nought(rect, d),
             Cell::Board(b) => {
                 if let Value::None = b.check() {
-                    b.draw(rect, d) // Draw the board, if it is still playable...
+                    b.draw(rect, d, no_check, alpha) // Draw the board, if it is still playable...
                 } else {
-                    b.check().draw(rect, d) // ...else draw it's corresponding value
+                    if no_check {
+                        b.draw(rect, d, no_check, alpha) // ...or if we're told not to check...
+                    } else {
+                        b.draw(rect, d, no_check, alpha);
+                        b.check().draw(rect, d, alpha) // ...else draw the corresponding value
+                    }
                 }
             }
         }

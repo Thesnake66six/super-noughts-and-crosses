@@ -1,6 +1,6 @@
-use anyhow::{Error, Ok, Result};
+use anyhow::{Ok, Result};
 use board::Board;
-use cell::{Cell, Value};
+use cell::Cell;
 use raylib::prelude::*;
 
 mod board;
@@ -24,12 +24,12 @@ fn main() -> Result<()> {
         d.clear_background(Color::WHITE);
 
         let mut x = Board::new();
-        x.set(&[0], Cell::Player1).unwrap();
-        x.set(&[3], Cell::Player1).unwrap();
-        x.set(&[6], Cell::Player1).unwrap();
-        x.set(&[2], Cell::Player2).unwrap();
-        x.set(&[5], Cell::Player2).unwrap();
-        x.set(&[8], Cell::Player2).unwrap();
+        x.set(&[0], Cell::Player2).unwrap();
+        x.set(&[3], Cell::Player2).unwrap();
+        x.set(&[6], Cell::Player2).unwrap();
+        x.set(&[2], Cell::Player1).unwrap();
+        x.set(&[5], Cell::Player1).unwrap();
+        x.set(&[8], Cell::Player1).unwrap();
         let y = x.clone();
         x.set(&[4], Cell::Board(y.clone())).unwrap();
         x.set(&[4, 4], Cell::Board(y.clone())).unwrap();
@@ -46,6 +46,8 @@ fn main() -> Result<()> {
                 height: 1000.0,
             },
             &mut d,
+            false,
+            true
         )
     }
 
