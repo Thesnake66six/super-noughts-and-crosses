@@ -3,17 +3,20 @@ use board::Board;
 use cell::{Cell, Value};
 use raylib::prelude::*;
 
-mod cell;
 mod board;
+mod cell;
+mod game;
 mod styles;
 
-fn main() -> Result<()>{
+fn main() -> Result<()> {
     let (mut rl, thread) = raylib::init()
-    .size(640 * 2, 640 * 2)
-    .resizable()
-    .title("Hello, World")
-    .msaa_4x()
-    .build();
+        .size(600 * 2, 600 * 2)
+        .resizable()
+        .title("It's beginning")
+        .msaa_4x()
+        .build();
+
+    rl.set_target_fps(12);
 
     while !rl.window_should_close() {
         let mut d = rl.begin_drawing(&thread);
@@ -33,8 +36,18 @@ fn main() -> Result<()>{
         x.set(&[4, 4, 4], Cell::Board(y.clone())).unwrap();
         x.set(&[4, 4, 4, 4], Cell::Board(y.clone())).unwrap();
 
-        x.draw(Rectangle { x: 10.0, y: 10.0, width: 1000.0, height: 1000.0 }, &mut d)
-    }        
+        // let x = Board::new_depth(3);
+
+        x.draw(
+            Rectangle {
+                x: 100.0,
+                y: 100.0,
+                width: 1000.0,
+                height: 1000.0,
+            },
+            &mut d,
+        )
+    }
 
     Ok(())
 }

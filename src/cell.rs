@@ -1,35 +1,41 @@
-use raylib::{drawing::RaylibDraw, math::Rectangle, color::Color};
+use raylib::{drawing::RaylibDraw, math::Rectangle};
 
-use crate::{board::Board, styles::{draw_none, draw_cross, draw_nought, draw_draw}};
+use crate::{
+    board::Board,
+    styles::{draw_cross, draw_draw, draw_none, draw_nought},
+};
 
 #[derive(Debug, Copy, Clone, PartialEq)]
+/// An enum used to differentiate the states of a board, namely:
+/// `Player1`: The first player has won;
+/// `Player2`: The second player has won;
+/// `Draw`: The board has drawn;
+/// `None`: The board may still be played into.
 pub enum Value {
     None,
-    Draw, 
+    Draw,
     Player1,
     Player2,
 }
 
 impl Value {
-    pub fn draw<T:RaylibDraw>(&self, rect: Rectangle, d: &mut T) {
+    /// Draws the value onto `T`, inside the given `Rectangle`
+    pub fn draw<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T) {
         match self {
-            Value::None => {
-                draw_none(rect, d)
-            },
-            Value::Player1 => {
-                draw_cross(rect, d)
-            },
-            Value::Player2 => {
-                draw_nought(rect, d)
-            },
-            Value::Draw => {
-                draw_draw(rect, d)
-            },
+            Value::None => draw_none(rect, d),
+            Value::Player1 => draw_cross(rect, d),
+            Value::Player2 => draw_nought(rect, d),
+            Value::Draw => draw_draw(rect, d),
         }
     }
 }
 
 #[derive(Debug, Clone, PartialEq)]
+/// An enum used to differentiate the states of a cell, namely:
+/// `None`: An empty cell;
+/// `Player1`: The first player;
+/// `Player2`: The second player;
+/// `Board(Board)`: Another board.
 pub enum Cell {
     None,
     Player1,
@@ -38,33 +44,45 @@ pub enum Cell {
 }
 
 impl Cell {
-    pub fn value(&self) -> Value{
+    /// Returns the `Value` corresponding to a cell
+    pub fn value(&self) -> Value {
         match self {
             Cell::None => Value::None,
             Cell::Player1 => Value::Player1,
             Cell::Player2 => Value::Player2,
-            Cell::Board(b) => b.check(),
+            Cell::Board(b) => b.check(), // If the cell is a `Cell::Board`, return the value of the board instead
         }
     }
 
-    pub fn draw<T:RaylibDraw>(&self, rect: Rectangle, d: &mut T) {
+    /// An alternate draw function
+    pub fn draw_old<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T) {
         match self {
-            Cell::None => {
-                draw_none(rect, d)
-            },
-            Cell::Player1 => {
-                draw_cross(rect, d)
-            },
-            Cell::Player2 => {
-                draw_nought(rect, d)
-            },
+            Cell::None => draw_none(rect, d),
+            Cell::Player1 => draw_cross(rect, d),
+            Cell::Player2 => draw_nought(rect, d),
             Cell::Board(b) => {
                 if let Value::None = b.check() {
-                    b.draw(rect, d)
+                    b.draw_old(rect, d) // Draw the board, if it is still playable...
                 } else {
-                    b.check().draw(rect, d)
+                    b.check().draw(rect, d) // ...else draw it's corresponding value
                 }
-            },
+            }
+        }
+    }
+
+    /// Draws the value onto `T`, inside the given `Rectangle`
+    pub fn draw<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T) {
+        match self {
+            Cell::None => draw_none(rect, d),
+            Cell::Player1 => draw_cross(rect, d),
+            Cell::Player2 => draw_nought(rect, d),
+            Cell::Board(b) => {
+                if let Value::None = b.check() {
+                    b.draw(rect, d) // Draw the board, if it is still playable...
+                } else {
+                    b.check().draw(rect, d) // ...else draw it's corresponding value
+                }
+            }
         }
     }
 }
