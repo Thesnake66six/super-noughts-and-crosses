@@ -38,6 +38,7 @@ impl Value {
         }
     }
 
+    /// Draws the value onto `T`, inside the given `Rectangle`, using the associated `draw_alpha` function
     pub fn draw_alpha<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, alpha: u8) {
         match self {
             Value::None => draw_none(rect, d),

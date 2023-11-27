@@ -43,6 +43,7 @@ impl Board {
         }
     }
 
+    /// Changes the `Cell` at a given position to the given `Value`
     pub fn set(&mut self, pos: &[usize], value: Cell) -> Result<()> {
         if pos.len() > 1 {
             if let Cell::Board(x) = &mut self.cells[pos[0]] {
@@ -56,6 +57,7 @@ impl Board {
         }
     }
 
+    /// Recursively checks the board to see if it has been won or drawn, and returns the corresponding `Value`
     pub fn check(&self) -> Value {
         let vals = self
             .cells
@@ -86,6 +88,7 @@ impl Board {
         Value::None
     }
 
+    /// Alternate `draw` function
     pub fn draw_old<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, no_check: bool, alpha: bool) {
         let gap = rect.width * BOARD_CELL_MARGIN;
         let cw = (rect.width - 2.0 * gap) / 3.0;
@@ -110,6 +113,7 @@ impl Board {
         }
     }
 
+    /// Draws the board in a given `Rectangle`. Automatically checking for wins can be turned off, as well as rendering completed boards under their symbols
     pub fn draw<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, no_check: bool, alpha: bool) {
         d.draw_rectangle(
             rect.x as i32,
