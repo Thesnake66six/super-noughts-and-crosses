@@ -125,7 +125,7 @@ pub fn draw_cross<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
     );
 }
 
-/// Draws a `Cell::Player1` or `Value::Player1`
+/// Draws a `Cell::Player1` or `Value::Player1` with a transparent background
 pub fn draw_cross_alpha<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
     let mut c = COLOUR_CROSS_BGA.clone();
     c.a = BOARD_ALPHA_OVERRIDE;
@@ -163,7 +163,7 @@ pub fn draw_cross_alpha<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
     );
 }
 
-/// Draws a `Cell::Player2` or `Value::Player2`
+/// Draws a `Cell::Player2` or `Value::Player2` with a transparent background
 pub fn draw_nought<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
     d.draw_rectangle(
         rect.x as i32,
@@ -172,16 +172,17 @@ pub fn draw_nought<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
         rect.height as i32,
         COLOUR_NOUGHT_BG,
     );
-
+    
     let cx = rect.x + (rect.width / 2.0);
     let cy = rect.y + (rect.height / 2.0);
-
+    
     let ro = (rect.width / 2.0) - NOUGHT_PADDING * rect.width;
     let ri = (rect.width / 2.0) - (NOUGHT_THICK + NOUGHT_PADDING) * rect.width;
-
+    
     d.draw_ring(Vector2{ x: cx, y: cy }, ri, ro, 0.0, 360.0, 100, COLOUR_NOUGHT_FG)
 }
 
+/// Draws a `Cell::Player2` or `Value::Player2` with a transparent background
 pub fn draw_nought_alpha<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
     let mut c = COLOUR_NOUGHT_BGA.clone();
     c.a = BOARD_ALPHA_OVERRIDE;
@@ -240,7 +241,7 @@ pub fn draw_draw<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
     );
 }
 
-/// Draws a `Value::Draw`
+/// Draws a `Value::Draw` with a transparent background
 pub fn draw_draw_alpha<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
     let mut c = COLOUR_DRAW_BGA.clone();
     c.a = BOARD_ALPHA_OVERRIDE;

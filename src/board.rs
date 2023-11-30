@@ -36,10 +36,14 @@ impl Board {
     /// `[0]` is the top-left cell of a tic-tac-toe board;
     /// `[0, 1]` is the upper-middle cell in the top-left board of a depth 2 game
     pub fn get(&self, pos: &[usize]) -> Option<Cell> {
-        if let Cell::Board(board) = &self.cells[pos[0]] {
-            board.get(&pos[1..])
+        if &pos.len() > &1 {
+            if let Cell::Board(board) = &self.cells[pos[0]] {
+                return board.get(&pos[1..]);
+            } else {
+                return None;
+            }
         } else {
-            None
+            Some(self.cells[pos[0]].clone())
         }
     }
 
