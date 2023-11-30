@@ -37,6 +37,16 @@ impl Value {
             }
         }
     }
+
+    /// Draws the value onto `T`, inside the given `Rectangle`, using the associated `draw_alpha` function
+    pub fn draw_alpha<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, alpha: u8) {
+        match self {
+            Value::None => draw_none(rect, d),
+            Value::Player1 => draw_cross_alpha(rect, d),
+            Value::Player2 => draw_nought_alpha(rect, d),
+            Value::Draw => draw_draw_alpha(rect, d),
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq)]
