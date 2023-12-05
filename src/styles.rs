@@ -5,6 +5,9 @@ use raylib::{
     math::{Rectangle, Vector2},
 };
 
+
+pub const USE_OLD_RENDERER: bool = false; // Flag used to switch to the old renderer
+
 // Colour for a `Cell::None`
 // pub const COLOUR_CELL_BG: Color = Color {
 //     r: 80,
@@ -21,7 +24,6 @@ pub const COLOUR_CROSS_FG: Color = Color {
     b: 55,
     a: 255,
 };
-
 pub const COLOUR_CROSS_BGA: Color = Color {
     r: 230,
     g: 41,
@@ -39,7 +41,6 @@ pub const COLOUR_NOUGHT_FG: Color = Color {
     b: 243,
     a: 255,
 };
-
 pub const COLOUR_NOUGHT_BGA: Color = Color {
     r: 49,
     g: 148,
@@ -54,16 +55,15 @@ pub const NOUGHT_PADDING: f32 = 0.05; // Padding between the circle and the box
 // Colours and rendering settings for a Draw - `Value::Draw`
 pub const COLOUR_DRAW_BG: Color = COLOUR_CELL_BG;
 pub const COLOUR_DRAW_FG: Color = Color {
-    r: 150,
-    g: 150,
-    b: 150,
+    r: 160,
+    g: 160,
+    b: 160,
     a: 255,
 };
-
 pub const COLOUR_DRAW_BGA: Color = Color {
-    r: 150,
-    g: 150,
-    b: 150,
+    r: 0,
+    g: 0,
+    b: 0,
     a: 255,
 };
 
@@ -75,9 +75,18 @@ pub const COLOUR_BOARD_LINE: Color = Color {
     b: 0,
     a: 255,
 };
-pub const BOARD_CELL_MARGIN: f32 = 0.02;
-pub const BOARD_LINE_THICK: f32 = 0.02;
+// pub const BOARD_CELL_MARGIN: f32 = 0.02;
+// pub const BOARD_LINE_THICK: f32 = 0.02;
+pub const BOARD_CELL_MARGIN: f32 = 0.01;
+pub const BOARD_LINE_THICK: f32 = 0.04;
 pub const BOARD_ALPHA_OVERRIDE: u8 = 127;
+
+pub const COLOUR_CELL_HOVER: Color = Color {
+    r: 190,
+    g: 190,
+    b: 190,
+    a: 170,
+};
 
 /// Draws a `Cell::None` or `Value::None`
 pub fn draw_none<T: RaylibDraw>(rect: Rectangle, d: &mut T) {

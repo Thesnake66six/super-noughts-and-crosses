@@ -1,5 +1,5 @@
 use anyhow::{bail, Ok, Result};
-use raylib::{core::math::Rectangle, prelude::*};
+use raylib::{core::math::Rectangle, prelude::*, ffi::VALUEBOX_MAX_CHARS};
 
 use crate::{
     cell::{Cell, Value},
@@ -9,21 +9,34 @@ use crate::{
 #[derive(Debug, Clone, PartialEq)]
 pub struct Board {
     pub cells: Vec<Cell>,
+    pub cell_positions: Vec<Rectangle>,
 }
 
 impl Board {
     /// Creates a new board filled with `Cell::None`
     pub fn new() -> Self {
-        Board {
+        let mut x = Board {
             cells: vec![Cell::None; 9],
-        }
+            cell_positions: vec![Rectangle::new(0.0, 0.0, 0.0, 0.0); 9],
+        };
+        x
     }
 
+    /// Creates a new board with its cells as the input slice
+    pub fn new_cells(cells: [Cell; 9]) -> Self {
+        let mut x = Board {
+            cells: cells.to_vec(),
+            cell_positions: vec![Rectangle::new(0.0, 0.0, 0.0, 0.0); 9],
+        };
+        x
+    }
+    
     /// Recursively creates a new board, containing levels equal to the specified `depth`  
     pub fn new_depth(depth: usize) -> Self {
         if depth > 1 {
             Board {
                 cells: vec![Cell::Board(Board::new_depth(depth - 1)); 9],
+                cell_positions: vec![Rectangle::new(0.0, 0.0, 0.0, 0.0); 9],
             }
         } else {
             Board::new()
@@ -36,7 +49,10 @@ impl Board {
     /// `[0]` is the top-left cell of a tic-tac-toe board;
     /// `[0, 1]` is the upper-middle cell in the top-left board of a depth 2 game
     pub fn get(&self, pos: &[usize]) -> Option<Cell> {
-        if &pos.len() > &1 {
+        if &pos.len() == &0 {
+            return Some(Cell::Board(self.clone()));
+        }
+        else if &pos.len() > &1 {
             if let Cell::Board(board) = &self.cells[pos[0]] {
                 return board.get(&pos[1..]);
             } else {
@@ -92,6 +108,51 @@ impl Board {
         Value::None
     }
 
+    /// Updates the positions of all cells within the board based on a given rectangle, which will then be used for drawing
+    pub fn update_positions(&mut self, rect: Rectangle) {
+        let length = rect.width;
+        let thickness = BOARD_LINE_THICK * length;
+        let margin = BOARD_CELL_MARGIN * length;
+        let column_size = (length - (2.0 * thickness)) / 3.0;
+
+        for y in 0..3 {
+            for x in 0..3 {
+                self.cell_positions[3 * y + x] = Rectangle {
+                    x: rect.x + x as f32 * (column_size + thickness) + margin,
+                    y: rect.y + y as f32 * (column_size + thickness) + margin,
+                    width: column_size - 2.0 * margin,
+                    height: column_size - 2.0 * margin,
+                }
+            }
+        }
+
+        for i in 0..9 {
+            if let Cell::Board(b) = &mut self.cells[i] {
+                b.update_positions(self.cell_positions[i])
+            }
+        }
+    }
+
+    pub fn get_cell_from_pos(&self, point: Vector2, no_check: bool) -> Option<Vec<usize>> {
+        for ((cell, rect), i) in self.cells.iter().zip(&self.cell_positions).zip(0..9) {
+            if rect.check_collision_point_rec(point) {
+                if let Cell::Board(b) = cell {
+                    if (b.check() == Value::None) || no_check {
+                        let mut out = vec![i];
+                        out.append(&mut b.get_cell_from_pos(point, no_check).unwrap_or(vec![]));
+                        return Some(out);
+                    } else {
+                        return Some(vec![i]);
+                    }
+                } else {
+                    return Some(vec![i]);
+                }
+            }
+        }
+
+        return None;
+    }
+
     /// Alternate `draw` function
     pub fn draw_old<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, no_check: bool, alpha: bool) {
         let gap = rect.width * BOARD_CELL_MARGIN;
@@ -118,7 +179,7 @@ impl Board {
     }
 
     /// Draws the board in a given `Rectangle`. Automatically checking for wins can be turned off, as well as rendering completed boards under their symbols
-    pub fn draw<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, no_check: bool, alpha: bool) {
+    pub fn draw<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, no_check: bool, alpha: bool, hover: Option<&[usize]>) {
         d.draw_rectangle(
             rect.x as i32,
             rect.y as i32,
@@ -127,13 +188,13 @@ impl Board {
             COLOUR_BOARD_BG,
         );
 
-        let l = rect.width;
-        let t = BOARD_LINE_THICK * rect.width;
-        let m = BOARD_CELL_MARGIN * rect.width;
+        let length = rect.width; // Side length of the board
+        let thickness = BOARD_LINE_THICK * rect.width; // Thickness of the lines in px
+        let margin = BOARD_CELL_MARGIN * rect.width; // Size of margin in px
 
-        let c = (l - 2.0 * t) / 3.0;
-        let g1 = c + 0.5 * t;
-        let g2 = c + t;
+        let column_size = (length - 2.0 * thickness) / 3.0;
+        let g1 = column_size + 0.5 * thickness;
+        let g2 = column_size + thickness;
 
         d.draw_line_ex(
             // Draw the first vertical line
@@ -145,7 +206,7 @@ impl Board {
                 x: rect.x + g1,
                 y: rect.y + rect.height,
             },
-            t,
+            thickness,
             COLOUR_BOARD_LINE,
         );
 
@@ -159,7 +220,7 @@ impl Board {
                 x: rect.x + g1 + g2,
                 y: rect.y + rect.height,
             },
-            t,
+            thickness,
             COLOUR_BOARD_LINE,
         );
 
@@ -173,7 +234,7 @@ impl Board {
                 x: rect.x + rect.width,
                 y: rect.y + g1,
             },
-            t,
+            thickness,
             COLOUR_BOARD_LINE,
         );
 
@@ -187,23 +248,20 @@ impl Board {
                 x: rect.x + rect.width,
                 y: rect.y + g1 + g2,
             },
-            t,
+            thickness,
             COLOUR_BOARD_LINE,
         );
 
-        for y in 0..3 {
-            for x in 0..3 {
-                self.cells[3 * y + x].draw(
-                    Rectangle {
-                        x: rect.x + x as f32 * (c + t) + m,
-                        y: rect.y + y as f32 * (c + t) + m,
-                        width: c - 2.0 * m,
-                        height: c - 2.0 * m,
-                    },
-                    d,
-                    no_check,
-                    alpha,
-                )
+        let mut x = 10;
+        if let Some(pos) = hover {
+            x = pos[0]
+        }
+
+        for i in 0..9 {
+            if i == x {
+                self.cells[i].draw(self.cell_positions[i], d, no_check, alpha, Some(&hover.unwrap()[1..]))
+            } else {
+                self.cells[i].draw(self.cell_positions[i], d, no_check, alpha, None)
             }
         }
     }

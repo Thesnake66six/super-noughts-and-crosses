@@ -1,8 +1,8 @@
-use raylib::{drawing::RaylibDraw, math::Rectangle, color::Color};
+use raylib::{drawing::RaylibDraw, math::Rectangle,};
 
 use crate::{
     board::Board,
-    styles::{draw_cross, draw_draw, draw_none, draw_nought, draw_draw_alpha, draw_nought_alpha, draw_cross_alpha},
+    styles::{draw_cross, draw_draw, draw_none, draw_nought, draw_draw_alpha, draw_nought_alpha, draw_cross_alpha, COLOUR_CELL_HOVER},
 };
 
 #[derive(Debug, Copy, Clone, PartialEq)]
@@ -94,23 +94,36 @@ impl Cell {
     }
 
     /// Draws the value onto `T`, inside the given `Rectangle`
-    pub fn draw<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, no_check: bool, alpha: bool) {
+    pub fn draw<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, no_check: bool, alpha: bool, mut hover: Option<&[usize]>) {
+        let mut flag = false;
+        if let Some(pos) = hover {
+            if pos.len() == 0 {
+                flag = true;
+                hover = None
+            }
+        }
+
         match self {
             Cell::None => draw_none(rect, d),
             Cell::Player1 => draw_cross(rect, d),
             Cell::Player2 => draw_nought(rect, d),
             Cell::Board(b) => {
                 if let Value::None = b.check() {
-                    b.draw(rect, d, no_check, alpha) // Draw the board, if it is still playable...
+                    b.draw(rect, d, no_check, alpha, hover) // Draw the board, if it is still playable...
                 } else {
                     if no_check {
-                        b.draw(rect, d, no_check, alpha) // ...or if we're told not to check...
+                        b.draw(rect, d, no_check, alpha, hover) // ...or if we're told not to check...
                     } else {
-                        b.draw(rect, d, no_check, alpha);
+                        b.draw(rect, d, no_check, alpha, hover);
                         b.check().draw(rect, d, alpha) // ...else draw the corresponding value
                     }
                 }
             }
+        }
+
+        if flag {
+
+            d.draw_rectangle(rect.x as i32, rect.y as i32, rect.width as i32, rect.height as i32, COLOUR_CELL_HOVER)
         }
     }
 }
