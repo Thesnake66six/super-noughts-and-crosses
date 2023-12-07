@@ -1,5 +1,5 @@
 use anyhow::{bail, Ok, Result};
-use raylib::{core::math::Rectangle, prelude::*, ffi::VALUEBOX_MAX_CHARS};
+use raylib::{core::math::Rectangle, prelude::*};
 
 use crate::{
     cell::{Cell, Value},
@@ -180,11 +180,8 @@ impl Board {
 
     /// Draws the board in a given `Rectangle`. Automatically checking for wins can be turned off, as well as rendering completed boards under their symbols
     pub fn draw<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, no_check: bool, alpha: bool, hover: Option<&[usize]>) {
-        d.draw_rectangle(
-            rect.x as i32,
-            rect.y as i32,
-            rect.width as i32,
-            rect.height as i32,
+        d.draw_rectangle_rec(
+            rect,
             COLOUR_BOARD_BG,
         );
 

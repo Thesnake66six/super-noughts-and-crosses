@@ -1,9 +1,10 @@
-use raylib::{drawing::RaylibDraw, math::Rectangle, prelude::Vector2};
+use raylib::{drawing::{RaylibDraw, RaylibMode2DExt}, math::Rectangle, prelude::Vector2, camera::{Camera2D, self}};
 use anyhow::{Ok, Result, bail};
 
 use crate::{board::Board, styles::{BOARD_CELL_MARGIN, COLOUR_CELL_BG, USE_OLD_RENDERER}, cell::{Cell, Value}};
 
 pub struct Game {
+    pub camera: Camera2D,
     pub board: Board,
     pub turn: u8,
     pub moves: Vec<Vec<usize>>,
@@ -13,6 +14,7 @@ pub struct Game {
 impl Game {
     pub fn new_depth(depth: usize) -> Self {
         Game { 
+            camera: Camera2D { offset: Vector2 { x: 0.0, y: 0.0 }, target: Vector2 { x: 0.0, y: 0.0 }, rotation: 0.0, zoom: 1.0 },
             board: Board::new_depth(depth), 
             turn: 1, 
             moves: [].into(),
@@ -21,13 +23,14 @@ impl Game {
     }
 
     pub fn draw<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, no_check: bool, alpha: bool, hover: Option<&[usize]>) {
+        let mut c = d.begin_mode2D(self.camera);
+
         let m = rect.width * BOARD_CELL_MARGIN;
 
-        d.draw_rectangle(
-            rect.x as i32,
-            rect.y as i32,
-            rect.width as i32,
-            rect.height as i32,
+        c.clear_background(COLOUR_CELL_BG);
+
+        c.draw_rectangle_rec(
+            rect,
             COLOUR_CELL_BG,
         );
 
@@ -39,9 +42,9 @@ impl Game {
         }; 
 
         if USE_OLD_RENDERER {
-            self.board.draw_old(irect, d, no_check, alpha)
+            self.board.draw_old(irect, &mut c, no_check, alpha)
         } else {
-            self.board.draw(irect, d, no_check, alpha, hover)
+            self.board.draw(irect, &mut c, no_check, alpha, hover)
         }
 
     }

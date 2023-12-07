@@ -5,7 +5,8 @@ use raylib::{
     math::{Rectangle, Vector2},
 };
 
-
+pub const CAMERA_MOVE_SPEED: f32 = -1.0;
+pub const CAMERA_SCROLL_SPEED: f32 = 0.1;
 pub const USE_OLD_RENDERER: bool = false; // Flag used to switch to the old renderer
 
 // Colour for a `Cell::None`
@@ -90,22 +91,16 @@ pub const COLOUR_CELL_HOVER: Color = Color {
 
 /// Draws a `Cell::None` or `Value::None`
 pub fn draw_none<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
-    d.draw_rectangle(
-        rect.x as i32,
-        rect.y as i32,
-        rect.width as i32,
-        rect.height as i32,
+    d.draw_rectangle_rec(
+        rect,
         COLOUR_CELL_BG,
     );
 }
 
 /// Draws a `Cell::Player1` or `Value::Player1`
 pub fn draw_cross<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
-    d.draw_rectangle(
-        rect.x as i32,
-        rect.y as i32,
-        rect.width as i32,
-        rect.height as i32,
+    d.draw_rectangle_rec(
+        rect,
         COLOUR_CROSS_BG,
     );
 
@@ -139,11 +134,8 @@ pub fn draw_cross_alpha<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
     let mut c = COLOUR_CROSS_BGA.clone();
     c.a = BOARD_ALPHA_OVERRIDE;
 
-    d.draw_rectangle(
-        rect.x as i32,
-        rect.y as i32,
-        rect.width as i32,
-        rect.height as i32,
+    d.draw_rectangle_rec(
+        rect,
         c,
     );
 
@@ -174,11 +166,8 @@ pub fn draw_cross_alpha<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
 
 /// Draws a `Cell::Player2` or `Value::Player2` with a transparent background
 pub fn draw_nought<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
-    d.draw_rectangle(
-        rect.x as i32,
-        rect.y as i32,
-        rect.width as i32,
-        rect.height as i32,
+    d.draw_rectangle_rec(
+        rect,
         COLOUR_NOUGHT_BG,
     );
     
@@ -196,11 +185,8 @@ pub fn draw_nought_alpha<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
     let mut c = COLOUR_NOUGHT_BGA.clone();
     c.a = BOARD_ALPHA_OVERRIDE;
 
-    d.draw_rectangle(
-        rect.x as i32,
-        rect.y as i32,
-        rect.width as i32,
-        rect.height as i32,
+    d.draw_rectangle_rec(
+        rect,
         c,
     );
 
@@ -217,11 +203,8 @@ pub fn draw_nought_alpha<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
 
 /// Draws a `Value::Draw`
 pub fn draw_draw<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
-    d.draw_rectangle(
-        rect.x as i32,
-        rect.y as i32,
-        rect.width as i32,
-        rect.height as i32,
+    d.draw_rectangle_rec(
+        rect,
         COLOUR_DRAW_BG,
     );
 
@@ -255,11 +238,8 @@ pub fn draw_draw_alpha<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
     let mut c = COLOUR_DRAW_BGA.clone();
     c.a = BOARD_ALPHA_OVERRIDE;
     
-    d.draw_rectangle(
-        rect.x as i32,
-        rect.y as i32,
-        rect.width as i32,
-        rect.height as i32,
+    d.draw_rectangle_rec(
+        rect,
         c,
     );
 
