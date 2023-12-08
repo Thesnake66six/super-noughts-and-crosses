@@ -15,9 +15,10 @@ fn main() -> Result<()> {
         .resizable()
         .title("Super Noughts and Crosses")
         .msaa_4x()
+        
         .build();
 
-    rl.set_target_fps(12);
+    rl.set_target_fps(60);
 
     let mut g = Game::new_depth(2);
 
