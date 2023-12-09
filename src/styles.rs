@@ -5,6 +5,9 @@ use raylib::{
     math::{Rectangle, Vector2},
 };
 
+pub const CAMERA_MOVE_SPEED: f32 = -1.0;
+pub const CAMERA_SCROLL_SPEED: f32 = 0.1;
+pub const BOARD_DEPTH: usize = 5;
 
 pub const USE_OLD_RENDERER: bool = false; // Flag used to switch to the old renderer
 
