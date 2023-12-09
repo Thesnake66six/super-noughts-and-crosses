@@ -1,53 +1,83 @@
-use raylib::{drawing::{RaylibDraw, RaylibMode2DExt}, math::Rectangle, prelude::Vector2, camera::{Camera2D}};
-use anyhow::{Ok, Result, bail};
+use anyhow::{bail, Ok, Result};
+use raylib::{
+    camera::Camera2D,
+    drawing::{RaylibDraw, RaylibMode2DExt},
+    math::Rectangle,
+    prelude::Vector2,
+};
 
-use crate::{board::Board, styles::{BOARD_CELL_MARGIN, COLOUR_CELL_BG, USE_OLD_RENDERER}, cell::{Cell, Value}};
+use crate::{
+    board::Board,
+    cell::{Cell, Value},
+    styles::{BOARD_CELL_MARGIN, BOARD_DEPTH, COLOUR_CELL_BG, USE_OLD_RENDERER},
+};
 
 pub struct Game {
+    pub rect: Rectangle,
     pub camera: Camera2D,
     pub board: Board,
     pub turn: u8,
     pub moves: Vec<Vec<usize>>,
-    legal: Vec<usize>,
+    pub legal: Vec<usize>,
 }
 
 impl Game {
-    pub fn new_depth(depth: usize) -> Self {
-        Game { 
-            camera: Camera2D { zoom: 1.0, ..Default::default() },
-            board: Board::new_depth(depth), 
-            turn: 1, 
+    pub fn new_depth(rect: Rectangle, depth: usize) -> Self {
+        Game {
+            rect: rect,
+            camera: Camera2D {
+                zoom: 1.0,
+                ..Default::default()
+            },
+            board: Board::new_depth(depth),
+            turn: 1,
             moves: [].into(),
             legal: vec![],
         }
     }
 
-    pub fn draw<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, no_check: bool, alpha: bool, hover: Option<&[usize]>) {
+    pub fn update_positions(&mut self) {
+        let m = self.rect.width * BOARD_CELL_MARGIN;
+
+        let irect = Rectangle {
+            x: self.rect.x + m,
+            y: self.rect.x + m,
+            width: self.rect.width - 2.0 * m,
+            height: self.rect.height - 2.0 * m,
+        };
+
+        self.board.update_positions(irect)
+    }
+
+    pub fn draw<T: RaylibDraw>(
+        &self,
+        rect: Rectangle,
+        d: &mut T,
+        no_check: bool,
+        alpha: bool,
+        hover: Option<&[usize]>,
+    ) {
         let m = rect.width * BOARD_CELL_MARGIN;
 
         let mut c = d.begin_mode2D(self.camera);
 
-        c.draw_rectangle_rec(
-            rect,
-            COLOUR_CELL_BG,
-        );
+        c.draw_rectangle_rec(rect, COLOUR_CELL_BG);
 
         let irect = Rectangle {
             x: rect.x + m,
             y: rect.x + m,
             width: rect.width - 2.0 * m,
             height: rect.height - 2.0 * m,
-        }; 
+        };
 
         if USE_OLD_RENDERER {
             self.board.draw_old(irect, &mut c, no_check, alpha)
         } else {
             self.board.draw(irect, &mut c, no_check, alpha, hover)
         }
-
     }
 
-    pub fn play(&mut self, pos: &[usize]) -> Result<()>{
+    pub fn play(&mut self, pos: &[usize]) -> Result<()> {
         let mut check_pos = pos;
         for c in &self.legal {
             if pos.starts_with(&[*c]) {
@@ -64,9 +94,12 @@ impl Game {
         }
 
         if let Cell::None = &mut self.board.get(pos).unwrap() {
-
             // Play the move
-            let val = if self.turn == 1 { Cell::Player1 } else { Cell::Player2 };
+            let val = if self.turn == 1 {
+                Cell::Player1
+            } else {
+                Cell::Player2
+            };
             self.board.set(pos, val)?;
             self.legal = self.get_legal(pos);
             self.turn = (self.turn + 1) % 2;
@@ -89,15 +122,20 @@ impl Game {
                 return self.get_legal(&pos[..pos.len().saturating_sub(2)]);
             }
         }
-        
+
         let n = pos[pos.len() - 1];
-        
-        if let Some(Cell::Board(b)) = self.board.get(&[&pos[..pos.len().saturating_sub(3)], &[n]].concat()) {
+
+        if let Some(Cell::Board(b)) = self
+            .board
+            .get(&[&pos[..pos.len().saturating_sub(2)], &[n]].concat())
+        {
             if b.check() != Value::None {
                 // ...if so, re-target to a higher board
-                return pos[..pos.len().saturating_sub(3)].to_vec();
+                return pos[..pos.len().saturating_sub(2)].to_vec();
             } else {
-                return [&pos[..pos.len().saturating_sub(3)], &[n]].concat().to_vec();
+                return [&pos[..pos.len().saturating_sub(2)], &[n]]
+                    .concat()
+                    .to_vec();
             }
         }
 
@@ -107,5 +145,4 @@ impl Game {
     pub fn get_cell_from_pos(&self, point: Vector2, no_check: bool) -> Option<Vec<usize>> {
         self.board.get_cell_from_pos(point, no_check)
     }
-    
 }
