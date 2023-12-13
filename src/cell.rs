@@ -1,8 +1,11 @@
-use raylib::{drawing::RaylibDraw, math::Rectangle,};
+use raylib::{drawing::RaylibDraw, math::Rectangle};
 
 use crate::{
     board::Board,
-    styles::{draw_cross, draw_draw, draw_none, draw_nought, draw_draw_alpha, draw_nought_alpha, draw_cross_alpha, COLOUR_CELL_HOVER},
+    styles::{
+        draw_cross, draw_cross_alpha, draw_draw, draw_draw_alpha, draw_none, draw_nought,
+        draw_nought_alpha, COLOUR_CELL_HOVER,
+    },
 };
 
 #[derive(Debug, Copy, Clone, PartialEq)]
@@ -94,7 +97,14 @@ impl Cell {
     }
 
     /// Draws the value onto `T`, inside the given `Rectangle`
-    pub fn draw<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, no_check: bool, alpha: bool, mut hover: Option<&[usize]>) {
+    pub fn draw<T: RaylibDraw>(
+        &self,
+        rect: Rectangle,
+        d: &mut T,
+        no_check: bool,
+        alpha: bool,
+        mut hover: Option<&[usize]>,
+    ) {
         let mut flag = false;
         if let Some(pos) = hover {
             if pos.len() == 0 {
@@ -122,8 +132,13 @@ impl Cell {
         }
 
         if flag {
-
-            d.draw_rectangle(rect.x as i32, rect.y as i32, rect.width as i32, rect.height as i32, COLOUR_CELL_HOVER)
+            d.draw_rectangle(
+                rect.x as i32,
+                rect.y as i32,
+                rect.width as i32,
+                rect.height as i32,
+                COLOUR_CELL_HOVER,
+            )
         }
     }
 }

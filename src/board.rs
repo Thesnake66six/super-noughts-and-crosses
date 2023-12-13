@@ -1,5 +1,5 @@
 use anyhow::{bail, Ok, Result};
-use raylib::{core::math::Rectangle, prelude::*};
+use raylib::{core::math::Rectangle, ffi::VALUEBOX_MAX_CHARS, prelude::*};
 
 use crate::{
     cell::{Cell, Value},
@@ -30,7 +30,7 @@ impl Board {
         };
         x
     }
-    
+
     /// Recursively creates a new board, containing levels equal to the specified `depth`  
     pub fn new_depth(depth: usize) -> Self {
         if depth > 1 {
@@ -51,8 +51,7 @@ impl Board {
     pub fn get(&self, pos: &[usize]) -> Option<Cell> {
         if &pos.len() == &0 {
             return Some(Cell::Board(self.clone()));
-        }
-        else if &pos.len() > &1 {
+        } else if &pos.len() > &1 {
             if let Cell::Board(board) = &self.cells[pos[0]] {
                 return board.get(&pos[1..]);
             } else {
@@ -85,18 +84,21 @@ impl Board {
             .map(|cell| cell.value())
             .collect::<Vec<Value>>();
         let sets = [
-            [0, 1, 2], 
-            [3, 4, 5], 
-            [6, 7, 8], 
-            [0, 3, 6], 
-            [1, 4, 7], 
-            [2, 5, 8], 
-            [0, 4, 8], 
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
             [2, 4, 6],
         ];
 
         for set in sets {
-            if vals[set[0]] == vals[set[1]] && vals[set[1]] == vals[set[2]] && [Value::Player1, Value::Player2].contains(&vals[set[0]]) {
+            if vals[set[0]] == vals[set[1]]
+                && vals[set[1]] == vals[set[2]]
+                && [Value::Player1, Value::Player2].contains(&vals[set[0]])
+            {
                 return vals[set[0]];
             }
         }
@@ -157,12 +159,12 @@ impl Board {
     pub fn draw_old<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, no_check: bool, alpha: bool) {
         let gap = rect.width * BOARD_CELL_MARGIN;
         let cw = (rect.width - 2.0 * gap) / 3.0;
-    
+
         for r in 0..3 {
             for c in 0..3 {
                 let x = rect.x + c as f32 * (cw + gap);
                 let y = rect.y + r as f32 * (cw + gap);
-    
+
                 self.cells[3 * r + c].draw_old(
                     Rectangle {
                         x,
@@ -179,9 +181,19 @@ impl Board {
     }
 
     /// Draws the board in a given `Rectangle`. Automatically checking for wins can be turned off, as well as rendering completed boards under their symbols
-    pub fn draw<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, no_check: bool, alpha: bool, hover: Option<&[usize]>) {
-        d.draw_rectangle_rec(
-            rect,
+    pub fn draw<T: RaylibDraw>(
+        &self,
+        rect: Rectangle,
+        d: &mut T,
+        no_check: bool,
+        alpha: bool,
+        hover: Option<&[usize]>,
+    ) {
+        d.draw_rectangle(
+            rect.x as i32,
+            rect.y as i32,
+            rect.width as i32,
+            rect.height as i32,
             COLOUR_BOARD_BG,
         );
 
@@ -256,7 +268,13 @@ impl Board {
 
         for i in 0..9 {
             if i == x {
-                self.cells[i].draw(self.cell_positions[i], d, no_check, alpha, Some(&hover.unwrap()[1..]))
+                self.cells[i].draw(
+                    self.cell_positions[i],
+                    d,
+                    no_check,
+                    alpha,
+                    Some(&hover.unwrap()[1..]),
+                )
             } else {
                 self.cells[i].draw(self.cell_positions[i], d, no_check, alpha, None)
             }

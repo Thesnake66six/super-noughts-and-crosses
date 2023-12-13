@@ -1,12 +1,15 @@
-use std::f32::consts::SQRT_2;
 use raylib::{
     color::Color,
     drawing::RaylibDraw,
     math::{Rectangle, Vector2},
 };
+use std::f32::consts::SQRT_2;
 
 pub const CAMERA_MOVE_SPEED: f32 = -1.0;
+pub const CAMERA_DEFAULT_ZOOM: f32 = 0.5;
 pub const CAMERA_SCROLL_SPEED: f32 = 0.1;
+pub const BOARD_DEPTH: usize = 3;
+
 pub const USE_OLD_RENDERER: bool = false; // Flag used to switch to the old renderer
 
 // Colour for a `Cell::None`
@@ -86,7 +89,7 @@ pub const COLOUR_CELL_HOVER: Color = Color {
     r: 190,
     g: 190,
     b: 190,
-    a: 170,
+    a: 220,
 };
 
 /// Draws a `Cell::None` or `Value::None`
@@ -170,14 +173,22 @@ pub fn draw_nought<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
         rect,
         COLOUR_NOUGHT_BG,
     );
-    
+
     let cx = rect.x + (rect.width / 2.0);
     let cy = rect.y + (rect.height / 2.0);
-    
+
     let ro = (rect.width / 2.0) - NOUGHT_PADDING * rect.width;
     let ri = (rect.width / 2.0) - (NOUGHT_THICK + NOUGHT_PADDING) * rect.width;
-    
-    d.draw_ring(Vector2{ x: cx, y: cy }, ri, ro, 0.0, 360.0, 100, COLOUR_NOUGHT_FG)
+
+    d.draw_ring(
+        Vector2 { x: cx, y: cy },
+        ri,
+        ro,
+        0.0,
+        360.0,
+        100,
+        COLOUR_NOUGHT_FG,
+    )
 }
 
 /// Draws a `Cell::Player2` or `Value::Player2` with a transparent background
@@ -198,7 +209,15 @@ pub fn draw_nought_alpha<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
 
     // d.draw_circle(cx as i32, cy as i32, ro, COLOUR_NOUGHT_FG);
     // d.draw_circle(cx as i32, cy as i32, ri, c);
-    d.draw_ring(Vector2{ x: cx, y: cy }, ri, ro, 0.0, 360.0, 100, COLOUR_NOUGHT_FG)
+    d.draw_ring(
+        Vector2 { x: cx, y: cy },
+        ri,
+        ro,
+        0.0,
+        360.0,
+        100,
+        COLOUR_NOUGHT_FG,
+    )
 }
 
 /// Draws a `Value::Draw`
@@ -237,9 +256,12 @@ pub fn draw_draw<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
 pub fn draw_draw_alpha<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
     let mut c = COLOUR_DRAW_BGA.clone();
     c.a = BOARD_ALPHA_OVERRIDE;
-    
-    d.draw_rectangle_rec(
-        rect,
+
+    d.draw_rectangle(
+        rect.x as i32,
+        rect.y as i32,
+        rect.width as i32,
+        rect.height as i32,
         c,
     );
 
