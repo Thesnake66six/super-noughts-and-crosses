@@ -110,8 +110,6 @@ fn main() -> Result<()> {
         g.draw(board_rect, &mut d, false, true, hovered_cell.as_deref());
 
         d.draw_fps(10, 10);
-
-        dbg!(&g.legal);
     }
 
     Ok(())

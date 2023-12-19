@@ -79,13 +79,11 @@ impl Game {
 
     pub fn play(&mut self, pos: &[usize]) -> Result<()> {
         let mut check_pos = pos;
-        for c in &self.legal {
-            if pos.starts_with(&[*c]) {
-                check_pos = &check_pos[1..];
-            } else {
+
+            if !pos.starts_with(&self.legal) {
                 bail!("Illegal move: Move is not within bounds of current play")
             }
-        }
+
 
         if let Cell::Board(b) = self.board.get(&pos[..pos.len().saturating_sub(2)]).unwrap() {
             if b.check() != Value::None {
@@ -111,35 +109,62 @@ impl Game {
     }
 
     pub fn get_legal(&self, pos: &[usize]) -> Vec<usize> {
-        if pos.len() == 0 {
-            return vec![];
-        }
+        let n = pos.last().unwrap(); // The last position in pos
+        let up = if pos.len() >= 2 { &pos[..pos.len().saturating_sub(1)] } else { pos }; // The penultimate position in pos - correlates to the box that the play was made in
+        let last = if pos.len() >= 2 { &pos[..pos.len().saturating_sub(2)] } else { pos }; // The position two positions up, gives the depth-two board that the next move will always be in
 
-        // Check to see if the move completed the board, ...
-        if let Some(Cell::Board(b)) = self.board.get(&pos[..pos.len().saturating_sub(2)]) {
+        // Check to see if the move completed the board (up)
+        if let Some(Cell::Board(b)) = self.board.get(up) {
             if b.check() != Value::None {
-                // ...if so, re-target to a higher board
-                return self.get_legal(&pos[..pos.len().saturating_sub(2)]);
+                // ...if so, check again as if the move made was `up`
+                return self.get_legal(up);
             }
         }
-
-        let n = pos[pos.len() - 1];
-
-        if let Some(Cell::Board(b)) = self
-            .board
-            .get(&[&pos[..pos.len().saturating_sub(2)], &[n]].concat())
-        {
+        // Otherwise, check to make sure `up` exists
+        if let Some(Cell::Board(b)) = self.board.get(&[last, &[*n]].concat()){
+            // If it's completed, then return the board above (`last`)
             if b.check() != Value::None {
-                // ...if so, re-target to a higher board
-                return pos[..pos.len().saturating_sub(2)].to_vec();
+                return last.to_vec()
+            // Otherwise, return last, plus `n` to get the board referenced by the previous move
             } else {
-                return [&pos[..pos.len().saturating_sub(2)], &[n]]
-                    .concat()
-                    .to_vec();
+                return [last, &[*n]].concat();
             }
+        // And, if `up` doesn't exist, return the targetted board as a failsafe (though, this shouldn't happen sp )
+        } else {
+            eprintln!("Didn't know this could happen, please check circumstances");
+            return [last, &[*n]].concat();
         }
 
-        return pos[..pos.len().saturating_sub(2)].to_vec();
+
+        // if pos.len() == 0 {
+
+        // }
+
+        // // Check to see if the move completed the board, ...
+        // if let Some(Cell::Board(b)) = self.board.get(&pos[..pos.len().saturating_sub(2)]) {
+        //     if b.check() != Value::None {
+        //         // ...if so, re-target to a higher board
+        //         return self.get_legal(&pos[..pos.len().saturating_sub(2)]);
+        //     }
+        // }
+
+        // let n = pos[pos.len() - 1];
+
+        // if let Some(Cell::Board(b)) = self
+        //     .board
+        //     .get(&[&pos[..pos.len().saturating_sub(2)], &[n]].concat())
+        // {
+        //     if b.check() != Value::None {
+        //         // ...if so, re-target to a higher board
+        //         return pos[..pos.len().saturating_sub(2)].to_vec();
+        //     } else {
+        //         return [&pos[..pos.len().saturating_sub(2)], &[n]]
+        //             .concat()
+        //             .to_vec();
+        //     }
+        // }
+
+        // return pos[..pos.len().saturating_sub(2)].to_vec();
     }
 
     pub fn get_cell_from_pos(&self, point: Vector2, no_check: bool) -> Option<Vec<usize>> {
