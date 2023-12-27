@@ -1,9 +1,9 @@
 use anyhow::{bail, Ok, Result};
-use raylib::{core::math::Rectangle, ffi::VALUEBOX_MAX_CHARS, prelude::*};
+use raylib::{core::math::Rectangle, prelude::*};
 
 use crate::{
     cell::{Cell, Value},
-    styles::{BOARD_CELL_MARGIN, BOARD_LINE_THICK, COLOUR_BOARD_BG, COLOUR_BOARD_LINE},
+    styles::*,
 };
 
 #[derive(Debug, Clone, PartialEq)]
@@ -15,7 +15,7 @@ pub struct Board {
 impl Board {
     /// Creates a new board filled with `Cell::None`
     pub fn new() -> Self {
-        let mut x = Board {
+        let x = Board {
             cells: vec![Cell::None; 9],
             cell_positions: vec![Rectangle::new(0.0, 0.0, 0.0, 0.0); 9],
         };
@@ -24,7 +24,7 @@ impl Board {
 
     /// Creates a new board with its cells as the input slice
     pub fn new_cells(cells: [Cell; 9]) -> Self {
-        let mut x = Board {
+        let x = Board {
             cells: cells.to_vec(),
             cell_positions: vec![Rectangle::new(0.0, 0.0, 0.0, 0.0); 9],
         };
@@ -155,31 +155,6 @@ impl Board {
         return None;
     }
 
-    /// Alternate `draw` function
-    pub fn draw_old<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, no_check: bool, alpha: bool) {
-        let gap = rect.width * BOARD_CELL_MARGIN;
-        let cw = (rect.width - 2.0 * gap) / 3.0;
-
-        for r in 0..3 {
-            for c in 0..3 {
-                let x = rect.x + c as f32 * (cw + gap);
-                let y = rect.y + r as f32 * (cw + gap);
-
-                self.cells[3 * r + c].draw_old(
-                    Rectangle {
-                        x,
-                        y,
-                        width: cw,
-                        height: cw,
-                    },
-                    d,
-                    no_check,
-                    alpha,
-                );
-            }
-        }
-    }
-
     /// Draws the board in a given `Rectangle`. Automatically checking for wins can be turned off, as well as rendering completed boards under their symbols
     pub fn draw<T: RaylibDraw>(
         &self,
@@ -188,18 +163,44 @@ impl Board {
         no_check: bool,
         alpha: bool,
         hover: Option<&[usize]>,
+        mut legal: Option<&[usize]>,
+        turn: u8,
     ) {
-        d.draw_rectangle(
-            rect.x as i32,
-            rect.y as i32,
-            rect.width as i32,
-            rect.height as i32,
-            COLOUR_BOARD_BG,
+        let mut t: Option<usize> = None;
+        let mut ignore = false;
+        if let Some(x) = legal {
+            if x == [13] {
+                t = Some(13);
+                ignore = true
+            } else if x.len() > 0 {
+                t = Some(x[0]);
+                if x.len() == 1 {
+                    legal = Some(&[]);
+                } else {
+                    legal = Some(&x[1..])
+                }
+            } else {
+                t = Some(10)
+            }
+        };
+
+        let board_complete = if self.check() != Value::None || ignore { true } else { false };
+
+        d.draw_rectangle_rec(
+            rect,
+            if board_complete {
+                COLOUR_BOARD_BG    
+            } else {
+                if INVERT_GREYS {
+                    if let Some(_) = t { COLOUR_BOARD_BG } else { get_greyed_colour_board(turn) }
+                } else {
+                    if let Some(x) = t { if x == 10 { get_greyed_colour_board(turn) } else { COLOUR_BOARD_BG } } else { COLOUR_BOARD_BG }
+                }
+            }
         );
 
         let length = rect.width; // Side length of the board
         let thickness = BOARD_LINE_THICK * rect.width; // Thickness of the lines in px
-        let margin = BOARD_CELL_MARGIN * rect.width; // Size of margin in px
 
         let column_size = (length - 2.0 * thickness) / 3.0;
         let g1 = column_size + 0.5 * thickness;
@@ -265,19 +266,19 @@ impl Board {
         if let Some(pos) = hover {
             x = pos[0]
         }
+        
 
         for i in 0..9 {
-            if i == x {
-                self.cells[i].draw(
-                    self.cell_positions[i],
-                    d,
-                    no_check,
-                    alpha,
-                    Some(&hover.unwrap()[1..]),
-                )
-            } else {
-                self.cells[i].draw(self.cell_positions[i], d, no_check, alpha, None)
-            }
-        }
+            self.cells[i].draw(
+                self.cell_positions[i],
+                d,
+                no_check,
+                alpha,
+                if i == x { Some(&hover.unwrap()[1..]) } else { None },
+                if board_complete { Some(&[13]) } else if [10, i].contains(&t.unwrap_or(11)) { legal } else { None },
+                turn
+            )
+    }   
     }
 }
+

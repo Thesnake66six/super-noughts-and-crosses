@@ -9,7 +9,7 @@ use raylib::{
 use crate::{
     board::Board,
     cell::{Cell, Value},
-    styles::{BOARD_CELL_MARGIN, BOARD_DEPTH, COLOUR_CELL_BG, USE_OLD_RENDERER},
+    styles::{BOARD_CELL_MARGIN, COLOUR_CELL_BG, get_greyed_colour_board, COLOUR_BOARD_BG_GREYED_P1, COLOUR_BOARD_BG_GREYED_P2},
 };
 
 pub struct Game {
@@ -61,7 +61,7 @@ impl Game {
 
         let mut c = d.begin_mode2D(self.camera);
 
-        c.draw_rectangle_rec(rect, COLOUR_CELL_BG);
+        c.draw_rectangle_rec(rect, if self.turn == 1 { COLOUR_BOARD_BG_GREYED_P1 } else { COLOUR_BOARD_BG_GREYED_P2 });
 
         let irect = Rectangle {
             x: rect.x + m,
@@ -70,16 +70,12 @@ impl Game {
             height: rect.height - 2.0 * m,
         };
 
-        if USE_OLD_RENDERER {
-            self.board.draw_old(irect, &mut c, no_check, alpha)
-        } else {
-            self.board.draw(irect, &mut c, no_check, alpha, hover)
-        }
+        let legal: Option<&[usize]> = if self.board.check() != Value::None { Some(&[13]) } else { Some(&self.legal) };
+
+        self.board.draw(irect, &mut c, no_check, alpha, hover, legal, self.turn)
     }
 
     pub fn play(&mut self, pos: &[usize]) -> Result<()> {
-        let mut check_pos = pos;
-
             if !pos.starts_with(&self.legal) {
                 bail!("Illegal move: Move is not within bounds of current play")
             }
@@ -100,24 +96,31 @@ impl Game {
             };
             self.board.set(pos, val)?;
             self.legal = self.get_legal(pos);
+            dbg!(&self.legal);
             self.turn = (self.turn + 1) % 2;
             Ok(())
         } else {
-            print!("hh");
+            println!("hh");
             bail!("Illegal move: Cell already filled")
         }
     }
 
     pub fn get_legal(&self, pos: &[usize]) -> Vec<usize> {
+        if self.board.check() != Value::None {
+            return vec![];
+        }
+
         let n = pos.last().unwrap(); // The last position in pos
-        let up = if pos.len() >= 2 { &pos[..pos.len().saturating_sub(1)] } else { pos }; // The penultimate position in pos - correlates to the box that the play was made in
+        let up = if pos.len() >= 1 { &pos[..pos.len().saturating_sub(1)] } else { pos }; // The penultimate position in pos - correlates to the box that the play was made in
         let last = if pos.len() >= 2 { &pos[..pos.len().saturating_sub(2)] } else { pos }; // The position two positions up, gives the depth-two board that the next move will always be in
 
         // Check to see if the move completed the board (up)
         if let Some(Cell::Board(b)) = self.board.get(up) {
             if b.check() != Value::None {
                 // ...if so, check again as if the move made was `up`
-                return self.get_legal(up);
+                if pos.len() >= 3 {
+                    return self.get_legal(up);
+                }
             }
         }
         // Otherwise, check to make sure `up` exists
@@ -129,42 +132,10 @@ impl Game {
             } else {
                 return [last, &[*n]].concat();
             }
-        // And, if `up` doesn't exist, return the targetted board as a failsafe (though, this shouldn't happen sp )
+        // And, if `up` doesn't exist, meaning that this is the top board, then return everywhere (`[]`).
         } else {
-            eprintln!("Didn't know this could happen, please check circumstances");
-            return [last, &[*n]].concat();
+            return [].to_vec();
         }
-
-
-        // if pos.len() == 0 {
-
-        // }
-
-        // // Check to see if the move completed the board, ...
-        // if let Some(Cell::Board(b)) = self.board.get(&pos[..pos.len().saturating_sub(2)]) {
-        //     if b.check() != Value::None {
-        //         // ...if so, re-target to a higher board
-        //         return self.get_legal(&pos[..pos.len().saturating_sub(2)]);
-        //     }
-        // }
-
-        // let n = pos[pos.len() - 1];
-
-        // if let Some(Cell::Board(b)) = self
-        //     .board
-        //     .get(&[&pos[..pos.len().saturating_sub(2)], &[n]].concat())
-        // {
-        //     if b.check() != Value::None {
-        //         // ...if so, re-target to a higher board
-        //         return pos[..pos.len().saturating_sub(2)].to_vec();
-        //     } else {
-        //         return [&pos[..pos.len().saturating_sub(2)], &[n]]
-        //             .concat()
-        //             .to_vec();
-        //     }
-        // }
-
-        // return pos[..pos.len().saturating_sub(2)].to_vec();
     }
 
     pub fn get_cell_from_pos(&self, point: Vector2, no_check: bool) -> Option<Vec<usize>> {

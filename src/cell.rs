@@ -1,11 +1,8 @@
-use raylib::{drawing::RaylibDraw, math::Rectangle};
+use raylib::{drawing::RaylibDraw, math::Rectangle, ffi::_GLAD_IS_SOME_NEW_VERSION};
 
 use crate::{
     board::Board,
-    styles::{
-        draw_cross, draw_cross_alpha, draw_draw, draw_draw_alpha, draw_none, draw_nought,
-        draw_nought_alpha, COLOUR_CELL_HOVER,
-    },
+    styles::*,
 };
 
 #[derive(Debug, Copy, Clone, PartialEq)]
@@ -23,31 +20,46 @@ pub enum Value {
 
 impl Value {
     /// Draws the value onto `T`, inside the given `Rectangle`
-    pub fn draw<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, alpha: bool) {
-        if alpha {
-            match self {
-                Value::None => draw_none(rect, d),
-                Value::Player1 => draw_cross_alpha(rect, d),
-                Value::Player2 => draw_nought_alpha(rect, d),
-                Value::Draw => draw_draw_alpha(rect, d),
-            }
-        } else {
-            match self {
-                Value::None => draw_none(rect, d),
-                Value::Player1 => draw_cross(rect, d),
-                Value::Player2 => draw_nought(rect, d),
-                Value::Draw => draw_draw(rect, d),
+    pub fn draw<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, alpha: bool, legal: Option<&[usize]>, turn: u8) {
+        let mut greyed = true;
+        if let Some(x) = legal {
+            if x == [] {
+                greyed = false
             }
         }
-    }
 
-    /// Draws the value onto `T`, inside the given `Rectangle`, using the associated `draw_alpha` function
-    pub fn draw_alpha<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, alpha: u8) {
+        // Draw background for the cell
+        d.draw_rectangle_rec(rect, 
+            if alpha {
+                match self {
+                    Value::None => COLOUR_CELL_BG,
+                    Value::Player1 => COLOUR_CROSS_BGA,
+                    Value::Player2 => COLOUR_NOUGHT_BGA,
+                    Value::Draw => COLOUR_DRAW_BGA,
+                }
+            } else if greyed {
+                if INVERT_GREYS {
+                    get_greyed_colour_cell(turn)
+                    // COLOUR_CELL_BG
+                } else {
+                    get_greyed_colour_cell(turn)
+                }
+            } else {
+                match self {
+                    Value::None => COLOUR_CELL_BG,
+                    Value::Player1 => COLOUR_CROSS_BG,
+                    Value::Player2 => COLOUR_NOUGHT_BG,
+                    Value::Draw => COLOUR_DRAW_BG,
+                }
+            }
+        );
+
+        // Draw the symbol atop the background
         match self {
-            Value::None => draw_none(rect, d),
-            Value::Player1 => draw_cross_alpha(rect, d),
-            Value::Player2 => draw_nought_alpha(rect, d),
-            Value::Draw => draw_draw_alpha(rect, d),
+            Value::None => {},
+            Value::Draw => draw_draw(rect, d),
+            Value::Player1 => draw_cross(rect, d),
+            Value::Player2 => draw_nought(rect, d),
         }
     }
 }
@@ -76,26 +88,6 @@ impl Cell {
         }
     }
 
-    /// An alternate draw function
-    pub fn draw_old<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, no_check: bool, alpha: bool) {
-        match self {
-            Cell::None => draw_none(rect, d),
-            Cell::Player1 => draw_cross(rect, d),
-            Cell::Player2 => draw_nought(rect, d),
-            Cell::Board(b) => {
-                if let Value::None = b.check() {
-                    b.draw_old(rect, d, no_check, alpha) // Draw the board, if it is still playable...
-                } else {
-                    if no_check {
-                        b.draw_old(rect, d, no_check, alpha) // ...or if we're told not to check...
-                    } else {
-                        b.check().draw(rect, d, alpha) // ...else draw the corresponding value
-                    }
-                }
-            }
-        }
-    }
-
     /// Draws the value onto `T`, inside the given `Rectangle`
     pub fn draw<T: RaylibDraw>(
         &self,
@@ -104,6 +96,8 @@ impl Cell {
         no_check: bool,
         alpha: bool,
         mut hover: Option<&[usize]>,
+        mut legal: Option<&[usize]>,
+        turn: u8,
     ) {
         let mut flag = false;
         if let Some(pos) = hover {
@@ -113,30 +107,90 @@ impl Cell {
             }
         }
 
+        let mut greyed = true;
+        if let Some(x) = legal {
+            if x.len() == 0 {
+                greyed = false
+            }
+        }
+
+        let no_grey = if let Some([13]) = legal { true } else { false };
+
+        let mut board_completed = false;
+        if let Cell::Board(x) = self {
+            if x.check() != Value::None {
+                board_completed = true;
+            }
+        }
+
+        let draw_as_alpha = if let Cell::Board(_) = self {
+            if alpha { true } else { false }
+        } else { false };
+
+        d.draw_rectangle_rec(
+            rect, 
+            if draw_as_alpha{
+                match self {
+                    Cell::None => COLOUR_CELL_BG,
+                    Cell::Player1 => COLOUR_CROSS_BGA,
+                    Cell::Player2 => COLOUR_NOUGHT_BGA,
+                    Cell::Board(_) => COLOUR_BOARD_BG,
+                }
+            } else {
+                if no_grey {
+                    match self {
+                        Cell::None => COLOUR_CELL_BG,
+                        Cell::Player1 => COLOUR_CROSS_BG,
+                        Cell::Player2 => COLOUR_NOUGHT_BG,
+                        Cell::Board(_) => COLOUR_BOARD_BG,
+                    }
+                } else if greyed {
+                    if INVERT_GREYS && !board_completed {
+                        get_greyed_colour_cell(turn)
+                    } else {
+                        match self {
+                            Cell::None => COLOUR_CELL_BG,
+                            Cell::Player1 => COLOUR_CROSS_BG,
+                            Cell::Player2 => COLOUR_NOUGHT_BG,
+                            Cell::Board(_) => COLOUR_BOARD_BG,
+                        }
+                    }
+                } else {
+                    if INVERT_GREYS || board_completed {
+                        match self {
+                            Cell::None => COLOUR_CELL_BG,
+                            Cell::Player1 => COLOUR_CROSS_BG,
+                            Cell::Player2 => COLOUR_NOUGHT_BG,
+                            Cell::Board(_) => COLOUR_BOARD_BG,
+                        }
+                    } else {
+                        get_greyed_colour_cell(turn)
+                    }
+                }
+            } 
+        );
+
         match self {
-            Cell::None => draw_none(rect, d),
+            Cell::None => {},
             Cell::Player1 => draw_cross(rect, d),
             Cell::Player2 => draw_nought(rect, d),
             Cell::Board(b) => {
                 if let Value::None = b.check() {
-                    b.draw(rect, d, no_check, alpha, hover) // Draw the board, if it is still playable...
+                    b.draw(rect, d, no_check, alpha, hover, legal, turn) // Draw the board, if it is still playable...
                 } else {
                     if no_check {
-                        b.draw(rect, d, no_check, alpha, hover) // ...or if we're told not to check...
+                        b.draw(rect, d, no_check, alpha, hover, legal, turn) // ...or if we're told not to check...
                     } else {
-                        b.draw(rect, d, no_check, alpha, hover);
-                        b.check().draw(rect, d, alpha) // ...else draw the corresponding value
+                        b.draw(rect, d, no_check, alpha, hover, legal, turn);
+                        b.check().draw(rect, d, alpha, legal, turn) // ...else draw the corresponding value
                     }
                 }
             }
         }
 
         if flag {
-            d.draw_rectangle(
-                rect.x as i32,
-                rect.y as i32,
-                rect.width as i32,
-                rect.height as i32,
+            d.draw_rectangle_rec(
+                rect,
                 COLOUR_CELL_HOVER,
             )
         }
