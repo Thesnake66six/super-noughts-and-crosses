@@ -1,6 +1,4 @@
 use anyhow::{Ok, Result};
-use board::Board;
-use cell::Cell;
 use game::Game;
 use raylib::prelude::*;
 use styles::{BOARD_DEPTH, CAMERA_DEFAULT_ZOOM, CAMERA_MOVE_SPEED, CAMERA_SCROLL_SPEED};
@@ -27,30 +25,7 @@ fn main() -> Result<()> {
 
     let mut g = Game::new_depth(board_rect, BOARD_DEPTH);
 
-    // let mut x = Board::new();
-    // x.set(&[0], Cell::Player1).unwrap();
-    // x.set(&[1], Cell::Player1).unwrap();
-    // x.set(&[5], Cell::Player1).unwrap();
-    // x.set(&[6], Cell::Player1).unwrap();
-    // x.set(&[7], Cell::Player1).unwrap();
-    // x.set(&[2], Cell::Player2).unwrap();
-    // x.set(&[3], Cell::Player2).unwrap();
-    // x.set(&[4], Cell::Player2).unwrap();
-    // x.set(&[8], Cell::Player2).unwrap();
-
-    // g.board.cells[1] = cell::Cell::Board(Board::new_cells([Cell::Player1, Cell::Player1, Cell::Player1, Cell::Player1, Cell::Player1, Cell::Player1, Cell::Player1, Cell::Player1, Cell::Player1]));
-    // g.board.cells[4] = cell::Cell::Board(x.clone());
-    // g.board.cells[7] = cell::Cell::Board(Board::new_cells([Cell::Player2, Cell::Player2, Cell::Player2, Cell::Player2, Cell::Player2, Cell::Player2, Cell::Player2, Cell::Player2, Cell::Player2]));
-
-    // g.board = Board::new_cells([Cell::Player1, Cell::Player1, Cell::Player1, Cell::Player1, Cell::Player1, Cell::Player1, Cell::Player1, Cell::Player1, Cell::Player1]);
-    // g.board.cells[4] = cell::Cell::Board(Board::new_cells([Cell::Player1, Cell::Player1, Cell::Player1, Cell::Player1, Cell::Player1, Cell::Player1, Cell::Player1, Cell::Player1, Cell::Player1]));
-
     g.update_positions();
-
-    // g.board.set(&[4], cell::Cell::Board(x.clone())).unwrap();
-    // g.board.set(&[4, 1], cell::Cell::Board(x.clone())).unwrap();
-
-    // g.play(&[2]);
 
     let mut mouse_prev = Vector2::zero();
 
@@ -96,7 +71,7 @@ fn main() -> Result<()> {
 
         if rl.is_mouse_button_pressed(MouseButton::MOUSE_LEFT_BUTTON) {
             if let Some(ref cell) = hovered_cell {
-                let _ = g.play(&cell);
+                let _ = g.play(cell);
                 dbg!(g.legal.as_slice());
             }
         }

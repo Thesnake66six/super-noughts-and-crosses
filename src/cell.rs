@@ -1,9 +1,6 @@
-use raylib::{drawing::RaylibDraw, math::Rectangle, ffi::_GLAD_IS_SOME_NEW_VERSION};
+use raylib::{drawing::RaylibDraw, math::Rectangle};
 
-use crate::{
-    board::Board,
-    styles::*,
-};
+use crate::{board::Board, styles::*};
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 /// An enum used to differentiate the states of a board, namely:
@@ -20,16 +17,24 @@ pub enum Value {
 
 impl Value {
     /// Draws the value onto `T`, inside the given `Rectangle`
-    pub fn draw<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, alpha: bool, legal: Option<&[usize]>, turn: u8) {
+    pub fn draw<T: RaylibDraw>(
+        &self,
+        rect: Rectangle,
+        d: &mut T,
+        alpha: bool,
+        legal: Option<&[usize]>,
+        turn: u8,
+    ) {
         let mut greyed = true;
         if let Some(x) = legal {
-            if x == [] {
+            if x.is_empty() {
                 greyed = false
             }
         }
 
         // Draw background for the cell
-        d.draw_rectangle_rec(rect, 
+        d.draw_rectangle_rec(
+            rect,
             if alpha {
                 match self {
                     Value::None => COLOUR_CELL_BG,
@@ -38,12 +43,7 @@ impl Value {
                     Value::Draw => COLOUR_DRAW_BGA,
                 }
             } else if greyed {
-                if INVERT_GREYS {
-                    get_greyed_colour_cell(turn)
-                    // COLOUR_CELL_BG
-                } else {
-                    get_greyed_colour_cell(turn)
-                }
+                get_greyed_colour_cell(turn)
             } else {
                 match self {
                     Value::None => COLOUR_CELL_BG,
@@ -51,12 +51,12 @@ impl Value {
                     Value::Player2 => COLOUR_NOUGHT_BG,
                     Value::Draw => COLOUR_DRAW_BG,
                 }
-            }
+            },
         );
 
         // Draw the symbol atop the background
         match self {
-            Value::None => {},
+            Value::None => {}
             Value::Draw => draw_draw(rect, d),
             Value::Player1 => draw_cross(rect, d),
             Value::Player2 => draw_nought(rect, d),
@@ -96,12 +96,12 @@ impl Cell {
         no_check: bool,
         alpha: bool,
         mut hover: Option<&[usize]>,
-        mut legal: Option<&[usize]>,
+        legal: Option<&[usize]>,
         turn: u8,
     ) {
         let mut flag = false;
         if let Some(pos) = hover {
-            if pos.len() == 0 {
+            if pos.is_empty() {
                 flag = true;
                 hover = None
             }
@@ -109,7 +109,7 @@ impl Cell {
 
         let mut greyed = true;
         if let Some(x) = legal {
-            if x.len() == 0 {
+            if x.is_empty() {
                 greyed = false
             }
         }
@@ -124,75 +124,68 @@ impl Cell {
         }
 
         let draw_as_alpha = if let Cell::Board(_) = self {
-            if alpha { true } else { false }
-        } else { false };
+            alpha
+        } else {
+            false
+        };
 
         d.draw_rectangle_rec(
-            rect, 
-            if draw_as_alpha{
+            rect,
+            if draw_as_alpha {
                 match self {
                     Cell::None => COLOUR_CELL_BG,
                     Cell::Player1 => COLOUR_CROSS_BGA,
                     Cell::Player2 => COLOUR_NOUGHT_BGA,
                     Cell::Board(_) => COLOUR_BOARD_BG,
                 }
-            } else {
-                if no_grey {
+            } else if no_grey {
+                match self {
+                    Cell::None => COLOUR_CELL_BG,
+                    Cell::Player1 => COLOUR_CROSS_BG,
+                    Cell::Player2 => COLOUR_NOUGHT_BG,
+                    Cell::Board(_) => COLOUR_BOARD_BG,
+                }
+            } else if greyed {
+                if INVERT_GREYS && !board_completed {
+                    get_greyed_colour_cell(turn)
+                } else {
                     match self {
                         Cell::None => COLOUR_CELL_BG,
                         Cell::Player1 => COLOUR_CROSS_BG,
                         Cell::Player2 => COLOUR_NOUGHT_BG,
                         Cell::Board(_) => COLOUR_BOARD_BG,
                     }
-                } else if greyed {
-                    if INVERT_GREYS && !board_completed {
-                        get_greyed_colour_cell(turn)
-                    } else {
-                        match self {
-                            Cell::None => COLOUR_CELL_BG,
-                            Cell::Player1 => COLOUR_CROSS_BG,
-                            Cell::Player2 => COLOUR_NOUGHT_BG,
-                            Cell::Board(_) => COLOUR_BOARD_BG,
-                        }
-                    }
-                } else {
-                    if INVERT_GREYS || board_completed {
-                        match self {
-                            Cell::None => COLOUR_CELL_BG,
-                            Cell::Player1 => COLOUR_CROSS_BG,
-                            Cell::Player2 => COLOUR_NOUGHT_BG,
-                            Cell::Board(_) => COLOUR_BOARD_BG,
-                        }
-                    } else {
-                        get_greyed_colour_cell(turn)
-                    }
                 }
-            } 
+            } else if INVERT_GREYS || board_completed {
+                match self {
+                    Cell::None => COLOUR_CELL_BG,
+                    Cell::Player1 => COLOUR_CROSS_BG,
+                    Cell::Player2 => COLOUR_NOUGHT_BG,
+                    Cell::Board(_) => COLOUR_BOARD_BG,
+                }
+            } else {
+                get_greyed_colour_cell(turn)
+            },
         );
 
         match self {
-            Cell::None => {},
+            Cell::None => {}
             Cell::Player1 => draw_cross(rect, d),
             Cell::Player2 => draw_nought(rect, d),
             Cell::Board(b) => {
                 if let Value::None = b.check() {
                     b.draw(rect, d, no_check, alpha, hover, legal, turn) // Draw the board, if it is still playable...
+                } else if no_check {
+                    b.draw(rect, d, no_check, alpha, hover, legal, turn) // ...or if we're told not to check...
                 } else {
-                    if no_check {
-                        b.draw(rect, d, no_check, alpha, hover, legal, turn) // ...or if we're told not to check...
-                    } else {
-                        b.draw(rect, d, no_check, alpha, hover, legal, turn);
-                        b.check().draw(rect, d, alpha, legal, turn) // ...else draw the corresponding value
-                    }
+                    b.draw(rect, d, no_check, alpha, hover, legal, turn);
+                    b.check().draw(rect, d, alpha, legal, turn) // ...else draw the corresponding value
                 }
             }
         }
 
         if flag {
-            d.draw_rectangle_rec(
-                rect,
-                COLOUR_CELL_HOVER,
-            )
+            d.draw_rectangle_rec(rect, COLOUR_CELL_HOVER)
         }
     }
 }

@@ -15,20 +15,18 @@ pub struct Board {
 impl Board {
     /// Creates a new board filled with `Cell::None`
     pub fn new() -> Self {
-        let x = Board {
+        Board {
             cells: vec![Cell::None; 9],
             cell_positions: vec![Rectangle::new(0.0, 0.0, 0.0, 0.0); 9],
-        };
-        x
+        }
     }
 
     /// Creates a new board with its cells as the input slice
     pub fn new_cells(cells: [Cell; 9]) -> Self {
-        let x = Board {
+        Board {
             cells: cells.to_vec(),
             cell_positions: vec![Rectangle::new(0.0, 0.0, 0.0, 0.0); 9],
-        };
-        x
+        }
     }
 
     /// Recursively creates a new board, containing levels equal to the specified `depth`  
@@ -49,13 +47,13 @@ impl Board {
     /// `[0]` is the top-left cell of a tic-tac-toe board;
     /// `[0, 1]` is the upper-middle cell in the top-left board of a depth 2 game
     pub fn get(&self, pos: &[usize]) -> Option<Cell> {
-        if &pos.len() == &0 {
-            return Some(Cell::Board(self.clone()));
-        } else if &pos.len() > &1 {
+        if pos.is_empty() {
+            Some(Cell::Board(self.clone()))
+        } else if pos.len() > 1 {
             if let Cell::Board(board) = &self.cells[pos[0]] {
                 return board.get(&pos[1..]);
             } else {
-                return None;
+                None
             }
         } else {
             Some(self.cells[pos[0]].clone())
@@ -152,7 +150,7 @@ impl Board {
             }
         }
 
-        return None;
+        None
     }
 
     /// Draws the board in a given `Rectangle`. Automatically checking for wins can be turned off, as well as rendering completed boards under their symbols
@@ -172,7 +170,7 @@ impl Board {
             if x == [13] {
                 t = Some(13);
                 ignore = true
-            } else if x.len() > 0 {
+            } else if !x.is_empty() {
                 t = Some(x[0]);
                 if x.len() == 1 {
                     legal = Some(&[]);
@@ -184,19 +182,27 @@ impl Board {
             }
         };
 
-        let board_complete = if self.check() != Value::None || ignore { true } else { false };
+        let board_complete = self.check() != Value::None || ignore;
 
         d.draw_rectangle_rec(
             rect,
             if board_complete {
-                COLOUR_BOARD_BG    
-            } else {
-                if INVERT_GREYS {
-                    if let Some(_) = t { COLOUR_BOARD_BG } else { get_greyed_colour_board(turn) }
+                COLOUR_BOARD_BG
+            } else if INVERT_GREYS {
+                if t.is_some() {
+                    COLOUR_BOARD_BG
                 } else {
-                    if let Some(x) = t { if x == 10 { get_greyed_colour_board(turn) } else { COLOUR_BOARD_BG } } else { COLOUR_BOARD_BG }
+                    get_greyed_colour_board(turn)
                 }
-            }
+            } else if let Some(x) = t {
+                if x == 10 {
+                    get_greyed_colour_board(turn)
+                } else {
+                    COLOUR_BOARD_BG
+                }
+            } else {
+                COLOUR_BOARD_BG
+            },
         );
 
         let length = rect.width; // Side length of the board
@@ -266,7 +272,6 @@ impl Board {
         if let Some(pos) = hover {
             x = pos[0]
         }
-        
 
         for i in 0..9 {
             self.cells[i].draw(
@@ -274,11 +279,20 @@ impl Board {
                 d,
                 no_check,
                 alpha,
-                if i == x { Some(&hover.unwrap()[1..]) } else { None },
-                if board_complete { Some(&[13]) } else if [10, i].contains(&t.unwrap_or(11)) { legal } else { None },
-                turn
+                if i == x {
+                    Some(&hover.unwrap()[1..])
+                } else {
+                    None
+                },
+                if board_complete {
+                    Some(&[13])
+                } else if [10, i].contains(&t.unwrap_or(11)) {
+                    legal
+                } else {
+                    None
+                },
+                turn,
             )
-    }   
+        }
     }
 }
-

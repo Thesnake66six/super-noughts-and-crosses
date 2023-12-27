@@ -5,19 +5,17 @@ use raylib::{
 };
 use std::f32::consts::SQRT_2;
 
-use crate::board::Board;
-
 pub const CAMERA_MOVE_SPEED: f32 = -1.0;
 pub const CAMERA_DEFAULT_ZOOM: f32 = 0.5;
 pub const CAMERA_SCROLL_SPEED: f32 = 0.1;
 pub const BOARD_DEPTH: usize = 2;
 
-
 pub const COLOUR_CELL_BG: Color = Color::WHITE;
 /// When false: illegal cells are chosen to be highlighted
 /// When true: legal cells are chosen to be highlighted
-pub const INVERT_GREYS: bool = true;
-pub const DO_COLOURED_GREYS: bool = false;
+pub const INVERT_GREYS: bool = false;
+/// When true: cells that should be 'greyed out' are instead coloured based on which player's turn it is
+pub const DO_COLOURED_GREYS: bool = true;
 pub const COLOUR_CELL_BG_GREYED: Color = Color {
     r: 200,
     g: 200,
@@ -89,7 +87,7 @@ pub const COLOUR_DRAW_BGA: Color = Color {
 
 // Colours and rendering settings for a `Board`
 pub const COLOUR_BOARD_BG: Color = COLOUR_CELL_BG;
-    
+
 pub const COLOUR_BOARD_BG_GREYED: Color = COLOUR_CELL_BG_GREYED;
 pub const COLOUR_BOARD_BG_GREYED_P1: Color = COLOUR_CELL_BG_GREYED_P1;
 pub const COLOUR_BOARD_BG_GREYED_P2: Color = COLOUR_CELL_BG_GREYED_P2;
@@ -111,7 +109,6 @@ pub const COLOUR_CELL_HOVER: Color = Color {
 
 /// Draws a `Cell::Player1` or `Value::Player1`
 pub fn draw_cross<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
-
     let ln_x = rect.x + (CROSS_THICK * rect.width / SQRT_2);
     let ln_y = rect.y + (CROSS_THICK * rect.height / SQRT_2);
     let ln_fx = rect.x + rect.width - (CROSS_THICK * rect.width / SQRT_2);
@@ -185,19 +182,26 @@ pub fn draw_draw<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
 
 /// Quick function to get the correct greyed background colour of a cell
 pub fn get_greyed_colour_cell(turn: u8) -> Color {
-    if DO_COLOURED_GREYS { 
-        if turn == 1 { 
-            COLOUR_CELL_BG_GREYED_P1 
-        } 
-        else { 
-            COLOUR_CELL_BG_GREYED_P2 
-        } 
-    } else { 
-        COLOUR_CELL_BG_GREYED 
+    if DO_COLOURED_GREYS {
+        if turn == 1 {
+            COLOUR_CELL_BG_GREYED_P1
+        } else {
+            COLOUR_CELL_BG_GREYED_P2
+        }
+    } else {
+        COLOUR_CELL_BG_GREYED
     }
 }
 
 /// Quick function to get the correct greyed background colour of a board
 pub fn get_greyed_colour_board(turn: u8) -> Color {
-    if DO_COLOURED_GREYS { if turn == 1 { COLOUR_BOARD_BG_GREYED_P1 } else { COLOUR_BOARD_BG_GREYED_P2 } } else { COLOUR_BOARD_BG_GREYED }
+    if DO_COLOURED_GREYS {
+        if turn == 1 {
+            COLOUR_BOARD_BG_GREYED_P1
+        } else {
+            COLOUR_BOARD_BG_GREYED_P2
+        }
+    } else {
+        COLOUR_BOARD_BG_GREYED
+    }
 }

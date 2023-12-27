@@ -9,7 +9,9 @@ use raylib::{
 use crate::{
     board::Board,
     cell::{Cell, Value},
-    styles::{BOARD_CELL_MARGIN, COLOUR_CELL_BG, get_greyed_colour_board, COLOUR_BOARD_BG_GREYED_P1, COLOUR_BOARD_BG_GREYED_P2},
+    styles::{
+        BOARD_CELL_MARGIN, COLOUR_BOARD_BG, COLOUR_BOARD_BG_GREYED_P1, COLOUR_BOARD_BG_GREYED_P2,
+    },
 };
 
 pub struct Game {
@@ -24,7 +26,7 @@ pub struct Game {
 impl Game {
     pub fn new_depth(rect: Rectangle, depth: usize) -> Self {
         Game {
-            rect: rect,
+            rect,
             camera: Camera2D {
                 zoom: 1.0,
                 ..Default::default()
@@ -61,7 +63,16 @@ impl Game {
 
         let mut c = d.begin_mode2D(self.camera);
 
-        c.draw_rectangle_rec(rect, if self.turn == 1 { COLOUR_BOARD_BG_GREYED_P1 } else { COLOUR_BOARD_BG_GREYED_P2 });
+        c.draw_rectangle_rec(
+            rect,
+            if self.moves.is_empty() {
+                COLOUR_BOARD_BG
+            } else if self.turn == 1 {
+                COLOUR_BOARD_BG_GREYED_P1
+            } else {
+                COLOUR_BOARD_BG_GREYED_P2
+            },
+        );
 
         let irect = Rectangle {
             x: rect.x + m,
@@ -70,16 +81,20 @@ impl Game {
             height: rect.height - 2.0 * m,
         };
 
-        let legal: Option<&[usize]> = if self.board.check() != Value::None { Some(&[13]) } else { Some(&self.legal) };
+        let legal: Option<&[usize]> = if self.board.check() != Value::None {
+            Some(&[13])
+        } else {
+            Some(&self.legal)
+        };
 
-        self.board.draw(irect, &mut c, no_check, alpha, hover, legal, self.turn)
+        self.board
+            .draw(irect, &mut c, no_check, alpha, hover, legal, self.turn)
     }
 
     pub fn play(&mut self, pos: &[usize]) -> Result<()> {
-            if !pos.starts_with(&self.legal) {
-                bail!("Illegal move: Move is not within bounds of current play")
-            }
-
+        if !pos.starts_with(&self.legal) {
+            bail!("Illegal move: Move is not within bounds of current play")
+        }
 
         if let Cell::Board(b) = self.board.get(&pos[..pos.len().saturating_sub(2)]).unwrap() {
             if b.check() != Value::None {
@@ -98,6 +113,7 @@ impl Game {
             self.legal = self.get_legal(pos);
             dbg!(&self.legal);
             self.turn = (self.turn + 1) % 2;
+            self.moves.insert(self.moves.len(), pos.to_vec());
             Ok(())
         } else {
             println!("hh");
@@ -111,8 +127,16 @@ impl Game {
         }
 
         let n = pos.last().unwrap(); // The last position in pos
-        let up = if pos.len() >= 1 { &pos[..pos.len().saturating_sub(1)] } else { pos }; // The penultimate position in pos - correlates to the box that the play was made in
-        let last = if pos.len() >= 2 { &pos[..pos.len().saturating_sub(2)] } else { pos }; // The position two positions up, gives the depth-two board that the next move will always be in
+        let up = if !pos.is_empty() {
+            &pos[..pos.len().saturating_sub(1)]
+        } else {
+            pos
+        }; // The penultimate position in pos - correlates to the box that the play was made in
+        let last = if pos.len() >= 2 {
+            &pos[..pos.len().saturating_sub(2)]
+        } else {
+            pos
+        }; // The position two positions up, gives the depth-two board that the next move will always be in
 
         // Check to see if the move completed the board (up)
         if let Some(Cell::Board(b)) = self.board.get(up) {
@@ -124,17 +148,17 @@ impl Game {
             }
         }
         // Otherwise, check to make sure `up` exists
-        if let Some(Cell::Board(b)) = self.board.get(&[last, &[*n]].concat()){
+        if let Some(Cell::Board(b)) = self.board.get(&[last, &[*n]].concat()) {
             // If it's completed, then return the board above (`last`)
             if b.check() != Value::None {
-                return last.to_vec()
+                last.to_vec()
             // Otherwise, return last, plus `n` to get the board referenced by the previous move
             } else {
-                return [last, &[*n]].concat();
+                [last, &[*n]].concat()
             }
         // And, if `up` doesn't exist, meaning that this is the top board, then return everywhere (`[]`).
         } else {
-            return [].to_vec();
+            [].to_vec()
         }
     }
 
