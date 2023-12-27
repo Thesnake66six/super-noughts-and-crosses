@@ -1,7 +1,7 @@
 use anyhow::{Ok, Result};
 use game::Game;
 use raylib::prelude::*;
-use styles::{BOARD_DEPTH, CAMERA_DEFAULT_ZOOM, CAMERA_MOVE_SPEED, CAMERA_SCROLL_SPEED};
+use styles::*;
 
 mod board;
 mod cell;
@@ -19,11 +19,11 @@ fn main() -> Result<()> {
     let board_rect = Rectangle {
         x: 150.0,
         y: 150.0,
-        width: 60.0 * 3f32.powi(BOARD_DEPTH as i32),
-        height: 60.0 * 3f32.powi(BOARD_DEPTH as i32),
+        width: 60.0 * 3f32.powi(BOARD_DEFAULT_DEPTH as i32),
+        height: 60.0 * 3f32.powi(BOARD_DEFAULT_DEPTH as i32),
     };
 
-    let mut g = Game::new_depth(board_rect, BOARD_DEPTH);
+    let mut g = Game::new_depth(board_rect, BOARD_DEFAULT_DEPTH);
 
     g.update_positions();
 

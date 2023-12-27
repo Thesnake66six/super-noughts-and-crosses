@@ -5,43 +5,122 @@ use raylib::{
 };
 use std::f32::consts::SQRT_2;
 
-pub const CAMERA_MOVE_SPEED: f32 = -1.0;
-pub const CAMERA_DEFAULT_ZOOM: f32 = 0.5;
-pub const CAMERA_SCROLL_SPEED: f32 = 0.1;
-pub const BOARD_DEPTH: usize = 2;
+//----------// Constants determining default game settings //----------//
 
-pub const COLOUR_CELL_BG: Color = Color::WHITE;
-/// When false: illegal cells are chosen to be highlighted
-/// When true: legal cells are chosen to be highlighted
+
+/// Specifies the default depth of a board
+pub const BOARD_DEFAULT_DEPTH: usize = 2;
+
+
+
+//----------// Constants determining the properties of the camera //----------//
+
+
+/// Governs how fast the camera moves when panning.
+pub const CAMERA_MOVE_SPEED: f32 = -1.0;
+
+/// The initial zoom of the camera. 
+/// 
+/// 
+/// It represents the proportion of the screen that the board takes up.
+pub const CAMERA_DEFAULT_ZOOM: f32 = 0.8;
+
+/// Governs how far the camera zooms per scroll tick
+pub const CAMERA_SCROLL_SPEED: f32 = 0.1;
+
+
+//----------// Constants of settings for rendering the board and cells //----------//
+
+
+/// Alters which cells are highlighted based on their legality.
+/// 
+///  
+/// When false: illegal cells are chosen to be highlighted.
+/// 
+/// When true: legal cells are chosen to be highlighted.
 pub const INVERT_GREYS: bool = false;
-/// When true: cells that should be 'greyed out' are instead coloured based on which player's turn it is
+
+/// Changes the colours with which 'greyed out' cells are rendered.
+/// 
+/// 
+/// When true: cells that should be 'greyed out' are instead coloured based on which player's turn it is.
 pub const DO_COLOURED_GREYS: bool = true;
+
+/// The fractional width of the margin between the edge of the board and the cell.
+pub const BOARD_CELL_MARGIN: f32 = 0.02;
+
+/// The fractional thichness of the board lines.
+pub const BOARD_LINE_THICK: f32 = 0.02;
+
+/// The fractional thickness of the lines in a cross symbol
+pub const CROSS_THICK: f32 = 0.15;
+
+/// The fractional thickness of the ring in a nought symbol
+pub const NOUGHT_THICK: f32 = 0.15;
+
+/// The fractional padding between the ring of the nought and the edge of the cell
+pub const NOUGHT_PADDING: f32 = 0.05;
+
+
+//----------// Constants of colours used in rendering the board //----------//
+
+
+/// Line colour of the board.
+pub const COLOUR_BOARD_FG: Color = Color {
+    r: 0,
+    g: 0,
+    b: 0,
+    a: 255,
+};
+
+/// Background colour of the board.
+pub const COLOUR_BOARD_BG: Color = COLOUR_CELL_BG;
+
+/// Background colour of a greyed board.
+pub const COLOUR_BOARD_BG_GREYED: Color = COLOUR_CELL_BG_GREYED;
+
+/// Colourful background colour of a board on crosses' turn.
+pub const COLOUR_BOARD_BG_GREYED_P1: Color = COLOUR_CELL_BG_GREYED_P1;
+
+/// Colourful background colour of a board on noughts' turn.
+pub const COLOUR_BOARD_BG_GREYED_P2: Color = COLOUR_CELL_BG_GREYED_P2;
+
+
+
+
+//----------// Constants of colours used in rendering cells //----------//
+
+
+//-----// Default cell //-----//
+
+
+/// Background colour of a cell.
+pub const COLOUR_CELL_BG: Color = Color::WHITE;
+
+/// Background colour of a greyed cell.
 pub const COLOUR_CELL_BG_GREYED: Color = Color {
     r: 200,
     g: 200,
     b: 200,
     a: 255,
 };
-pub const COLOUR_CELL_BG_GREYED_P1: Color = Color {
-    r: 243,
-    g: 148,
-    b: 155,
-    a: 255,
-};
-pub const COLOUR_CELL_BG_GREYED_P2: Color = Color {
-    r: 152,
-    g: 202,
-    b: 249,
-    a: 255,
-};
 
-// Colours and rendering settings for a Cross - `Cell::Player1`
+
+//-----// Crosses //-----//
+
+
+/// Foreground colour of the cross symbol.
 pub const COLOUR_CROSS_FG: Color = Color {
     r: 230,
     g: 41,
     b: 55,
     a: 255,
 };
+
+/// Specific backgorund colour of cross cells.
+pub const COLOUR_CROSS_BG: Color = COLOUR_CELL_BG;
+
+/// Specific transparrent backgorund colour of cross cells.
 pub const COLOUR_CROSS_BGA: Color = Color {
     r: 230,
     g: 41,
@@ -49,16 +128,30 @@ pub const COLOUR_CROSS_BGA: Color = Color {
     a: 127,
 };
 
-pub const COLOUR_CROSS_BG: Color = COLOUR_CELL_BG;
-pub const CROSS_THICK: f32 = 0.15; // Thickness of the line
+/// Colourful background colour of a greyed cell on crosses' turn.
+pub const COLOUR_CELL_BG_GREYED_P1: Color = Color { 
+    r: 243,
+    g: 148,
+    b: 155,
+    a: 255,
+};
 
-// Colours and rendering settings for a Nought - `Cell::Player2`
+
+//-----// Noughts //-----//
+
+
+/// Foreground colour of the nought symbol.
 pub const COLOUR_NOUGHT_FG: Color = Color {
     r: 49,
     g: 148,
     b: 243,
     a: 255,
 };
+
+/// Specific backgorund colour of nought cells.
+pub const COLOUR_NOUGHT_BG: Color = COLOUR_CELL_BG;
+
+/// Specific transparrent backgorund colour of nought cells.
 pub const COLOUR_NOUGHT_BGA: Color = Color {
     r: 49,
     g: 148,
@@ -66,18 +159,30 @@ pub const COLOUR_NOUGHT_BGA: Color = Color {
     a: 127,
 };
 
-pub const COLOUR_NOUGHT_BG: Color = COLOUR_CELL_BG;
-pub const NOUGHT_THICK: f32 = 0.15; // Thickness of the line
-pub const NOUGHT_PADDING: f32 = 0.05; // Padding between the circle and the box
+/// Colourful background colour of a greyed cell on noughts' turn.
+pub const COLOUR_CELL_BG_GREYED_P2: Color = Color {
+    r: 152,
+    g: 202,
+    b: 249,
+    a: 255,
+};
 
-// Colours and rendering settings for a Draw - `Value::Draw`
-pub const COLOUR_DRAW_BG: Color = COLOUR_CELL_BG;
+
+//-----// Drawn cells //-----//
+
+
+/// Foreground colour of the draw symbol.
 pub const COLOUR_DRAW_FG: Color = Color {
     r: 160,
     g: 160,
     b: 160,
     a: 255,
 };
+
+/// Specific backgorund colour of drawn cells.
+pub const COLOUR_DRAW_BG: Color = COLOUR_CELL_BG;
+
+/// Specific transparrent backgorund colour of drawn cells.
 pub const COLOUR_DRAW_BGA: Color = Color {
     r: 0,
     g: 0,
@@ -85,21 +190,11 @@ pub const COLOUR_DRAW_BGA: Color = Color {
     a: 127,
 };
 
-// Colours and rendering settings for a `Board`
-pub const COLOUR_BOARD_BG: Color = COLOUR_CELL_BG;
 
-pub const COLOUR_BOARD_BG_GREYED: Color = COLOUR_CELL_BG_GREYED;
-pub const COLOUR_BOARD_BG_GREYED_P1: Color = COLOUR_CELL_BG_GREYED_P1;
-pub const COLOUR_BOARD_BG_GREYED_P2: Color = COLOUR_CELL_BG_GREYED_P2;
-pub const COLOUR_BOARD_LINE: Color = Color {
-    r: 0,
-    g: 0,
-    b: 0,
-    a: 255,
-};
-pub const BOARD_CELL_MARGIN: f32 = 0.02;
-pub const BOARD_LINE_THICK: f32 = 0.02;
+//-----// Miscelaneous //-----//
 
+
+/// The overlay imposed upon a hovered cell
 pub const COLOUR_CELL_HOVER: Color = Color {
     r: 190,
     g: 190,
@@ -107,25 +202,35 @@ pub const COLOUR_CELL_HOVER: Color = Color {
     a: 220,
 };
 
-/// Draws a `Cell::Player1` or `Value::Player1`
+
+//----------// Symbol rendering functions //----------//
+
+
+/// Draws a cross (`Cell::Player1` or `Value::Player1`) into the given rectangle 'rect' onto `d`.
 pub fn draw_cross<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
+    // Calculating the starting point...
     let ln_x = rect.x + (CROSS_THICK * rect.width / SQRT_2);
     let ln_y = rect.y + (CROSS_THICK * rect.height / SQRT_2);
+    // ...and the ending point of the first line...
     let ln_fx = rect.x + rect.width - (CROSS_THICK * rect.width / SQRT_2);
     let ln_fy = rect.y + rect.height - (CROSS_THICK * rect.height / SQRT_2);
-
+    
+    // ...and drawing the given line with the correct colour and relative thickness.
     d.draw_line_ex(
         Vector2 { x: ln_x, y: ln_y },
         Vector2 { x: ln_fx, y: ln_fy },
         rect.width * CROSS_THICK,
         COLOUR_CROSS_FG,
     );
-
+    
+    // Calculating the starting point...
     let ln_x = rect.x + (CROSS_THICK * rect.width / SQRT_2);
     let ln_y = rect.y + rect.height - (CROSS_THICK * rect.height / SQRT_2);
+    // ...and the ending point of the second line...
     let ln_fx = rect.x + rect.width - (CROSS_THICK * rect.width / SQRT_2);
     let ln_fy = rect.y + (CROSS_THICK * rect.height / SQRT_2);
-
+    
+    // ...and drawing the given line with the correct colour and relative thickness.
     d.draw_line_ex(
         Vector2 { x: ln_x, y: ln_y },
         Vector2 { x: ln_fx, y: ln_fy },
@@ -134,14 +239,17 @@ pub fn draw_cross<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
     );
 }
 
-/// Draws a `Cell::Player2` or `Value::Player2` with a transparent background
+/// Draws a nought (`Cell::Player2` or `Value::Player2`) into the given rectangle 'rect' onto `d`.
 pub fn draw_nought<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
+    // Calculating the position of the centre of the ring...
     let cx = rect.x + (rect.width / 2.0);
     let cy = rect.y + (rect.height / 2.0);
-
+    
+    // ...then the inner and outer radii of the ring based on the relative thickness...
     let ro = (rect.width / 2.0) - NOUGHT_PADDING * rect.width;
     let ri = (rect.width / 2.0) - (NOUGHT_THICK + NOUGHT_PADDING) * rect.width;
-
+    
+    // ...then drawing that ring with the correct colour.
     d.draw_ring(
         Vector2 { x: cx, y: cy },
         ri,
@@ -153,34 +261,43 @@ pub fn draw_nought<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
     )
 }
 
-/// Draws a `Value::Draw`
+
+/// Draws a draw (`Value::Draw`) into the given rectangle 'rect' onto `d`.
 pub fn draw_draw<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
+    // Calculating the spacing between the lines.
     let s = rect.height / 7.0;
 
-    d.draw_rectangle(
-        (rect.x + s) as i32,
-        (rect.y + s) as i32,
-        (rect.width - s * 2.0) as i32,
-        (s) as i32,
+    // Creating and drawing the first rectangle based on s.
+    let mut target_rec = Rectangle {
+        x: rect.x + s,
+        y: rect.y + s,
+        width: rect.width - s * 2.0,
+        height: s,
+    };
+    d.draw_rectangle_rec(
+        target_rec,
         COLOUR_DRAW_FG,
     );
-    d.draw_rectangle(
-        (rect.x + s) as i32,
-        (rect.y + 3.0 * s) as i32,
-        (rect.width - s * 2.0) as i32,
-        (s) as i32,
+    
+    // Adjusting the starting height of the second and third rectangles and then drawing them.
+    target_rec.y += 2.0 * s;
+    d.draw_rectangle_rec(
+        target_rec,
         COLOUR_DRAW_FG,
     );
-    d.draw_rectangle(
-        (rect.x + s) as i32,
-        (rect.y + 5.0 * s) as i32,
-        (rect.width - s * 2.0) as i32,
-        (s) as i32,
+
+    target_rec.y += 2.0 * s;
+    d.draw_rectangle_rec(
+        target_rec,
         COLOUR_DRAW_FG,
     );
 }
 
-/// Quick function to get the correct greyed background colour of a cell
+
+//----------// Miscelaneous quick procedures //----------//
+
+
+/// Returns the correct colour for a greyed out cell.
 pub fn get_greyed_colour_cell(turn: u8) -> Color {
     if DO_COLOURED_GREYS {
         if turn == 1 {
@@ -193,7 +310,7 @@ pub fn get_greyed_colour_cell(turn: u8) -> Color {
     }
 }
 
-/// Quick function to get the correct greyed background colour of a board
+/// Returns the correct colour for a greyed out board.
 pub fn get_greyed_colour_board(turn: u8) -> Color {
     if DO_COLOURED_GREYS {
         if turn == 1 {

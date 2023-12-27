@@ -9,9 +9,7 @@ use raylib::{
 use crate::{
     board::Board,
     cell::{Cell, Value},
-    styles::{
-        BOARD_CELL_MARGIN, COLOUR_BOARD_BG, COLOUR_BOARD_BG_GREYED_P1, COLOUR_BOARD_BG_GREYED_P2,
-    },
+    styles::*,
 };
 
 pub struct Game {

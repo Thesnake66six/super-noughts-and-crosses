@@ -223,7 +223,7 @@ impl Board {
                 y: rect.y + rect.height,
             },
             thickness,
-            COLOUR_BOARD_LINE,
+            COLOUR_BOARD_FG,
         );
 
         d.draw_line_ex(
@@ -237,7 +237,7 @@ impl Board {
                 y: rect.y + rect.height,
             },
             thickness,
-            COLOUR_BOARD_LINE,
+            COLOUR_BOARD_FG,
         );
 
         d.draw_line_ex(
@@ -251,7 +251,7 @@ impl Board {
                 y: rect.y + g1,
             },
             thickness,
-            COLOUR_BOARD_LINE,
+            COLOUR_BOARD_FG,
         );
 
         d.draw_line_ex(
@@ -265,7 +265,7 @@ impl Board {
                 y: rect.y + g1 + g2,
             },
             thickness,
-            COLOUR_BOARD_LINE,
+            COLOUR_BOARD_FG,
         );
 
         let mut x = 10;
