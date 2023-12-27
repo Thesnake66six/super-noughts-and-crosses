@@ -7,42 +7,36 @@ use std::f32::consts::SQRT_2;
 
 //----------// Constants determining default game settings //----------//
 
-
 /// Specifies the default depth of a board
 pub const BOARD_DEFAULT_DEPTH: usize = 2;
 
-
-
 //----------// Constants determining the properties of the camera //----------//
-
 
 /// Governs how fast the camera moves when panning.
 pub const CAMERA_MOVE_SPEED: f32 = -1.0;
 
-/// The initial zoom of the camera. 
-/// 
-/// 
+/// The initial zoom of the camera.
+///
+///
 /// It represents the proportion of the screen that the board takes up.
 pub const CAMERA_DEFAULT_ZOOM: f32 = 0.8;
 
 /// Governs how far the camera zooms per scroll tick
 pub const CAMERA_SCROLL_SPEED: f32 = 0.1;
 
-
 //----------// Constants of settings for rendering the board and cells //----------//
 
-
 /// Alters which cells are highlighted based on their legality.
-/// 
+///
 ///  
 /// When false: illegal cells are chosen to be highlighted.
-/// 
+///
 /// When true: legal cells are chosen to be highlighted.
 pub const INVERT_GREYS: bool = false;
 
 /// Changes the colours with which 'greyed out' cells are rendered.
-/// 
-/// 
+///
+///
 /// When true: cells that should be 'greyed out' are instead coloured based on which player's turn it is.
 pub const DO_COLOURED_GREYS: bool = true;
 
@@ -61,9 +55,7 @@ pub const NOUGHT_THICK: f32 = 0.15;
 /// The fractional padding between the ring of the nought and the edge of the cell
 pub const NOUGHT_PADDING: f32 = 0.05;
 
-
 //----------// Constants of colours used in rendering the board //----------//
-
 
 /// Line colour of the board.
 pub const COLOUR_BOARD_FG: Color = Color {
@@ -85,14 +77,9 @@ pub const COLOUR_BOARD_BG_GREYED_P1: Color = COLOUR_CELL_BG_GREYED_P1;
 /// Colourful background colour of a board on noughts' turn.
 pub const COLOUR_BOARD_BG_GREYED_P2: Color = COLOUR_CELL_BG_GREYED_P2;
 
-
-
-
 //----------// Constants of colours used in rendering cells //----------//
 
-
 //-----// Default cell //-----//
-
 
 /// Background colour of a cell.
 pub const COLOUR_CELL_BG: Color = Color::WHITE;
@@ -105,9 +92,7 @@ pub const COLOUR_CELL_BG_GREYED: Color = Color {
     a: 255,
 };
 
-
 //-----// Crosses //-----//
-
 
 /// Foreground colour of the cross symbol.
 pub const COLOUR_CROSS_FG: Color = Color {
@@ -129,16 +114,14 @@ pub const COLOUR_CROSS_BGA: Color = Color {
 };
 
 /// Colourful background colour of a greyed cell on crosses' turn.
-pub const COLOUR_CELL_BG_GREYED_P1: Color = Color { 
+pub const COLOUR_CELL_BG_GREYED_P1: Color = Color {
     r: 243,
     g: 148,
     b: 155,
     a: 255,
 };
 
-
 //-----// Noughts //-----//
-
 
 /// Foreground colour of the nought symbol.
 pub const COLOUR_NOUGHT_FG: Color = Color {
@@ -167,9 +150,7 @@ pub const COLOUR_CELL_BG_GREYED_P2: Color = Color {
     a: 255,
 };
 
-
 //-----// Drawn cells //-----//
-
 
 /// Foreground colour of the draw symbol.
 pub const COLOUR_DRAW_FG: Color = Color {
@@ -190,9 +171,7 @@ pub const COLOUR_DRAW_BGA: Color = Color {
     a: 127,
 };
 
-
 //-----// Miscelaneous //-----//
-
 
 /// The overlay imposed upon a hovered cell
 pub const COLOUR_CELL_HOVER: Color = Color {
@@ -202,9 +181,7 @@ pub const COLOUR_CELL_HOVER: Color = Color {
     a: 220,
 };
 
-
 //----------// Symbol rendering functions //----------//
-
 
 /// Draws a cross (`Cell::Player1` or `Value::Player1`) into the given rectangle 'rect' onto `d`.
 pub fn draw_cross<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
@@ -214,7 +191,7 @@ pub fn draw_cross<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
     // ...and the ending point of the first line...
     let ln_fx = rect.x + rect.width - (CROSS_THICK * rect.width / SQRT_2);
     let ln_fy = rect.y + rect.height - (CROSS_THICK * rect.height / SQRT_2);
-    
+
     // ...and drawing the given line with the correct colour and relative thickness.
     d.draw_line_ex(
         Vector2 { x: ln_x, y: ln_y },
@@ -222,14 +199,14 @@ pub fn draw_cross<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
         rect.width * CROSS_THICK,
         COLOUR_CROSS_FG,
     );
-    
+
     // Calculating the starting point...
     let ln_x = rect.x + (CROSS_THICK * rect.width / SQRT_2);
     let ln_y = rect.y + rect.height - (CROSS_THICK * rect.height / SQRT_2);
     // ...and the ending point of the second line...
     let ln_fx = rect.x + rect.width - (CROSS_THICK * rect.width / SQRT_2);
     let ln_fy = rect.y + (CROSS_THICK * rect.height / SQRT_2);
-    
+
     // ...and drawing the given line with the correct colour and relative thickness.
     d.draw_line_ex(
         Vector2 { x: ln_x, y: ln_y },
@@ -244,11 +221,11 @@ pub fn draw_nought<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
     // Calculating the position of the centre of the ring...
     let cx = rect.x + (rect.width / 2.0);
     let cy = rect.y + (rect.height / 2.0);
-    
+
     // ...then the inner and outer radii of the ring based on the relative thickness...
     let ro = (rect.width / 2.0) - NOUGHT_PADDING * rect.width;
     let ri = (rect.width / 2.0) - (NOUGHT_THICK + NOUGHT_PADDING) * rect.width;
-    
+
     // ...then drawing that ring with the correct colour.
     d.draw_ring(
         Vector2 { x: cx, y: cy },
@@ -260,7 +237,6 @@ pub fn draw_nought<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
         COLOUR_NOUGHT_FG,
     )
 }
-
 
 /// Draws a draw (`Value::Draw`) into the given rectangle 'rect' onto `d`.
 pub fn draw_draw<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
@@ -274,28 +250,17 @@ pub fn draw_draw<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
         width: rect.width - s * 2.0,
         height: s,
     };
-    d.draw_rectangle_rec(
-        target_rec,
-        COLOUR_DRAW_FG,
-    );
-    
+    d.draw_rectangle_rec(target_rec, COLOUR_DRAW_FG);
+
     // Adjusting the starting height of the second and third rectangles and then drawing them.
     target_rec.y += 2.0 * s;
-    d.draw_rectangle_rec(
-        target_rec,
-        COLOUR_DRAW_FG,
-    );
+    d.draw_rectangle_rec(target_rec, COLOUR_DRAW_FG);
 
     target_rec.y += 2.0 * s;
-    d.draw_rectangle_rec(
-        target_rec,
-        COLOUR_DRAW_FG,
-    );
+    d.draw_rectangle_rec(target_rec, COLOUR_DRAW_FG);
 }
 
-
 //----------// Miscelaneous quick procedures //----------//
-
 
 /// Returns the correct colour for a greyed out cell.
 pub fn get_greyed_colour_cell(turn: u8) -> Color {
