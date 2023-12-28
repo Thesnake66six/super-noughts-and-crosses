@@ -49,6 +49,17 @@ impl Game {
         self.board.update_positions(irect)
     }
 
+    pub fn centre_camera(&mut self, rect: Rectangle) {
+        self.camera.target = Vector2 {
+            x: self.rect.x + self.rect.width / 2.0f32,
+            y: self.rect.y + self.rect.height / 2.0f32,
+        };
+        self.camera.zoom = f32::min(
+            rect.width / self.rect.width * CAMERA_DEFAULT_ZOOM,
+            rect.height / self.rect.height * CAMERA_DEFAULT_ZOOM,
+        );
+    }
+
     pub fn draw<T: RaylibDraw>(
         &self,
         rect: Rectangle,
@@ -63,7 +74,7 @@ impl Game {
 
         c.draw_rectangle_rec(
             rect,
-            if self.moves.is_empty() {
+            if self.legal.is_empty() {
                 COLOUR_BOARD_BG
             } else if self.turn == 1 {
                 COLOUR_BOARD_BG_GREYED_P1
@@ -79,7 +90,7 @@ impl Game {
             height: rect.height - 2.0 * m,
         };
 
-        let legal: Option<&[usize]> = if self.board.check() != Value::None {
+        let legal: Option<&[usize]> = if self.board.check() != Value::None || self.moves.is_empty() {
             Some(&[13])
         } else {
             Some(&self.legal)
