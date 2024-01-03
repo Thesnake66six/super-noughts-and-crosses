@@ -1,13 +1,13 @@
-use std::{collections::HashMap};
+use std::collections::HashMap;
 
 use raylib::{
     color::Color,
     drawing::RaylibDraw,
     math::{Rectangle, Vector2},
-    text::{self, measure_text_ex, Font},
+    text::Font,
 };
 
-use crate::{game::Game, styles::*, cell::Value};
+use crate::{cell::Value, game::Game, styles::*};
 
 pub enum UITab {
     Game,
@@ -51,15 +51,12 @@ impl UI<'_> {
                 ("Player 2", Rectangle::EMPTY),
                 ("New Game", Rectangle::EMPTY),
             ]),
-            state: HashMap::from([
-                ("Depth", BOARD_DEFAULT_DEPTH),
-                ("Players", 2),
-            ]),
+            state: HashMap::from([("Depth", BOARD_DEFAULT_DEPTH), ("Players", 2)]),
         }
     }
 
     /// A function that updates the elements hashmaps' values.
-    /// 
+    ///
     /// Called every frame before rendereing, so as to save on rl.get_screen_size() calls
     pub fn update_positions(&mut self, rect: Rectangle) {
         // Calculate the size of the padding in pixels
@@ -75,7 +72,7 @@ impl UI<'_> {
             height: UI_NAVBAR_HEIGHT as f32,
         };
         *self.constant_elements.get_mut("Game").unwrap() = r;
-        
+
         let r = Rectangle {
             x: r.x + r.width + UI_DIVIDER_THICKNESS as f32,
             y: r.y,
@@ -83,7 +80,7 @@ impl UI<'_> {
             height: r.height,
         };
         *self.constant_elements.get_mut("Settings").unwrap() = r;
-        
+
         let r = Rectangle {
             x: rect.x,
             y: rect.y + UI_NAVBAR_HEIGHT as f32 + UI_DIVIDER_THICKNESS as f32,
@@ -91,9 +88,9 @@ impl UI<'_> {
             height: rect.height - UI_NAVBAR_HEIGHT as f32 - UI_DIVIDER_THICKNESS as f32,
         };
         *self.constant_elements.get_mut("Content").unwrap() = r;
-        
+
         let content_pading = UI_CONTENT_PADDING * UI_PANEL_WIDTH as f32;
-        
+
         let r = Rectangle {
             x: r.x + content_pading,
             y: r.y + content_pading,
@@ -101,7 +98,7 @@ impl UI<'_> {
             height: r.height - 2.0 * content_pading,
         };
         *self.constant_elements.get_mut("Inner Content").unwrap() = r;
-        
+
         // Calculate the game elements' positions
 
         // Calculate the position of the Turn Display
@@ -112,7 +109,7 @@ impl UI<'_> {
             height: 100.0,
         };
         *self.game_elements.get_mut("Turn Display").unwrap() = r;
-        
+
         // Calculate the position of the Padding between the Turn Display and the Moves
         let p = Rectangle {
             x: r.x,
@@ -132,7 +129,7 @@ impl UI<'_> {
         *self.game_elements.get_mut("Moves").unwrap() = r;
 
         // Calculate the settings elements' positions
-        
+
         // Calculate the position of the Depth buttons
         let r = Rectangle {
             x: rect.x + padding,
@@ -142,7 +139,6 @@ impl UI<'_> {
         };
         *self.settings_elements.get_mut("Depth").unwrap() = r;
 
-        
         // Calculate the position of the Players selection buttons
         let r = Rectangle {
             x: r.x,
@@ -151,7 +147,7 @@ impl UI<'_> {
             height: 200.0,
         };
         *self.settings_elements.get_mut("Players").unwrap() = r;
-        
+
         // Calculate the position of the New Game button
         let r = Rectangle {
             x: r.x,
@@ -160,7 +156,7 @@ impl UI<'_> {
             height: 100.0,
         };
         *self.settings_elements.get_mut("New Game").unwrap() = r;
-        
+
         // Calculate the positions of the clickable content
         let padding = UI_CONTENT_PADDING * self.constant_elements["Inner Content"].width;
 
@@ -172,7 +168,7 @@ impl UI<'_> {
             height: dp.height - 2.0 * padding,
         };
         *self.settings_elements.get_mut("Depth Minus").unwrap() = r;
-        
+
         let r = Rectangle {
             x: r.x + r.width + padding,
             y: r.y,
@@ -180,11 +176,11 @@ impl UI<'_> {
             height: r.height,
         };
         *self.settings_elements.get_mut("Depth Plus").unwrap() = r;
-        
+
         // Draw Players selection
         let pl = self.settings_elements["Players"];
         let r = Rectangle {
-            x: pl.x  + padding + (pl.width - 2.0 * padding) - (100.0 - 2.0 * padding),
+            x: pl.x + padding + (pl.width - 2.0 * padding) - (100.0 - 2.0 * padding),
             y: pl.y + padding,
             width: 100.0 - 2.0 * padding,
             height: 100.0 - 2.0 * padding,
@@ -192,14 +188,14 @@ impl UI<'_> {
         *self.settings_elements.get_mut("Player 1").unwrap() = r;
 
         let r = Rectangle {
-            x: pl.x  + padding + (pl.width - 2.0 * padding) - (100.0 - 2.0 * padding),
+            x: pl.x + padding + (pl.width - 2.0 * padding) - (100.0 - 2.0 * padding),
             y: pl.y + 2.0 * padding + (pl.height - 3.0 * padding) / 2.0,
             width: 100.0 - 2.0 * padding,
             height: 100.0 - 2.0 * padding,
         };
         *self.settings_elements.get_mut("Player 2").unwrap() = r;
     }
-    
+
     pub fn draw<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, g: &Game, font: &Font) {
         // Draw the background for the UI
         d.draw_rectangle_rec(rect, COLOUR_UI_BG);
@@ -230,7 +226,7 @@ impl UI<'_> {
         );
 
         let tab_rect = self.constant_elements["Game"];
-        
+
         d.draw_rectangle_rec(
             tab_rect,
             match self.tab {
@@ -238,11 +234,11 @@ impl UI<'_> {
                 UITab::Game => COLOUR_UI_BG,
             },
         );
-        
+
         let text_rec = centre_text_rec(font, "Game", 50.0, 0.0, tab_rect);
-        
+
         d.draw_text_rec(font, "Game", text_rec, 50.0, 0.0, false, Color::BLACK);
-        
+
         // Draw the Settings tab button
         let tab_rect = self.constant_elements["Settings"];
 
@@ -270,7 +266,7 @@ impl UI<'_> {
                     },
                     COLOUR_UI_DIVIDER,
                 );
-            },
+            }
             UITab::Game => {
                 d.draw_rectangle_rec(
                     Rectangle {
@@ -281,7 +277,7 @@ impl UI<'_> {
                     },
                     COLOUR_UI_DIVIDER,
                 );
-            },
+            }
         }
 
         d.draw_line_ex(
@@ -303,17 +299,33 @@ impl UI<'_> {
         let mv = self.game_elements["Moves"];
 
         d.draw_rectangle_rec(mv, COLOUR_UI_ELEMENT);
-        
+
         for (i, x) in g.moves.iter().enumerate() {
             let rect = Rectangle {
-                x: mv.x + if i % 2 == 1 { mv.width * 0.5 } else { 0.0 } + (UI_CONTENT_PADDING * 75.0),
-                y: mv.y + self.scroll_offset_game + (75.0 * f32::floor(i as f32 / 2.0)) + (UI_CONTENT_PADDING * 75.0),
+                x: mv.x
+                    + if i % 2 == 1 { mv.width * 0.5 } else { 0.0 }
+                    + (UI_CONTENT_PADDING * 75.0),
+                y: mv.y
+                    + self.scroll_offset_game
+                    + (75.0 * f32::floor(i as f32 / 2.0))
+                    + (UI_CONTENT_PADDING * 75.0),
                 width: mv.width * 0.5 - (UI_CONTENT_PADDING * 75.0 * 2.0),
                 height: 75.0 - (UI_CONTENT_PADDING * 75.0 * 2.0),
             };
 
-            d.draw_rectangle_rec(rect, if i % 2 == 1 { COLOUR_UI_HIGHLIGHT_P2 } else { COLOUR_UI_HIGHLIGHT_P1 });
-            let t = x[0].iter().map(|x| x.to_string()).collect::<Vec<String>>().join(", ");
+            d.draw_rectangle_rec(
+                rect,
+                if i % 2 == 1 {
+                    COLOUR_UI_HIGHLIGHT_P2
+                } else {
+                    COLOUR_UI_HIGHLIGHT_P1
+                },
+            );
+            let t = x[0]
+                .iter()
+                .map(|x| x.to_string())
+                .collect::<Vec<String>>()
+                .join(", ");
             let r = centre_text_rec(font, &t, 50.0, 0.0, rect);
             d.draw_text_rec(font, &t, r, 50.0, 0.0, false, Color::BLACK)
         }
@@ -322,7 +334,6 @@ impl UI<'_> {
         let p = self.game_elements["Padding"];
 
         d.draw_rectangle_rec(p, COLOUR_UI_BG);
-
 
         // Draw the turn counter
         let tc = self.game_elements["Turn Display"];
@@ -352,33 +363,15 @@ impl UI<'_> {
                 },
             );
         } else if g.turn == 1 {
-            
             let text = "Crosses' Turn";
             let rec = centre_text_rec(font, text, 50.0, 0.0, tc);
-            
-            d.draw_text_rec(
-                font,
-                text,
-                rec,
-                50.0,
-                0.0,
-                false,
-                COLOUR_UI_HIGHLIGHT_P1,
-            );
+
+            d.draw_text_rec(font, text, rec, 50.0, 0.0, false, COLOUR_UI_HIGHLIGHT_P1);
         } else {
             let text = "Noughts' Turn";
             let rec = centre_text_rec(font, text, 50.0, 0.0, tc);
-            d.draw_text_rec(
-                font,
-                text,
-                rec,
-                50.0,
-                0.0,
-                true,
-                COLOUR_UI_HIGHLIGHT_P2,
-            );
+            d.draw_text_rec(font, text, rec, 50.0, 0.0, true, COLOUR_UI_HIGHLIGHT_P2);
         }
-
     }
 
     pub fn draw_settings<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, g: &Game, font: &Font) {
@@ -402,38 +395,55 @@ impl UI<'_> {
         // Draw the current depth text
         d.draw_text_rec(font, &text, text_rec, 50.0, 0.0, false, Color::BLACK);
 
-        
         // Draw the buttons
         let mut brec = self.settings_elements["Depth Plus"];
-        brec.y += self.scroll_offset_settings;        
+        brec.y += self.scroll_offset_settings;
         d.draw_rectangle_rec(brec, COLOUR_UI_BUTTON);
         let p = button_side * UI_CONTENT_PADDING * 2.0;
         d.draw_line_ex(
-            Vector2 { x: brec.x + p, y: brec.y + 0.5 * brec.height }, 
-            Vector2 { x: brec.x + brec.width - p, y: brec.y + 0.5 * brec.height}, 
-            UI_BUTTON_LINE_THICKNESS as f32, 
-            Color::BLACK
+            Vector2 {
+                x: brec.x + p,
+                y: brec.y + 0.5 * brec.height,
+            },
+            Vector2 {
+                x: brec.x + brec.width - p,
+                y: brec.y + 0.5 * brec.height,
+            },
+            UI_BUTTON_LINE_THICKNESS as f32,
+            Color::BLACK,
         );
         d.draw_line_ex(
-            Vector2 { x: brec.x + 0.5 * brec.width, y: brec.y + p }, 
-            Vector2 { x: brec.x + 0.5 * brec.width, y: brec.y + brec.height - p}, 
-            UI_BUTTON_LINE_THICKNESS as f32, 
-            Color::BLACK
+            Vector2 {
+                x: brec.x + 0.5 * brec.width,
+                y: brec.y + p,
+            },
+            Vector2 {
+                x: brec.x + 0.5 * brec.width,
+                y: brec.y + brec.height - p,
+            },
+            UI_BUTTON_LINE_THICKNESS as f32,
+            Color::BLACK,
         );
-        
+
         let mut brec = self.settings_elements["Depth Minus"];
         brec.y += self.scroll_offset_settings;
         d.draw_rectangle_rec(brec, COLOUR_UI_BUTTON);
         d.draw_line_ex(
-            Vector2 { x: brec.x + p, y: brec.y + 0.5 * brec.height }, 
-            Vector2 { x: brec.x + brec.width - p, y: brec.y + 0.5 * brec.height}, 
-            UI_BUTTON_LINE_THICKNESS as f32, 
-            Color::BLACK
+            Vector2 {
+                x: brec.x + p,
+                y: brec.y + 0.5 * brec.height,
+            },
+            Vector2 {
+                x: brec.x + brec.width - p,
+                y: brec.y + 0.5 * brec.height,
+            },
+            UI_BUTTON_LINE_THICKNESS as f32,
+            Color::BLACK,
         );
 
         // Draw Players selection
-        let mut pl = self.settings_elements["Players"];
-        
+        let pl = self.settings_elements["Players"];
+
         d.draw_rectangle_rec(pl, COLOUR_UI_ELEMENT);
         let button_side = 100.0 - 2.0 * padding;
         let p1 = Rectangle {
@@ -442,10 +452,10 @@ impl UI<'_> {
             width: pl.width - 2.0 * padding,
             height: (pl.height - 3.0 * padding) / 2.0,
         };
-        
+
         let mut brec = self.settings_elements["Player 1"];
         brec.y += self.scroll_offset_settings;
-        
+
         d.draw_rectangle_rec(brec, COLOUR_UI_BUTTON);
         let p = button_side * UI_CONTENT_PADDING * 2.0;
         if self.state["Players"] == 1 {
@@ -455,8 +465,8 @@ impl UI<'_> {
                     y: brec.y + p,
                     width: brec.width - 2.0 * p,
                     height: brec.height - 2.0 * p,
-                }, 
-                Color::BLACK
+                },
+                Color::BLACK,
             )
         }
         let trec = Rectangle {
@@ -467,17 +477,17 @@ impl UI<'_> {
         };
         let trec = centre_text_rec(font, "1 Player", 50.0, 0.0, trec);
         d.draw_text_rec(font, "1 Player", trec, 50.0, 0.0, false, Color::BLACK);
-        
+
         let p2 = Rectangle {
             x: pl.x + padding,
             y: pl.y + 2.0 * padding + (pl.height - 3.0 * padding) / 2.0,
             width: pl.width - 2.0 * padding,
             height: (pl.height - 3.0 * padding) / 2.0,
         };
-        
+
         let mut brec = self.settings_elements["Player 2"];
         brec.y += self.scroll_offset_settings;
-        
+
         d.draw_rectangle_rec(brec, COLOUR_UI_BUTTON);
         let p = button_side * UI_CONTENT_PADDING * 2.0;
         if self.state["Players"] == 2 {
@@ -487,8 +497,8 @@ impl UI<'_> {
                     y: brec.y + p,
                     width: brec.width - 2.0 * p,
                     height: brec.height - 2.0 * p,
-                }, 
-                Color::BLACK
+                },
+                Color::BLACK,
             )
         }
         let trec = Rectangle {

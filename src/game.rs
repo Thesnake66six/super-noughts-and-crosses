@@ -13,12 +13,19 @@ use crate::{
 };
 
 pub struct Game {
+    /// The rectange in which the board is rendered to the camera
     pub rect: Rectangle,
+    /// The camera
     pub camera: Camera2D,
+    /// The top level board
     pub board: Board,
+    /// The depth of the game
     pub depth: usize,
+    /// The current turn - 1 for Crosses, 2 for Noughts
     pub turn: u8,
+    /// A list of all previous moves, and the legal moves that could have been made on that turn
     pub moves: Vec<Vec<Vec<usize>>>,
+    /// The current set of legal moves
     pub legal: Vec<usize>,
 }
 
@@ -76,7 +83,7 @@ impl Game {
 
         c.draw_rectangle_rec(
             rect,
-            if self.board.check() != Value::None{
+            if self.board.check() != Value::None {
                 match self.board.check() {
                     Value::None => panic!("How the fuck did you manage that"),
                     Value::Draw => COLOUR_BOARD_BG_GREYED,
@@ -129,7 +136,10 @@ impl Game {
                 Cell::Player2
             };
             self.board.set(pos, val)?;
-            self.moves.insert(self.moves.len(), [pos.to_vec(), self.legal.to_vec()].to_vec());
+            self.moves.insert(
+                self.moves.len(),
+                [pos.to_vec(), self.legal.to_vec()].to_vec(),
+            );
             self.legal = self.get_legal(pos);
             dbg!(&self.legal);
             self.turn = (self.turn + 1) % 2;

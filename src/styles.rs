@@ -1,7 +1,8 @@
 use raylib::{
     color::Color,
     drawing::RaylibDraw,
-    math::{Rectangle, Vector2}, text::{Font, measure_text_ex},
+    math::{Rectangle, Vector2},
+    text::{measure_text_ex, Font},
 };
 use std::f32::consts::SQRT_2;
 
@@ -343,7 +344,13 @@ pub fn get_greyed_colour_board(turn: u8) -> Color {
 
 /// Returns a rectangle fitting the given text, given parameters.
 /// Adds a small offset due to rendering bugs (best fix I could find)
-pub fn centre_text_rec(font: &Font, text: &str, size: f32, spacing: f32, rect: Rectangle) -> Rectangle {
+pub fn centre_text_rec(
+    font: &Font,
+    text: &str,
+    size: f32,
+    spacing: f32,
+    rect: Rectangle,
+) -> Rectangle {
     let text_size = measure_text_ex(font, text, size, spacing);
     Rectangle {
         x: rect.x + 0.5 * (rect.width - text_size.x) - 2.0,
