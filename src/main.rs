@@ -1,14 +1,19 @@
 use anyhow::{Ok, Result};
 use game::Game;
-use raylib::prelude::*;
+use raylib::{ffi::{GL_SAMPLER_2D_RECT, glad_glBindParameterEXT}, prelude::*, rgui::RaylibDrawGui, text::RaylibFont};
 use styles::*;
+use ui::{UI, UITab};
 
 mod board;
 mod cell;
 mod game;
 mod styles;
+mod ui;
 
 fn main() -> Result<()> {
+    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("warn")).init();
+
+    // Initialise Raylib
     let (mut rl, thread) = raylib::init()
         .size(650 * 2, 650 * 2)
         .resizable()
@@ -16,88 +21,214 @@ fn main() -> Result<()> {
         .msaa_4x()
         .build();
 
-    let board_rect = Rectangle {
-        x: 150.0,
-        y: 150.0,
-        width: 60.0 * 3f32.powi(BOARD_DEFAULT_DEPTH as i32),
-        height: 60.0 * 3f32.powi(BOARD_DEFAULT_DEPTH as i32),
-    };
+    // Allocate the space on the screen for the game and the UI
+    let mut game_rect = get_game_rect(&rl);
+    let mut ui_rect = get_ui_rect(&rl);
 
-    let mut g = Game::new_depth(board_rect, BOARD_DEFAULT_DEPTH);
+    // Import the font
+    let font_50pt = rl
+        .load_font_ex(
+            &thread,
+            "./resources/Inter-Regular.ttf",
+            50,
+            FontLoadEx::Default(0),
+        )
+        .expect("Couldn't load font oof");
 
+    // Set some settings for the window
+    rl.set_target_fps(60);
+    rl.set_window_min_size(UI_PANEL_WIDTH as i32, UI_PANEL_MIN_HEIGHT as i32);
+
+
+    // Create the game
+    let mut g = Game::new_depth(get_board_rect(BOARD_DEFAULT_DEPTH), BOARD_DEFAULT_DEPTH);
+
+    // Create the ui
+    let mut ui = UI::new();
+
+    // Get the pixel positions of each cell in the game
     g.update_positions();
+    ui.update_positions(ui_rect);
 
     let mut mouse_prev = Vector2::zero();
+    let mut good_right_click = false;
 
     // Centre
-    g.camera.target = Vector2 {
-        x: board_rect.x + board_rect.width / 2.0f32,
-        y: board_rect.y + board_rect.height / 2.0f32,
-    };
-    g.camera.zoom = f32::max(
-        rl.get_screen_width() as f32 / board_rect.width * CAMERA_DEFAULT_ZOOM,
-        rl.get_screen_height() as f32 / board_rect.height * CAMERA_DEFAULT_ZOOM,
-    );
+    g.centre_camera(game_rect);
 
-    rl.set_target_fps(60);
-
-    let mut x = 0;
     while !rl.window_should_close() {
-        // Centre the camera
-        g.camera.offset = Vector2 {
-            x: rl.get_screen_width() as f32 / 2.0f32,
-            y: rl.get_screen_height() as f32 / 2.0f32,
-        };
+        //----------// Handle input //----------//
 
-        // Increment the zoom based of the mousewheel
-        g.camera.zoom += rl.get_mouse_wheel_move() * CAMERA_SCROLL_SPEED * g.camera.zoom;
+        let mouse_pos = rl.get_mouse_position();
 
-        // Prevent zoom from being negative
-        if g.camera.zoom < 0.0 {
-            g.camera.zoom *= -1.0;
+        if rl.is_window_resized() {
+            game_rect = get_game_rect(&rl);
+            ui_rect = get_ui_rect(&rl);
+            ui.update_positions(ui_rect);
         }
 
-        if rl.is_mouse_button_down(MouseButton::MOUSE_RIGHT_BUTTON) {
-            let offset = rl.get_mouse_position();
+        // Centre the camera
+        g.camera.offset = Vector2 {
+            x: game_rect.width as f32 / 2.0f32,
+            y: game_rect.height as f32 / 2.0f32,
+        };
+
+        // Increment the zoom based of the mousewheel and mouse position
+        let x = rl.get_mouse_wheel_move();
+        if ui_rect.check_collision_point_rec(mouse_pos) {
+            // If the mouse is over the UI...
+            match ui.tab {
+                // ...and is in the Game tab...
+                ui::UITab::Game => {
+                    // ...and is in the Moves display...
+                    if ui.game_elements["Moves"].check_collision_point_rec(mouse_pos) {
+                        // ...increment the scroll offset.
+                        ui.scroll_offset_game += x * UI_SCROLL_SPEED;
+                        if ui.scroll_offset_game > 0.0 { ui.scroll_offset_game = 0.0 }
+                    }
+                },
+                // ...and is in the Settings tab...
+                ui::UITab::Settings => {
+                    // ... and is over the content...
+                    let content_rec = Rectangle {
+                        x: ui_rect.x,
+                        y: ui_rect.y + UI_NAVBAR_HEIGHT as f32 + UI_DIVIDER_THICKNESS as f32,
+                        width: ui_rect.width,
+                        height: ui_rect.height - UI_NAVBAR_HEIGHT as f32 - UI_DIVIDER_THICKNESS as f32,
+                    };
+                    if content_rec.check_collision_point_rec(mouse_pos) {
+                        // ...increment the scroll offset.
+                        ui.scroll_offset_settings += x * UI_SCROLL_SPEED;
+                        if ui.scroll_offset_settings > 0.0 { ui.scroll_offset_settings = 0.0 }
+                    }
+                },
+            }
+        } else {
+            // If the mouse is over the Game, increment the Camera zoom
+            g.camera.zoom += x * CAMERA_SCROLL_SPEED * g.camera.zoom;
+            if g.camera.zoom < 0.0 { g.camera.zoom *= -1.0 }
+        }
+
+        if rl.is_mouse_button_pressed(MouseButton::MOUSE_RIGHT_BUTTON) && game_rect.check_collision_point_rec(mouse_pos) {
+            good_right_click = true;
+        }
+
+        if rl.is_mouse_button_released(MouseButton::MOUSE_RIGHT_BUTTON) {
+            good_right_click = false;
+        }
+
+        if rl.is_mouse_button_down(MouseButton::MOUSE_RIGHT_BUTTON) && good_right_click {
+            let offset = mouse_pos;
             g.camera.target.x += (offset.x - mouse_prev.x) * CAMERA_MOVE_SPEED / g.camera.zoom;
             g.camera.target.y += (offset.y - mouse_prev.y) * CAMERA_MOVE_SPEED / g.camera.zoom;
             mouse_prev = offset;
         } else {
-            mouse_prev = rl.get_mouse_position();
+            mouse_prev = mouse_pos;
         }
 
-        let world_coord = rl.get_screen_to_world2D(rl.get_mouse_position(), g.camera);
+        let world_coord = rl.get_screen_to_world2D(mouse_pos, g.camera);
         let hovered_cell = g.get_cell_from_pos(world_coord, false);
 
         if rl.is_mouse_button_pressed(MouseButton::MOUSE_LEFT_BUTTON) {
-            if let Some(ref cell) = hovered_cell {
+            if ui_rect.check_collision_point_rec(mouse_pos) {
+                // Oh boy, get ready
+                if ui.constant_elements["Game"].check_collision_point_rec(mouse_pos) {
+                    // If the Game tab was clicked, change the tab to Game
+                    ui.tab = UITab::Game;
+                } else if ui.constant_elements["Settings"].check_collision_point_rec(mouse_pos) {
+                    // If the Settings tab was clicked, change the tab to Settings
+                    ui.tab = UITab::Settings;
+                } else if ui.constant_elements["Inner Content"].check_collision_point_rec(mouse_pos) {
+                    // If the tab content was clicked...
+                    match ui.tab {
+                        UITab::Game => {
+                            // Nothing, yet
+                        },
+                        UITab::Settings => {
+                            // Account for scroll offset
+                            let offset = mouse_pos + ui.scroll_offset_settings;
+                            
+                            // Increment the depth if Depth Plus is clicked
+                            if ui.settings_elements["Depth Plus"].check_collision_point_rec(offset) {
+                                *ui.state.get_mut("Depth").unwrap() += 1;
+
+                            // Decrement the depth if Depth Minus is clicked, saturating at 1
+                            } else if ui.settings_elements["Depth Minus"].check_collision_point_rec(offset) {
+                                *ui.state.get_mut("Depth").unwrap() -= 1;
+                                if ui.state["Depth"] < 1 { *ui.state.get_mut("Depth").unwrap() = 1 };
+                            
+                            // Set the player to 1 if Player 1 is clicked
+                            } else if ui.settings_elements["Player 1"].check_collision_point_rec(offset) {
+                                *ui.state.get_mut("Players").unwrap() = 1;
+                            
+                            // Set the player to 2 if Player 2 is clicked
+                            } else if ui.settings_elements["Player 2"].check_collision_point_rec(offset) {
+                                *ui.state.get_mut("Players").unwrap() = 2;
+                            
+                            // Start a new Game with the selected settings if New Game is clicked 
+                            } else if ui.settings_elements["New Game"].check_collision_point_rec(offset) {
+                                g = Game::new_depth(get_board_rect(ui.state["Depth"]), ui.state["Depth"]);
+                                g.update_positions();
+                                g.centre_camera(game_rect);
+                                g.camera.offset = Vector2 {
+                                    x: game_rect.width as f32 / 2.0f32,
+                                    y: game_rect.height as f32 / 2.0f32,
+                                };
+                            } 
+                        },
+                    }
+                }
+
+            } else if let Some(ref cell) = hovered_cell {
                 let _ = g.play(cell);
-                dbg!(g.legal.as_slice());
             }
         }
 
         if rl.is_key_pressed(KeyboardKey::KEY_ENTER) {
-            g.camera.target = Vector2 {
-                x: board_rect.x + board_rect.width / 2.0f32,
-                y: board_rect.y + board_rect.height / 2.0f32,
-            };
-            g.camera.zoom = f32::max(
-                rl.get_screen_width() as f32 / board_rect.width * CAMERA_DEFAULT_ZOOM,
-                rl.get_screen_height() as f32 / board_rect.height * CAMERA_DEFAULT_ZOOM,
-            );
+            g.centre_camera(game_rect);
         }
 
         let mut d = rl.begin_drawing(&thread);
 
         d.clear_background(Color::BLACK);
 
-        g.draw(board_rect, &mut d, false, true, hovered_cell.as_deref());
+        g.draw(get_board_rect(g.depth), &mut d, false, true, hovered_cell.as_deref());
+
+        ui.draw(ui_rect, &mut d, &g, &font_50pt);
 
         d.draw_fps(10, 10);
-
-        d.draw_text(&x.to_string(), 10, 30, 10, Color::RED);
-        x += 1;
     }
 
     Ok(())
+}
+
+/// Returns the rectangle in which the game should be drawn
+fn get_game_rect(rl: &RaylibHandle) -> Rectangle {
+    Rectangle {
+        x: 0.0,
+        y: 0.0,
+        width: (rl.get_screen_width() - UI_PANEL_WIDTH as i32) as f32,
+        height: rl.get_screen_height() as f32,
+    }
+}
+
+/// Returns the rectangle in which the UI panel should be drawn
+fn get_ui_rect(rl: &RaylibHandle) -> Rectangle {
+    let r = get_game_rect(rl);
+    Rectangle {
+        x: r.width,
+        y: 0.0,
+        width: UI_PANEL_WIDTH as f32,
+        height: (rl.get_screen_height()) as f32,
+    }
+}
+
+/// Returns an appropriately-sized rectangle for drawing the board
+fn get_board_rect(depth: usize) -> Rectangle {
+    Rectangle {
+        x: 0.0,
+        y: 0.0,
+        width: 60.0 * 3f32.powi(depth as i32),
+        height: 60.0 * 3f32.powi(depth as i32),
+    }
 }

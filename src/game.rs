@@ -16,8 +16,9 @@ pub struct Game {
     pub rect: Rectangle,
     pub camera: Camera2D,
     pub board: Board,
+    pub depth: usize,
     pub turn: u8,
-    pub moves: Vec<Vec<usize>>,
+    pub moves: Vec<Vec<Vec<usize>>>,
     pub legal: Vec<usize>,
 }
 
@@ -30,6 +31,7 @@ impl Game {
                 ..Default::default()
             },
             board: Board::new_depth(depth),
+            depth,
             turn: 1,
             moves: [].into(),
             legal: vec![],
@@ -74,7 +76,14 @@ impl Game {
 
         c.draw_rectangle_rec(
             rect,
-            if self.legal.is_empty() {
+            if self.board.check() != Value::None{
+                match self.board.check() {
+                    Value::None => panic!("How the fuck did you manage that"),
+                    Value::Draw => COLOUR_BOARD_BG_GREYED,
+                    Value::Player1 => COLOUR_BOARD_BG_GREYED_P1,
+                    Value::Player2 => COLOUR_BOARD_BG_GREYED_P2,
+                }
+            } else if self.legal.is_empty() {
                 COLOUR_BOARD_BG
             } else if self.turn == 1 {
                 COLOUR_BOARD_BG_GREYED_P1
@@ -90,7 +99,8 @@ impl Game {
             height: rect.height - 2.0 * m,
         };
 
-        let legal: Option<&[usize]> = if self.board.check() != Value::None || self.moves.is_empty() {
+        let legal: Option<&[usize]> = if self.board.check() != Value::None || self.moves.is_empty()
+        {
             Some(&[13])
         } else {
             Some(&self.legal)
@@ -119,13 +129,12 @@ impl Game {
                 Cell::Player2
             };
             self.board.set(pos, val)?;
+            self.moves.insert(self.moves.len(), [pos.to_vec(), self.legal.to_vec()].to_vec());
             self.legal = self.get_legal(pos);
             dbg!(&self.legal);
             self.turn = (self.turn + 1) % 2;
-            self.moves.insert(self.moves.len(), pos.to_vec());
             Ok(())
         } else {
-            println!("hh");
             bail!("Illegal move: Cell already filled")
         }
     }

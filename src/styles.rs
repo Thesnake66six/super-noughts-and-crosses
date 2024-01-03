@@ -1,9 +1,32 @@
 use raylib::{
     color::Color,
     drawing::RaylibDraw,
-    math::{Rectangle, Vector2},
+    math::{Rectangle, Vector2}, text::{Font, measure_text_ex},
 };
 use std::f32::consts::SQRT_2;
+
+//----------// Constants determining UI settings //----------//
+
+/// Specifies the width of the UI panel
+pub const UI_PANEL_WIDTH: usize = 500;
+
+/// Specifies the thickness of the line separating the UI navbar and the content
+pub const UI_DIVIDER_THICKNESS: usize = 10;
+
+/// Specifies the thickness of the lines in button symbols
+pub const UI_BUTTON_LINE_THICKNESS: usize = 8;
+
+/// Specifies the minimum height of the UI panel
+pub const UI_PANEL_MIN_HEIGHT: usize = 600;
+
+/// Specifies the height of the UI navbar (pixels)
+pub const UI_NAVBAR_HEIGHT: usize = 100;
+
+/// Specifies the UI content padding (percentage)
+pub const UI_CONTENT_PADDING: f32 = 0.05;
+
+/// Specifies how far the UI content scrolls per scroll tick
+pub const UI_SCROLL_SPEED: f32 = 35.0;
 
 //----------// Constants determining default game settings //----------//
 
@@ -54,6 +77,36 @@ pub const NOUGHT_THICK: f32 = 0.15;
 
 /// The fractional padding between the ring of the nought and the edge of the cell
 pub const NOUGHT_PADDING: f32 = 0.05;
+
+//----------// Constants of colours used in rendering the UI //----------//
+
+/// Background colour for the UI menu
+pub const COLOUR_UI_BG: Color = Color::WHITE;
+
+/// Element default colour for the UI menu
+pub const COLOUR_UI_ELEMENT: Color = Color {
+    r: 200,
+    g: 200,
+    b: 200,
+    a: 255,
+};
+
+/// Background colour of a UI button
+pub const COLOUR_UI_BUTTON: Color = Color {
+    r: 150,
+    g: 150,
+    b: 150,
+    a: 255,
+};
+
+/// Colour of the divider between the navbar and the tab content
+pub const COLOUR_UI_DIVIDER: Color = Color::BLACK;
+
+/// Colour for player 1 highlights
+pub const COLOUR_UI_HIGHLIGHT_P1: Color = COLOUR_CROSS_FG;
+
+/// Colour for player 2 highlights
+pub const COLOUR_UI_HIGHLIGHT_P2: Color = COLOUR_NOUGHT_FG;
 
 //----------// Constants of colours used in rendering the board //----------//
 
@@ -285,5 +338,17 @@ pub fn get_greyed_colour_board(turn: u8) -> Color {
         }
     } else {
         COLOUR_BOARD_BG_GREYED
+    }
+}
+
+/// Returns a rectangle fitting the given text, given parameters.
+/// Adds a small offset due to rendering bugs (best fix I could find)
+pub fn centre_text_rec(font: &Font, text: &str, size: f32, spacing: f32, rect: Rectangle) -> Rectangle {
+    let text_size = measure_text_ex(font, text, size, spacing);
+    Rectangle {
+        x: rect.x + 0.5 * (rect.width - text_size.x) - 2.0,
+        y: rect.y + 0.5 * (rect.height - text_size.y),
+        width: text_size.x + 2.0,
+        height: text_size.y,
     }
 }

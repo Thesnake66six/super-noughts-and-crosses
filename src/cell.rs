@@ -114,7 +114,7 @@ impl Cell {
             }
         }
 
-        let no_grey = if let Some([13]) = legal { true } else { false };
+        let no_grey = matches!(legal, Some([13]));
 
         let mut board_completed = false;
         if let Cell::Board(x) = self {
