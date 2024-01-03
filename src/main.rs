@@ -108,8 +108,8 @@ fn handle_input(
 
     // Centre the camera
     g.camera.offset = Vector2 {
-        x: game_rect.width,
-        y: game_rect.height / 2.0f32,
+        x: game_rect.width / 2.0,
+        y: game_rect.height /2.0,
     };
 
     // Increment the zoom based of the mousewheel and mouse position

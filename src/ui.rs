@@ -323,7 +323,7 @@ impl UI<'_> {
             );
             let t = x[0]
                 .iter()
-                .map(|x| x.to_string())
+                .map(|x| (x + 1).to_string())
                 .collect::<Vec<String>>()
                 .join(", ");
             let r = centre_text_rec(font, &t, 50.0, 0.0, rect);
