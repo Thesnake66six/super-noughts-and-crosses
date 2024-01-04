@@ -58,7 +58,7 @@ fn main() -> Result<()> {
     // Centre
     g.centre_camera(game_rect);
 
-    dbg!(g.legal_moves());
+    println!("//------Look Ma, I'm a hacker now!------//");
 
     while !rl.window_should_close() {
         let delta = rl.get_frame_time();
@@ -80,7 +80,6 @@ fn main() -> Result<()> {
             let moves = g.legal_moves();
             let mut rng = rand::thread_rng();
             let x = &moves[rng.gen_range(0..(moves.len() - 1))];
-            dbg!(g.play(x).err());
         }
 
         let mut d = rl.begin_drawing(&thread);
@@ -100,7 +99,6 @@ fn main() -> Result<()> {
         d.draw_fps(10, 10);
 
         response_time -= delta;
-        dbg!(response_time);
         if response_time < 0.0 {
             response_time = 0.0
         }

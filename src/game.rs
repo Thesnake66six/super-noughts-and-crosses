@@ -144,7 +144,6 @@ impl Game {
                 [pos.to_vec(), self.legal.to_vec()].to_vec(),
             );
             self.legal = self.get_legal(pos);
-            dbg!(&self.legal);
             self.turn = (self.turn + 1) % 2;
             Ok(())
         } else {
