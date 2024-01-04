@@ -1,8 +1,8 @@
-use cell::Value;
-use rand::{Rng, thread_rng};
 use anyhow::{Ok, Result};
+use cell::Value;
 use game::Game;
-use raylib::{prelude::*, ffi::_CRT_BUILD_DESKTOP_APP};
+use rand::{thread_rng, Rng};
+use raylib::prelude::*;
 use styles::*;
 use ui::{UITab, UI};
 
@@ -76,7 +76,7 @@ fn main() -> Result<()> {
             &mut response_time,
         );
 
-        if g.turn == 0 && g.board.check() == Value::None && g.players == 1 && response_time <= 0.0{
+        if g.turn == 0 && g.board.check() == Value::None && g.players == 1 && response_time <= 0.0 {
             let moves = g.legal_moves();
             let mut rng = rand::thread_rng();
             let x = &moves[rng.gen_range(0..(moves.len() - 1))];
@@ -101,7 +101,9 @@ fn main() -> Result<()> {
 
         response_time -= delta;
         dbg!(response_time);
-        if response_time < 0.0 { response_time = 0.0 }
+        if response_time < 0.0 {
+            response_time = 0.0
+        }
     }
 
     Ok(())
@@ -128,7 +130,7 @@ fn handle_input(
     // Centre the camera
     g.camera.offset = Vector2 {
         x: game_rect.width / 2.0,
-        y: game_rect.height /2.0,
+        y: game_rect.height / 2.0,
     };
 
     // Increment the zoom based of the mousewheel and mouse position
@@ -197,7 +199,16 @@ fn handle_input(
     let world_coord = rl.get_screen_to_world2D(mouse_pos, g.camera);
     let hovered_cell = g.get_cell_from_pixel(world_coord, false);
 
-    handle_click(rl, ui_rect, mouse_pos, response_time, ui, g, game_rect, &hovered_cell);
+    handle_click(
+        rl,
+        ui_rect,
+        mouse_pos,
+        response_time,
+        ui,
+        g,
+        game_rect,
+        &hovered_cell,
+    );
 
     if rl.is_key_pressed(KeyboardKey::KEY_ENTER) {
         g.centre_camera(*game_rect);
@@ -276,16 +287,12 @@ fn handle_click(
                 }
             }
         } else if let Some(ref cell) = *hovered_cell {
-            let mut e = None;
             if g.players == 2 || g.turn == 1 {
-                e = g.play(cell).err();
-
+                let _ = g.play(cell);
                 let mut rng = thread_rng();
                 let x = rng.gen_range(5..20) as f32;
                 *response_time = COMPUTER_RESPONSE_DELAY * x / 10.0;
             }
-            
-
         }
     }
 }

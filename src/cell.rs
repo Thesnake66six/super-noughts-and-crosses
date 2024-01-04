@@ -90,11 +90,17 @@ impl Cell {
 
     /// Returns the possible moves within a cell
     pub fn moves<'a>(&'a self, pos: &'a [usize]) -> Vec<Vec<usize>> {
-        match self{
+        match self {
             Cell::None => vec![pos.to_vec()],
             Cell::Player1 => vec![],
             Cell::Player2 => vec![],
-            Cell::Board(b) => if b.check() != Value::None { vec![] } else { b.legal_moves(pos) },
+            Cell::Board(b) => {
+                if b.check() != Value::None {
+                    vec![]
+                } else {
+                    b.legal_moves(pos)
+                }
+            }
         }
     }
 

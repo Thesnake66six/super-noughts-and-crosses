@@ -129,15 +129,13 @@ impl Board {
             let mut v = Vec::with_capacity(pos.len() + 1);
             v.extend_from_slice(pos);
             v.push(i);
-            
+
             // let mut v = Vec::with_capacity(pos.len() + 1);
             // v.push(i);
             // v.extend_from_slice(pos);
             // dbg!(&mut x.moves(&v));
 
             l.append(&mut x.moves(&v))
-
-        
         }
         l
     }
