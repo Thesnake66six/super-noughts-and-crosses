@@ -1,8 +1,11 @@
-use anyhow::{Ok, Result};
+use std::{fs::File, io::Write};
+use std::result::Result::Ok;
+
+use anyhow::{Result};
 use cell::Value;
 use game::Game;
 use rand::{thread_rng, Rng};
-use raylib::prelude::*;
+use raylib::{prelude::*};
 use styles::*;
 use ui::{UITab, UI};
 
@@ -25,18 +28,20 @@ fn main() -> Result<()> {
     let mut game_rect = get_game_rect(&rl);
     let mut ui_rect = get_ui_rect(&rl);
 
+    let font_path = "./resources/Inter-Regular.ttf";
+
     // Import the font
     let font_50pt = rl
         .load_font_ex(
             &thread,
-            "./resources/Inter-Regular.ttf",
+            font_path,
             50,
             FontLoadEx::Default(0),
         )
         .expect("Couldn't load font oof");
 
     // Set some settings for the window
-    rl.set_target_fps(60);
+    rl.set_target_fps(120);
     rl.set_window_min_size(UI_PANEL_WIDTH as i32, UI_PANEL_MIN_HEIGHT as i32);
 
     // Create the game
@@ -79,7 +84,9 @@ fn main() -> Result<()> {
         if g.turn == 0 && g.board.check() == Value::None && g.players == 1 && response_time <= 0.0 {
             let moves = g.legal_moves();
             let mut rng = rand::thread_rng();
-            let x = &moves[rng.gen_range(0..(moves.len() - 1))];
+            let i = if moves.len() == 1 { 0 } else { rng.gen_range(0..(moves.len() - 1)) };
+            let x = &moves[i];
+            let _ = g.play(x);
         }
 
         let mut d = rl.begin_drawing(&thread);

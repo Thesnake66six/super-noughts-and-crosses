@@ -82,7 +82,7 @@ pub const NOUGHT_PADDING: f32 = 0.05;
 //----------// Constants of colours used in rendering the UI //----------//
 
 /// The time between the computer making a move
-pub const COMPUTER_RESPONSE_DELAY: f32 = 0.5;
+pub const COMPUTER_RESPONSE_DELAY: f32 = 0.0;
 
 //----------// Constants of colours used in rendering the UI //----------//
 
