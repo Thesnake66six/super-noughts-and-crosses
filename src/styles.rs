@@ -81,6 +81,11 @@ pub const NOUGHT_PADDING: f32 = 0.05;
 
 //----------// Constants of colours used in rendering the UI //----------//
 
+/// The time between the computer making a move
+pub const COMPUTER_RESPONSE_DELAY: f32 = 0.5;
+
+//----------// Constants of colours used in rendering the UI //----------//
+
 /// Background colour for the UI menu
 pub const COLOUR_UI_BG: Color = Color::WHITE;
 
@@ -317,7 +322,7 @@ pub fn draw_draw<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
 //----------// Miscelaneous quick procedures //----------//
 
 /// Returns the correct colour for a greyed out cell.
-pub fn get_greyed_colour_cell(turn: u8) -> Color {
+pub fn get_greyed_colour_cell(turn: usize) -> Color {
     if DO_COLOURED_GREYS {
         if turn == 1 {
             COLOUR_CELL_BG_GREYED_P1
@@ -330,7 +335,7 @@ pub fn get_greyed_colour_cell(turn: u8) -> Color {
 }
 
 /// Returns the correct colour for a greyed out board.
-pub fn get_greyed_colour_board(turn: u8) -> Color {
+pub fn get_greyed_colour_board(turn: usize) -> Color {
     if DO_COLOURED_GREYS {
         if turn == 1 {
             COLOUR_BOARD_BG_GREYED_P1

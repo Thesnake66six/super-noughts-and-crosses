@@ -22,7 +22,9 @@ pub struct Game {
     /// The depth of the game
     pub depth: usize,
     /// The current turn - 1 for Crosses, 2 for Noughts
-    pub turn: u8,
+    pub turn: usize,
+    /// The number of human players
+    pub players: usize,
     /// A list of all previous moves, and the legal moves that could have been made on that turn
     pub moves: Vec<Vec<Vec<usize>>>,
     /// The current set of legal moves
@@ -30,7 +32,7 @@ pub struct Game {
 }
 
 impl Game {
-    pub fn new_depth(rect: Rectangle, depth: usize) -> Self {
+    pub fn new_depth(rect: Rectangle, depth: usize, players: usize) -> Self {
         Game {
             rect,
             camera: Camera2D {
@@ -40,6 +42,7 @@ impl Game {
             board: Board::new_depth(depth),
             depth,
             turn: 1,
+            players,
             moves: [].into(),
             legal: vec![],
         }
@@ -190,7 +193,11 @@ impl Game {
         }
     }
 
-    pub fn get_cell_from_pos(&self, point: Vector2, no_check: bool) -> Option<Vec<usize>> {
-        self.board.get_cell_from_pos(point, no_check)
+    pub fn legal_moves(&self) -> Vec<Vec<usize>> {
+        self.board.get(&self.legal).unwrap().moves(&self.legal)
+    }
+
+    pub fn get_cell_from_pixel(&self, point: Vector2, no_check: bool) -> Option<Vec<usize>> {
+        self.board.get_cell_from_pixel(point, no_check)
     }
 }

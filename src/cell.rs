@@ -23,7 +23,7 @@ impl Value {
         d: &mut T,
         alpha: bool,
         legal: Option<&[usize]>,
-        turn: u8,
+        turn: usize,
     ) {
         let mut greyed = true;
         if let Some(x) = legal {
@@ -88,6 +88,16 @@ impl Cell {
         }
     }
 
+    /// Returns the possible moves within a cell
+    pub fn moves<'a>(&'a self, pos: &'a [usize]) -> Vec<Vec<usize>> {
+        match self{
+            Cell::None => vec![pos.to_vec()],
+            Cell::Player1 => vec![],
+            Cell::Player2 => vec![],
+            Cell::Board(b) => if b.check() != Value::None { vec![] } else { b.legal_moves(pos) },
+        }
+    }
+
     /// Draws the value onto `T`, inside the given `Rectangle`
     pub fn draw<T: RaylibDraw>(
         &self,
@@ -97,7 +107,7 @@ impl Cell {
         alpha: bool,
         mut hover: Option<&[usize]>,
         legal: Option<&[usize]>,
-        turn: u8,
+        turn: usize,
     ) {
         let mut flag = false;
         if let Some(pos) = hover {

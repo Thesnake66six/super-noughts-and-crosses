@@ -60,6 +60,20 @@ impl Board {
         }
     }
 
+    // pub fn get_mut(mut self, pos: &[usize]) -> Option<&mut Cell> {
+    //     if pos.is_empty() {
+    //         Some(&mut Cell::Board(self))
+    //     } else if pos.len() > 1 {
+    //         if let Cell::Board(board) = &self.cells[pos[0]] {
+    //             return board.get_mut(&pos[1..]);
+    //         } else {
+    //             None
+    //         }
+    //     } else {
+    //         Some(&mut self.cells[pos[0]])
+    //     }
+    // }
+
     /// Changes the `Cell` at a given position to the given `Value`
     pub fn set(&mut self, pos: &[usize], value: Cell) -> Result<()> {
         if pos.len() > 1 {
@@ -108,6 +122,26 @@ impl Board {
         Value::None
     }
 
+    /// Returns a Vec of all possible moves in the board
+    pub fn legal_moves(&self, pos: &[usize]) -> Vec<Vec<usize>> {
+        let mut l = vec![];
+        for (i, x) in self.cells.iter().enumerate() {
+            let mut v = Vec::with_capacity(pos.len() + 1);
+            v.extend_from_slice(pos);
+            v.push(i);
+            
+            // let mut v = Vec::with_capacity(pos.len() + 1);
+            // v.push(i);
+            // v.extend_from_slice(pos);
+            // dbg!(&mut x.moves(&v));
+
+            l.append(&mut x.moves(&v))
+
+        
+        }
+        l
+    }
+
     /// Updates the positions of all cells within the board based on a given rectangle, which will then be used for drawing
     pub fn update_positions(&mut self, rect: Rectangle) {
         let length = rect.width;
@@ -133,13 +167,13 @@ impl Board {
         }
     }
 
-    pub fn get_cell_from_pos(&self, point: Vector2, no_check: bool) -> Option<Vec<usize>> {
+    pub fn get_cell_from_pixel(&self, point: Vector2, no_check: bool) -> Option<Vec<usize>> {
         for ((cell, rect), i) in self.cells.iter().zip(&self.cell_positions).zip(0..9) {
             if rect.check_collision_point_rec(point) {
                 if let Cell::Board(b) = cell {
                     if (b.check() == Value::None) || no_check {
                         let mut out = vec![i];
-                        out.append(&mut b.get_cell_from_pos(point, no_check).unwrap_or(vec![]));
+                        out.append(&mut b.get_cell_from_pixel(point, no_check).unwrap_or(vec![]));
                         return Some(out);
                     } else {
                         return Some(vec![i]);
@@ -162,7 +196,7 @@ impl Board {
         alpha: bool,
         hover: Option<&[usize]>,
         mut legal: Option<&[usize]>,
-        turn: u8,
+        turn: usize,
     ) {
         let mut t: Option<usize> = None;
         let mut ignore = false;

@@ -1,6 +1,8 @@
+use cell::Value;
+use rand::{Rng, thread_rng};
 use anyhow::{Ok, Result};
 use game::Game;
-use raylib::prelude::*;
+use raylib::{prelude::*, ffi::_CRT_BUILD_DESKTOP_APP};
 use styles::*;
 use ui::{UITab, UI};
 
@@ -11,8 +13,6 @@ mod styles;
 mod ui;
 
 fn main() -> Result<()> {
-    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("warn")).init();
-
     // Initialise Raylib
     let (mut rl, thread) = raylib::init()
         .size(650 * 2, 650 * 2)
@@ -40,7 +40,7 @@ fn main() -> Result<()> {
     rl.set_window_min_size(UI_PANEL_WIDTH as i32, UI_PANEL_MIN_HEIGHT as i32);
 
     // Create the game
-    let mut g = Game::new_depth(get_board_rect(BOARD_DEFAULT_DEPTH), BOARD_DEFAULT_DEPTH);
+    let mut g = Game::new_depth(get_board_rect(BOARD_DEFAULT_DEPTH), BOARD_DEFAULT_DEPTH, 2);
 
     // Create the ui
     let mut ui = UI::new();
@@ -53,10 +53,16 @@ fn main() -> Result<()> {
     let mut mouse_prev = Vector2::zero();
     let mut good_right_click = false;
 
+    let mut response_time = COMPUTER_RESPONSE_DELAY;
+
     // Centre
     g.centre_camera(game_rect);
 
+    dbg!(g.legal_moves());
+
     while !rl.window_should_close() {
+        let delta = rl.get_frame_time();
+
         //----------// Handle input //----------//
 
         let hovered_cell = handle_input(
@@ -67,7 +73,15 @@ fn main() -> Result<()> {
             &mut g,
             &mut good_right_click,
             &mut mouse_prev,
+            &mut response_time,
         );
+
+        if g.turn == 0 && g.board.check() == Value::None && g.players == 1 && response_time <= 0.0{
+            let moves = g.legal_moves();
+            let mut rng = rand::thread_rng();
+            let x = &moves[rng.gen_range(0..(moves.len() - 1))];
+            dbg!(g.play(x).err());
+        }
 
         let mut d = rl.begin_drawing(&thread);
 
@@ -84,6 +98,10 @@ fn main() -> Result<()> {
         ui.draw(ui_rect, &mut d, &g, &font_50pt);
 
         d.draw_fps(10, 10);
+
+        response_time -= delta;
+        dbg!(response_time);
+        if response_time < 0.0 { response_time = 0.0 }
     }
 
     Ok(())
@@ -97,6 +115,7 @@ fn handle_input(
     g: &mut Game,
     good_right_click: &mut bool,
     mouse_prev: &mut Vector2,
+    response_time: &mut f32,
 ) -> Option<Vec<usize>> {
     let mouse_pos = rl.get_mouse_position();
 
@@ -176,9 +195,9 @@ fn handle_input(
     }
 
     let world_coord = rl.get_screen_to_world2D(mouse_pos, g.camera);
-    let hovered_cell = g.get_cell_from_pos(world_coord, false);
+    let hovered_cell = g.get_cell_from_pixel(world_coord, false);
 
-    handle_click(rl, ui_rect, mouse_pos, ui, g, game_rect, &hovered_cell);
+    handle_click(rl, ui_rect, mouse_pos, response_time, ui, g, game_rect, &hovered_cell);
 
     if rl.is_key_pressed(KeyboardKey::KEY_ENTER) {
         g.centre_camera(*game_rect);
@@ -190,6 +209,7 @@ fn handle_click(
     rl: &RaylibHandle,
     ui_rect: &mut Rectangle,
     mouse_pos: Vector2,
+    response_time: &mut f32,
     ui: &mut UI<'_>,
     g: &mut Game,
     game_rect: &mut Rectangle,
@@ -243,6 +263,7 @@ fn handle_click(
                             *g = Game::new_depth(
                                 get_board_rect(ui.state["Depth"]),
                                 ui.state["Depth"],
+                                ui.state["Players"],
                             );
                             g.update_positions();
                             g.centre_camera(*game_rect);
@@ -255,7 +276,16 @@ fn handle_click(
                 }
             }
         } else if let Some(ref cell) = *hovered_cell {
-            let _ = g.play(cell);
+            let mut e = None;
+            if g.players == 2 || g.turn == 1 {
+                e = g.play(cell).err();
+
+                let mut rng = thread_rng();
+                let x = rng.gen_range(5..20) as f32;
+                *response_time = COMPUTER_RESPONSE_DELAY * x / 10.0;
+            }
+            
+
         }
     }
 }
