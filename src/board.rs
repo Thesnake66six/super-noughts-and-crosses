@@ -160,13 +160,24 @@ impl Board {
     }
 
     pub fn get_cell_from_pixel(&self, point: Vector2, no_check: bool) -> Option<Vec<usize>> {
+        // Iterate over every cell in the board.
         for ((cell, rect), i) in self.cells.iter().zip(&self.cell_positions).zip(0..9) {
+            // If the point collides with the cell...
             if rect.check_collision_point_rec(point) {
+                // ...and it is a board...
                 if let Cell::Board(b) = cell {
+                    // ...and it hasn't been completed (or we don't check)...
                     if (b.check() == Value::None) || no_check {
+                        // ...then append the current coordinate... 
                         let mut out = vec![i];
-                        out.append(&mut b.get_cell_from_pixel(point, no_check).unwrap_or(vec![]));
-                        return Some(out);
+                        let x = b.get_cell_from_pixel(point, no_check);
+                        match x {
+                            Some(mut x) => {
+                                out.append(&mut x);
+                                return Some(out)
+                            },
+                            None => return None,
+                        }
                     } else {
                         return Some(vec![i]);
                     }
