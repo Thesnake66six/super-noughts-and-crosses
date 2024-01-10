@@ -1,16 +1,16 @@
 use std::{fs::File, io::Write};
-use std::result::Result::Ok;
 
-use anyhow::{Result};
+use anyhow::Result;
 use cell::Value;
 use game::Game;
 use rand::{thread_rng, Rng};
-use raylib::{prelude::*};
+use raylib::prelude::*;
 use styles::*;
 use ui::{UITab, UI};
 
 mod board;
 mod cell;
+mod common;
 mod game;
 mod styles;
 mod ui;
@@ -32,12 +32,7 @@ fn main() -> Result<()> {
 
     // Import the font
     let font_50pt = rl
-        .load_font_ex(
-            &thread,
-            font_path,
-            50,
-            FontLoadEx::Default(0),
-        )
+        .load_font_ex(&thread, font_path, 50, FontLoadEx::Default(0))
         .expect("Couldn't load font oof");
 
     // Set some settings for the window
@@ -84,7 +79,11 @@ fn main() -> Result<()> {
         if g.turn == 0 && g.board.check() == Value::None && g.players == 1 && response_time <= 0.0 {
             let moves = g.legal_moves();
             let mut rng = rand::thread_rng();
-            let i = if moves.len() == 1 { 0 } else { rng.gen_range(0..(moves.len() - 1)) };
+            let i = if moves.len() == 1 {
+                0
+            } else {
+                rng.gen_range(0..(moves.len() - 1))
+            };
             let x = &moves[i];
             let _ = g.play(x);
         }

@@ -3,6 +3,7 @@ use raylib::{core::math::Rectangle, prelude::*};
 
 use crate::{
     cell::{Cell, Value},
+    common::*,
     styles::*,
 };
 
@@ -168,14 +169,14 @@ impl Board {
                 if let Cell::Board(b) = cell {
                     // ...and it hasn't been completed (or we don't check)...
                     if (b.check() == Value::None) || no_check {
-                        // ...then append the current coordinate... 
+                        // ...then append the current coordinate...
                         let mut out = vec![i];
                         let x = b.get_cell_from_pixel(point, no_check);
                         match x {
                             Some(mut x) => {
                                 out.append(&mut x);
-                                return Some(out)
-                            },
+                                return Some(out);
+                            }
                             None => return None,
                         }
                     } else {

@@ -1,6 +1,6 @@
 use raylib::{drawing::RaylibDraw, math::Rectangle};
 
-use crate::{board::Board, styles::*};
+use crate::{board::Board, common::*, styles::*};
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 /// An enum used to differentiate the states of a board, namely:

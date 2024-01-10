@@ -7,7 +7,7 @@ use raylib::{
     text::Font,
 };
 
-use crate::{cell::Value, game::Game, styles::*};
+use crate::{cell::Value, common::*, game::Game, styles::*};
 
 pub enum UITab {
     Game,
