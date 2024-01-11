@@ -11,6 +11,18 @@ use raylib::{
 
 use crate::styles::*;
 
+#[derive(PartialEq, Clone, Copy)]
+/// An enum used to represent the legal moves in the `Game` draw function
+/// 
+/// Pos(&usize): The relative coordinates of the legal board.
+/// None: There are no legal moves below this point.
+/// ForceDefaultBg: Forces the default board background colour (`COLOUR_BOUARD_BG`).
+pub enum Legal<'a> {
+    Pos(&'a [usize]),
+    None,
+    ForceDefaultBg,
+}
+
 /// Draws a cross (`Cell::Player1` or `Value::Player1`) into the given rectangle 'rect' onto `d`.
 pub fn draw_cross<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
     // Calculating the starting point...

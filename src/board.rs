@@ -199,21 +199,21 @@ impl Board {
         no_check: bool,
         alpha: bool,
         hover: Option<&[usize]>,
-        mut legal: Option<&[usize]>,
+        mut legal: Legal,
         turn: usize,
     ) {
         let mut t: Option<usize> = None;
         let mut ignore = false;
-        if let Some(x) = legal {
-            if x == [13] {
-                t = Some(13);
-                ignore = true
-            } else if !x.is_empty() {
+        if legal == Legal::ForceDefaultBg {
+            t = Some(13);
+            ignore = true
+        } else if let Legal::Pos(x) = legal {
+            if !x.is_empty() {
                 t = Some(x[0]);
                 if x.len() == 1 {
-                    legal = Some(&[]);
+                    legal = Legal::Pos(&[]);
                 } else {
-                    legal = Some(&x[1..])
+                    legal = Legal::Pos(&x[1..])
                 }
             } else {
                 t = Some(10)
@@ -323,11 +323,11 @@ impl Board {
                     None
                 },
                 if board_complete {
-                    Some(&[13])
+                    Legal::ForceDefaultBg
                 } else if [10, i].contains(&t.unwrap_or(11)) {
                     legal
                 } else {
-                    None
+                    Legal::None
                 },
                 turn,
             )

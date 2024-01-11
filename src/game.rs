@@ -10,6 +10,7 @@ use crate::{
     board::Board,
     cell::{Cell, Value},
     styles::*,
+    common::*,
 };
 
 pub struct Game {
@@ -109,11 +110,11 @@ impl Game {
             height: rect.height - 2.0 * m,
         };
 
-        let legal: Option<&[usize]> = if self.board.check() != Value::None || self.moves.is_empty()
+        let legal: Legal = if self.board.check() != Value::None || self.moves.is_empty()
         {
-            Some(&[13])
+            Legal::ForceDefaultBg
         } else {
-            Some(&self.legal)
+            Legal::Pos(&self.legal)
         };
 
         self.board
@@ -177,7 +178,7 @@ impl Game {
                 }
             }
         }
-        // Otherwise, check to make sure `up` exists
+        // Otherwise, check to make sure the new target board exists
         if let Some(Cell::Board(b)) = self.board.get(&[last, &[*n]].concat()) {
             // If it's completed, then return the board above (`last`)
             if b.check() != Value::None {
@@ -186,7 +187,7 @@ impl Game {
             } else {
                 [last, &[*n]].concat()
             }
-        // And, if `up` doesn't exist, meaning that this is the top board, then return everywhere (`[]`).
+        // And, if the new target board doesn't exist, meaning that this is the top board, then return everywhere (`[]`).
         } else {
             [].to_vec()
         }

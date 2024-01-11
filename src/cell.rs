@@ -22,11 +22,11 @@ impl Value {
         rect: Rectangle,
         d: &mut T,
         alpha: bool,
-        legal: Option<&[usize]>,
+        legal: Legal,
         turn: usize,
     ) {
         let mut greyed = true;
-        if let Some(x) = legal {
+        if let Legal::Pos(x) = legal {
             if x.is_empty() {
                 greyed = false
             }
@@ -112,7 +112,7 @@ impl Cell {
         no_check: bool,
         alpha: bool,
         mut hover: Option<&[usize]>,
-        legal: Option<&[usize]>,
+        legal: Legal,
         turn: usize,
     ) {
         let mut flag = false;
@@ -124,13 +124,13 @@ impl Cell {
         }
 
         let mut greyed = true;
-        if let Some(x) = legal {
+        if let Legal::Pos(x) = legal {
             if x.is_empty() {
                 greyed = false
             }
         }
 
-        let no_grey = matches!(legal, Some([13]));
+        let no_grey = legal == Legal::ForceDefaultBg;
 
         let mut board_completed = false;
         if let Cell::Board(x) = self {
