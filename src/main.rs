@@ -192,12 +192,10 @@ fn handle_input(
     }
 
     if rl.is_mouse_button_down(MouseButton::MOUSE_RIGHT_BUTTON) && *good_right_click {
-        let offset = mouse_pos;
-        g.camera.target.x += (offset.x - mouse_prev.x) * CAMERA_MOVE_SPEED / g.camera.zoom;
-        g.camera.target.y += (offset.y - mouse_prev.y) * CAMERA_MOVE_SPEED / g.camera.zoom;
-        *mouse_prev = offset;
-    } else {
-        *mouse_prev = mouse_pos;
+        g.camera.target.x += (mouse_pos.x - mouse_prev.x) * CAMERA_MOVE_SPEED / g.camera.zoom;
+        g.camera.target.y += (mouse_pos.y - mouse_prev.y) * CAMERA_MOVE_SPEED / g.camera.zoom;
+    }
+    *mouse_prev = mouse_pos;
     }
 
     let world_coord = rl.get_screen_to_world2D(mouse_pos, g.camera);
