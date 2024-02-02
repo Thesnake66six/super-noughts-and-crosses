@@ -1,3 +1,5 @@
+use std::ops::Not;
+
 use anyhow::{bail, Ok, Result};
 use raylib::{
     camera::Camera2D,
@@ -9,10 +11,37 @@ use raylib::{
 use crate::{
     board::Board,
     cell::{Cell, Value},
-    styles::*,
     common::*,
+    styles::*,
 };
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Turn {
+    Player1,
+    Player2,
+}
+
+impl Turn {
+    pub fn val(&self) -> Value {
+        match self {
+            Turn::Player1 => Value::Player1,
+            Turn::Player2 => Value::Player2,
+        }
+    }
+}
+
+
+impl Not for Turn {
+    type Output = Turn;
+    fn not(self) -> Self::Output {
+        match self {
+            Turn::Player1 => Turn::Player2,
+            Turn::Player2 => Turn::Player1,
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
 pub struct Game {
     /// The rectange in which the board is rendered to the camera
     pub rect: Rectangle,
@@ -23,7 +52,7 @@ pub struct Game {
     /// The depth of the game
     pub depth: usize,
     /// The current turn - 1 for Crosses, 2 for Noughts
-    pub turn: usize,
+    pub turn: Turn,
     /// The number of human players
     pub players: usize,
     /// A list of all previous moves, and the legal moves that could have been made on that turn
@@ -42,7 +71,7 @@ impl Game {
             },
             board: Board::new_depth(depth),
             depth,
-            turn: 1,
+            turn: Turn::Player1,
             players,
             moves: [].into(),
             legal: vec![],
@@ -96,7 +125,7 @@ impl Game {
                 }
             } else if self.legal.is_empty() {
                 COLOUR_BOARD_BG
-            } else if self.turn == 1 {
+            } else if self.turn == Turn::Player1 {
                 COLOUR_BOARD_BG_GREYED_P1
             } else {
                 COLOUR_BOARD_BG_GREYED_P2
@@ -110,8 +139,7 @@ impl Game {
             height: rect.height - 2.0 * m,
         };
 
-        let legal: Legal = if self.board.check() != Value::None || self.moves.is_empty()
-        {
+        let legal: Legal = if self.board.check() != Value::None || self.moves.is_empty() {
             Legal::ForceDefaultBg
         } else {
             Legal::Pos(&self.legal)
@@ -134,7 +162,7 @@ impl Game {
 
         if let Cell::None = &mut self.board.get(pos).unwrap() {
             // Play the move
-            let val = if self.turn == 1 {
+            let val = if self.turn == Turn::Player1 {
                 Cell::Player1
             } else {
                 Cell::Player2
@@ -145,11 +173,26 @@ impl Game {
                 [pos.to_vec(), self.legal.to_vec()].to_vec(),
             );
             self.legal = self.get_legal(pos);
-            self.turn = (self.turn + 1) % 2;
+            self.turn = !self.turn;
             Ok(())
+        } else if let Cell::Board(_) = &mut self.board.get(pos).unwrap() {
+            bail!("Illegal move: That's a board")
         } else {
             bail!("Illegal move: Cell already filled")
         }
+    }
+
+    pub fn unplay(&mut self) -> Result<()> {
+        if self.moves.is_empty() {
+            bail!("No move to unplay")
+        }
+        // (The move that was played, The legal at that time)
+        let mv = self.moves.pop().unwrap();
+        let x = &mv[1];
+        let _ = self.board.set(&mv[0], Cell::None);
+        self.legal = x.to_vec();
+        self.turn = !self.turn;
+        Ok(())
     }
 
     pub fn get_legal(&self, pos: &[usize]) -> Vec<usize> {
@@ -157,35 +200,35 @@ impl Game {
             return vec![];
         }
 
-        let n = pos.last().unwrap(); // The last position in pos
-        let up = if !pos.is_empty() {
+        let x = pos.last().unwrap(); // The last position in pos
+        let y = if !pos.is_empty() {
             &pos[..pos.len().saturating_sub(1)]
         } else {
             pos
         }; // The penultimate position in pos - correlates to the box that the play was made in
-        let last = if pos.len() >= 2 {
+        let z = if pos.len() >= 2 {
             &pos[..pos.len().saturating_sub(2)]
         } else {
             pos
         }; // The position two positions up, gives the depth-two board that the next move will always be in
 
         // Check to see if the move completed the board (up)
-        if let Some(Cell::Board(b)) = self.board.get(up) {
+        if let Some(Cell::Board(b)) = self.board.get(y) {
             if b.check() != Value::None {
                 // ...if so, check again as if the move made was `up`
                 if pos.len() >= 3 {
-                    return self.get_legal(up);
+                    return self.get_legal(y);
                 }
             }
         }
         // Otherwise, check to make sure the new target board exists
-        if let Some(Cell::Board(b)) = self.board.get(&[last, &[*n]].concat()) {
+        if let Some(Cell::Board(b)) = self.board.get(&[z, &[*x]].concat()) {
             // If it's completed, then return the board above (`last`)
             if b.check() != Value::None {
-                last.to_vec()
+                z.to_vec()
             // Otherwise, return last, plus `n` to get the board referenced by the previous move
             } else {
-                [last, &[*n]].concat()
+                [z, &[*x]].concat()
             }
         // And, if the new target board doesn't exist, meaning that this is the top board, then return everywhere (`[]`).
         } else {

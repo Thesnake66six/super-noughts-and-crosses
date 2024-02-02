@@ -3,17 +3,14 @@
 use std::f32::consts::SQRT_2;
 
 use raylib::{
-    color::Color,
-    drawing::RaylibDraw,
-    math::{Rectangle, Vector2},
-    text::{measure_text_ex, Font},
+    color::Color, drawing::RaylibDraw, math::{Rectangle, Vector2}, text::{measure_text_ex, Font}, RaylibHandle
 };
 
-use crate::styles::*;
+use crate::{game::Turn, monte_carlo::Message, styles::*};
 
 #[derive(PartialEq, Clone, Copy)]
 /// An enum used to represent the legal moves in the `Game` draw function
-/// 
+///
 /// Pos(&usize): The relative coordinates of the legal board.
 /// None: There are no legal moves below this point.
 /// ForceDefaultBg: Forces the default board background colour (`COLOUR_BOUARD_BG`).
@@ -21,6 +18,15 @@ pub enum Legal<'a> {
     Pos(&'a [usize]),
     None,
     ForceDefaultBg,
+}
+
+pub struct State {
+    pub good_right_click: bool,
+    pub mouse_prev: Vector2,
+    pub waiting_for_move: bool,
+    pub message_queue: Vec<Message>,
+    pub response_time: f32,
+    pub show_fps: bool,
 }
 
 /// Draws a cross (`Cell::Player1` or `Value::Player1`) into the given rectangle 'rect' onto `d`.
@@ -103,12 +109,11 @@ pub fn draw_draw<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
 //----------// Miscelaneous quick procedures //----------//
 
 /// Returns the correct colour for a greyed out cell.
-pub fn get_greyed_colour_cell(turn: usize) -> Color {
+pub fn get_greyed_colour_cell(turn: Turn) -> Color {
     if DO_COLOURED_GREYS {
-        if turn == 1 {
-            COLOUR_CELL_BG_GREYED_P1
-        } else {
-            COLOUR_CELL_BG_GREYED_P2
+        match turn {
+            Turn::Player1 => COLOUR_CELL_BG_GREYED_P1,
+            Turn::Player2 => COLOUR_CELL_BG_GREYED_P2,
         }
     } else {
         COLOUR_CELL_BG_GREYED
@@ -116,12 +121,11 @@ pub fn get_greyed_colour_cell(turn: usize) -> Color {
 }
 
 /// Returns the correct colour for a greyed out board.
-pub fn get_greyed_colour_board(turn: usize) -> Color {
+pub fn get_greyed_colour_board(turn: Turn) -> Color {
     if DO_COLOURED_GREYS {
-        if turn == 1 {
-            COLOUR_BOARD_BG_GREYED_P1
-        } else {
-            COLOUR_BOARD_BG_GREYED_P2
+        match turn {
+            Turn::Player1 => COLOUR_BOARD_BG_GREYED_P1,
+            Turn::Player2 => COLOUR_BOARD_BG_GREYED_P2,
         }
     } else {
         COLOUR_BOARD_BG_GREYED
@@ -143,5 +147,36 @@ pub fn centre_text_rec(
         y: rect.y + 0.5 * (rect.height - text_size.y),
         width: text_size.x + 2.0,
         height: text_size.y,
+    }
+}
+
+/// Returns the rectangle in which the game should be drawn
+pub fn get_game_rect(rl: &RaylibHandle) -> Rectangle {
+    Rectangle {
+        x: 0.0,
+        y: 0.0,
+        width: (rl.get_screen_width() - UI_PANEL_WIDTH as i32) as f32,
+        height: rl.get_screen_height() as f32,
+    }
+}
+
+/// Returns the rectangle in which the UI panel should be drawn
+pub fn get_ui_rect(rl: &RaylibHandle) -> Rectangle {
+    let r = get_game_rect(rl);
+    Rectangle {
+        x: r.width,
+        y: 0.0,
+        width: UI_PANEL_WIDTH as f32,
+        height: (rl.get_screen_height()) as f32,
+    }
+}
+
+/// Returns an appropriately-sized rectangle for drawing the board
+pub fn get_board_rect(depth: usize) -> Rectangle {
+    Rectangle {
+        x: 0.0,
+        y: 0.0,
+        width: 60.0 * 3f32.powi(depth as i32),
+        height: 60.0 * 3f32.powi(depth as i32),
     }
 }

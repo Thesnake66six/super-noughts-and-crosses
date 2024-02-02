@@ -2,9 +2,7 @@ use anyhow::{bail, Ok, Result};
 use raylib::{core::math::Rectangle, prelude::*};
 
 use crate::{
-    cell::{Cell, Value},
-    common::*,
-    styles::*,
+    cell::{Cell, Value}, common::*, game::Turn, styles::*
 };
 
 #[derive(Debug, Clone, PartialEq)]
@@ -200,7 +198,7 @@ impl Board {
         alpha: bool,
         hover: Option<&[usize]>,
         mut legal: Legal,
-        turn: usize,
+        turn: Turn,
     ) {
         let mut t: Option<usize> = None;
         let mut ignore = false;

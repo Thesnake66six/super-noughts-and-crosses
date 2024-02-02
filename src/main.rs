@@ -1,21 +1,92 @@
-use std::{fs::File, io::Write};
+use std::{
+    fmt::Display, sync::mpsc::{self, Receiver, SyncSender}, thread, time::{self, Duration}
+};
 
 use anyhow::Result;
 use cell::Value;
+use ego_tree::Tree;
 use game::Game;
-use rand::{thread_rng, Rng};
-use raylib::prelude::*;
+use raylib::{core::texture::RaylibTexture2D, prelude::*};
 use styles::*;
 use ui::{UITab, UI};
+
+use crate::{common::*, game::Turn, monte_carlo::{Message, MonteCarloManager, MonteCarloSettings}};
+use monte_carlo::MonteCarloPolicy;
 
 mod board;
 mod cell;
 mod common;
 mod game;
+mod monte_carlo;
 mod styles;
 mod ui;
 
 fn main() -> Result<()> {
+    // Main thread comms with Noughbert
+    let (tx_0, rx_0) = mpsc::sync_channel::<Message>(0);
+
+    // Noughbert comms witn main thread
+    let (tx_1, rx_1) = mpsc::sync_channel::<Vec<usize>>(1);
+
+    thread::spawn(move || {
+        let rx = rx_0;
+        let tx = tx_1;
+
+        loop {
+            let message = rx.recv().unwrap();
+            let mc_options = match message {
+                Message::GetMove(x) => x,
+                Message::Interrupt => continue,
+            };
+            let mut noughbert = MonteCarloManager::new(mc_options.game);
+            let start_time = time::Instant::now();
+            let mut interrupt = false;
+            
+            while start_time.elapsed() < mc_options.timeout && noughbert.sims < mc_options.max_sims
+            {
+                let message = rx.try_recv();
+                match message {
+                    Ok(m) => match m {
+                        Message::GetMove(_) => {},
+                        Message::Interrupt => {interrupt = true; break},
+                    },
+                    Err(e) => match e {
+                        mpsc::TryRecvError::Empty => {},
+                        mpsc::TryRecvError::Disconnected => panic!("Thread disconnected"),
+                    },
+                }
+                let x = noughbert.select(mc_options.exploration_factor);
+                if x.is_none() {
+                    break;
+                }
+                let x = noughbert.expand(x.unwrap());
+                let (x, val) = noughbert.simulate(x, mc_options.opt_for);
+                noughbert.backpropogate(x, val);
+                noughbert.sims += 1;
+            }
+            if interrupt {
+                println!("Exited due to interrupt request");
+                continue;
+            } else if noughbert.sims >= mc_options.max_sims {
+                println!("Exited due to simulation cap")
+            } else if start_time.elapsed() >= mc_options.timeout {
+                println!("Exited due to timeout")
+            } else {
+                println!("Exited due to complete game tree");
+            }
+            println!("{} sims", noughbert.sims);
+
+            let best_play = noughbert.best(mc_options.policy);
+            dbg!(&best_play);
+            tx.send(best_play).unwrap();
+            eprintln!("{}", graphvis_ego_tree::TreeWrapper::new(&noughbert.tree, |x| format!("{:?}", x.value().play)))
+            
+        }
+    });
+
+    let rx = rx_1;
+    let tx = tx_0;
+
     // Initialise Raylib
     let (mut rl, thread) = raylib::init()
         .size(650 * 2, 650 * 2)
@@ -28,19 +99,29 @@ fn main() -> Result<()> {
     let mut game_rect = get_game_rect(&rl);
     let mut ui_rect = get_ui_rect(&rl);
 
+    let mon_const = get_current_monitor_index();
+    dbg!(mon_const);
+    let physical_width = get_monitor_physical_width(mon_const) as f32;
+    let width = get_monitor_width(mon_const) as f32;
+    dbg!(width / physical_width, width, physical_width);
+
     let font_path = "./resources/Inter-Regular.ttf";
 
     // Import the font
     let font_50pt = rl
-        .load_font_ex(&thread, font_path, 50, FontLoadEx::Default(0))
+        .load_font_ex(&thread, font_path, 100, FontLoadEx::Default(0))
         .expect("Couldn't load font oof");
+
+    font_50pt
+        .texture()
+        .set_texture_filter(&thread, TextureFilter::TEXTURE_FILTER_BILINEAR);
 
     // Set some settings for the window
     rl.set_target_fps(120);
     rl.set_window_min_size(UI_PANEL_WIDTH as i32, UI_PANEL_MIN_HEIGHT as i32);
 
     // Create the game
-    let mut g = Game::new_depth(get_board_rect(BOARD_DEFAULT_DEPTH), BOARD_DEFAULT_DEPTH, 2);
+    let mut g = Game::new_depth(get_board_rect(BOARD_DEFAULT_DEPTH), BOARD_DEFAULT_DEPTH, 1);
 
     // Create the ui
     let mut ui = UI::new();
@@ -50,8 +131,14 @@ fn main() -> Result<()> {
     ui.update_positions(ui_rect);
 
     // Set up variables to do with input that are needed between frames
-    let mut mouse_prev = Vector2::zero();
-    let mut good_right_click = false;
+    let mut state = State {
+        mouse_prev: Vector2::zero(),
+        good_right_click: false,
+        show_fps: true,
+        waiting_for_move: false,
+        response_time: COMPUTER_RESPONSE_DELAY,
+        message_queue: vec![],
+    };
 
     let mut response_time = COMPUTER_RESPONSE_DELAY;
 
@@ -71,21 +158,41 @@ fn main() -> Result<()> {
             &mut ui_rect,
             &mut ui,
             &mut g,
-            &mut good_right_click,
-            &mut mouse_prev,
-            &mut response_time,
+            &mut state,
         );
 
-        if g.turn == 0 && g.board.check() == Value::None && g.players == 1 && response_time <= 0.0 {
-            let moves = g.legal_moves();
-            let mut rng = rand::thread_rng();
-            let i = if moves.len() == 1 {
-                0
-            } else {
-                rng.gen_range(0..(moves.len() - 1))
-            };
-            let x = &moves[i];
-            let _ = g.play(x);
+        // if g.turn == 0 && g.board.check() == Value::None && g.players == 1 && !waiting_for_move {
+        if g.board.check() == Value::None && g.players == 1 && !state.waiting_for_move {
+            state.message_queue.insert(state.message_queue.len(),  Message::GetMove(MonteCarloSettings {
+                game: g.clone(),
+                timeout: Duration::from_secs(DEFAULT_MOVE_TIMEOUT as u64),
+                max_sims: DEFAULT_MAX_SIMS,
+                exploration_factor: DEFAULT_EXPLORATION_FACTOR,
+                opt_for: g.turn,
+                carry_forward: false,
+                policy: MonteCarloPolicy::Robust,
+            }));
+            state.waiting_for_move = true;
+        }
+
+        for message in state.message_queue.drain(0..state.message_queue.len()) {
+            tx.send(message).unwrap();
+        }
+
+
+
+        let mv = rx.try_recv();
+        match mv {
+            Ok(mv) => {
+                if state.waiting_for_move {
+                    g.play(&mv).unwrap();
+                    state.waiting_for_move = false;
+                }
+            }
+            Err(e) => match e {
+                mpsc::TryRecvError::Empty => {}
+                mpsc::TryRecvError::Disconnected => panic!("Thread disconnected"),
+            },
         }
 
         let mut d = rl.begin_drawing(&thread);
@@ -102,7 +209,9 @@ fn main() -> Result<()> {
 
         ui.draw(ui_rect, &mut d, &g, &font_50pt);
 
-        d.draw_fps(10, 10);
+        if state.show_fps {
+            d.draw_fps(10, 10);
+        }
 
         response_time -= delta;
         if response_time < 0.0 {
@@ -119,9 +228,7 @@ fn handle_input(
     ui_rect: &mut Rectangle,
     ui: &mut UI<'_>,
     g: &mut Game,
-    good_right_click: &mut bool,
-    mouse_prev: &mut Vector2,
-    response_time: &mut f32,
+    state: &mut State,
 ) -> Option<Vec<usize>> {
     let mouse_pos = rl.get_mouse_position();
 
@@ -184,19 +291,18 @@ fn handle_input(
     if rl.is_mouse_button_pressed(MouseButton::MOUSE_RIGHT_BUTTON)
         && game_rect.check_collision_point_rec(mouse_pos)
     {
-        *good_right_click = true;
+        state.good_right_click = true;
     }
 
     if rl.is_mouse_button_released(MouseButton::MOUSE_RIGHT_BUTTON) {
-        *good_right_click = false;
+        state.good_right_click = false;
     }
 
-    if rl.is_mouse_button_down(MouseButton::MOUSE_RIGHT_BUTTON) && *good_right_click {
-        g.camera.target.x += (mouse_pos.x - mouse_prev.x) * CAMERA_MOVE_SPEED / g.camera.zoom;
-        g.camera.target.y += (mouse_pos.y - mouse_prev.y) * CAMERA_MOVE_SPEED / g.camera.zoom;
+    if rl.is_mouse_button_down(MouseButton::MOUSE_RIGHT_BUTTON) && state.good_right_click {
+        g.camera.target.x += (mouse_pos.x - state.mouse_prev.x) * CAMERA_MOVE_SPEED / g.camera.zoom;
+        g.camera.target.y += (mouse_pos.y - state.mouse_prev.y) * CAMERA_MOVE_SPEED / g.camera.zoom;
     }
-    *mouse_prev = mouse_pos;
-    }
+    state.mouse_prev = mouse_pos;
 
     let world_coord = rl.get_screen_to_world2D(mouse_pos, g.camera);
     let hovered_cell = g.get_cell_from_pixel(world_coord, false);
@@ -205,7 +311,7 @@ fn handle_input(
         rl,
         ui_rect,
         mouse_pos,
-        response_time,
+        &mut state.response_time,
         ui,
         g,
         game_rect,
@@ -215,6 +321,28 @@ fn handle_input(
     if rl.is_key_pressed(KeyboardKey::KEY_ENTER) {
         g.centre_camera(*game_rect);
     }
+    
+    if rl.is_key_pressed(KeyboardKey::KEY_BACKSPACE) {
+        let _ = g.unplay();
+        state.message_queue.insert(state.message_queue.len(), Message::Interrupt)
+    }
+    
+    if rl.is_key_pressed(KeyboardKey::KEY_SLASH) {
+        state.message_queue.insert(state.message_queue.len(), Message::GetMove(MonteCarloSettings {
+            game: g.clone(),
+            timeout: Duration::from_secs(DEFAULT_MOVE_TIMEOUT as u64),
+            max_sims: DEFAULT_MAX_SIMS,
+            exploration_factor: DEFAULT_EXPLORATION_FACTOR,
+            opt_for: g.turn,
+            carry_forward: false,
+            policy: MonteCarloPolicy::Robust,
+        }))
+    }
+
+    if rl.is_key_pressed(KeyboardKey::KEY_GRAVE) {
+        state.show_fps ^= true;
+    }
+
     hovered_cell
 }
 
@@ -230,6 +358,7 @@ fn handle_click(
 ) {
     if rl.is_mouse_button_pressed(MouseButton::MOUSE_LEFT_BUTTON) {
         if ui_rect.check_collision_point_rec(mouse_pos) {
+            // This means that the mouse click was in the UI.
             // Oh boy, get ready
             if ui.constant_elements["Game"].check_collision_point_rec(mouse_pos) {
                 // If the Game tab was clicked, change the tab to Game
@@ -289,43 +418,12 @@ fn handle_click(
                 }
             }
         } else if let Some(ref cell) = *hovered_cell {
-            if g.players == 2 || g.turn == 1 {
+            // This means that the mouse click was in the game.
+            if g.players == 2 || g.turn == Turn::Player1 {
                 let _ = g.play(cell);
-                let mut rng = thread_rng();
-                let x = rng.gen_range(5..20) as f32;
+                let x = fastrand::usize(5..20) as f32;
                 *response_time = COMPUTER_RESPONSE_DELAY * x / 10.0;
             }
         }
-    }
-}
-
-/// Returns the rectangle in which the game should be drawn
-fn get_game_rect(rl: &RaylibHandle) -> Rectangle {
-    Rectangle {
-        x: 0.0,
-        y: 0.0,
-        width: (rl.get_screen_width() - UI_PANEL_WIDTH as i32) as f32,
-        height: rl.get_screen_height() as f32,
-    }
-}
-
-/// Returns the rectangle in which the UI panel should be drawn
-fn get_ui_rect(rl: &RaylibHandle) -> Rectangle {
-    let r = get_game_rect(rl);
-    Rectangle {
-        x: r.width,
-        y: 0.0,
-        width: UI_PANEL_WIDTH as f32,
-        height: (rl.get_screen_height()) as f32,
-    }
-}
-
-/// Returns an appropriately-sized rectangle for drawing the board
-fn get_board_rect(depth: usize) -> Rectangle {
-    Rectangle {
-        x: 0.0,
-        y: 0.0,
-        width: 60.0 * 3f32.powi(depth as i32),
-        height: 60.0 * 3f32.powi(depth as i32),
     }
 }

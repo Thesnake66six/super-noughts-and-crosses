@@ -7,7 +7,7 @@ use raylib::{
     text::Font,
 };
 
-use crate::{cell::Value, common::*, game::Game, styles::*};
+use crate::{cell::Value, common::*, game::{Game, Turn}, styles::*};
 
 pub enum UITab {
     Game,
@@ -362,7 +362,7 @@ impl UI<'_> {
                     Value::Player2 => COLOUR_UI_HIGHLIGHT_P2,
                 },
             );
-        } else if g.turn == 1 {
+        } else if g.turn == Turn::Player1 {
             let text = "Crosses' Turn";
             let rec = centre_text_rec(font, text, 50.0, 0.0, tc);
 

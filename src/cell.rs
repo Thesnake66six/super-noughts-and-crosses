@@ -1,6 +1,6 @@
 use raylib::{drawing::RaylibDraw, math::Rectangle};
 
-use crate::{board::Board, common::*, styles::*};
+use crate::{board::Board, common::*, game::Turn, styles::*};
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 /// An enum used to differentiate the states of a board, namely:
@@ -23,7 +23,7 @@ impl Value {
         d: &mut T,
         alpha: bool,
         legal: Legal,
-        turn: usize,
+        turn: Turn,
     ) {
         let mut greyed = true;
         if let Legal::Pos(x) = legal {
@@ -113,7 +113,7 @@ impl Cell {
         alpha: bool,
         mut hover: Option<&[usize]>,
         legal: Legal,
-        turn: usize,
+        turn: Turn,
     ) {
         let mut flag = false;
         if let Some(pos) = hover {
