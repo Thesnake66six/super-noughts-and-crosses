@@ -4,7 +4,7 @@ use anyhow::{bail, Ok, Result};
 use raylib::{core::math::Rectangle, prelude::*};
 
 use crate::{
-    cell::{Cell, Value}, common::*, game::Turn, styles::*
+    cell::{Cell, Value}, common::*, game::{Move, Turn}, styles::*
 };
 
 #[derive(Debug, Clone, PartialEq)]
@@ -47,17 +47,17 @@ impl Board {
     /// The slice should contain the position of the target cell at each level of recursion - I.e.
     /// `[0]` is the top-left cell of a tic-tac-toe board;
     /// `[0, 1]` is the upper-middle cell in the top-left board of a depth 2 game
-    pub fn get(&self, pos: &[usize]) -> Option<Cell> {
-        if pos.is_empty() {
+    pub fn get(&self, pos: &Move) -> Option<Cell> {
+        if pos.0.is_empty() {
             Some(Cell::Board(self.clone()))
-        } else if pos.len() > 1 {
-            if let Cell::Board(board) = &self.cells[pos[0]] {
-                return board.get(&pos[1..]);
+        } else if pos.0.len() > 1 {
+            if let Cell::Board(board) = &self.cells[pos.0[0]] {
+                return board.get(&Move(pos.0[1..].to_vec()));
             } else {
                 None
             }
         } else {
-            Some(self.cells[pos[0]].clone())
+            Some(self.cells[pos.0[0]].clone())
         }
     }
 
@@ -76,15 +76,15 @@ impl Board {
     // }
 
     /// Changes the `Cell` at a given position to the given `Value`
-    pub fn set(&mut self, pos: &[usize], value: Cell) -> Result<()> {
-        if pos.len() > 1 {
-            if let Cell::Board(x) = &mut self.cells[pos[0]] {
-                x.set(&pos[1..], value)
+    pub fn set(&mut self, pos: &Move, value: Cell) -> Result<()> {
+        if pos.0.len() > 1 {
+            if let Cell::Board(x) = &mut self.cells[pos.0[0]] {
+                x.set(&Move(pos.0[1..].to_vec()), value)
             } else {
                 bail!("No cell at specified depth")
             }
         } else {
-            self.cells[pos[0]] = value;
+            self.cells[pos.0[0]] = value;
             Ok(())
         }
     }
@@ -124,13 +124,13 @@ impl Board {
     }
 
     /// Returns a Vec of all possible moves in the board
-    pub fn legal_moves(&self, pos: &[usize]) -> Vec<Vec<usize>> {
+    pub fn legal_moves(&self, pos: &Move) -> Vec<Move> {
         let mut l = vec![];
         for (i, x) in self.cells.iter().enumerate() {
-            let mut v = Vec::with_capacity(pos.len() + 1);
-            v.extend_from_slice(pos);
+            let mut v = Vec::with_capacity(pos.0.len() + 1);
+            v.extend_from_slice(&pos.0);
             v.push(i);
-            l.append(&mut x.moves(&v))
+            l.append(&mut x.moves(&Move(v)))
         }
         l
     }
@@ -160,7 +160,7 @@ impl Board {
         }
     }
 
-    pub fn get_cell_from_pixel(&self, point: Vector2, no_check: bool) -> Option<Vec<usize>> {
+    pub fn get_cell_from_pixel(&self, point: Vector2, no_check: bool) -> Option<Move> {
         // Iterate over every cell in the board.
         for ((cell, rect), i) in self.cells.iter().zip(&self.cell_positions).zip(0..9) {
             // If the point collides with the cell...
@@ -170,20 +170,20 @@ impl Board {
                     // ...and it hasn't been completed (or we don't check)...
                     if (b.check() == Value::None) || no_check {
                         // ...then append the current coordinate...
-                        let mut out = vec![i];
+                        let mut out = Move([i].to_vec());
                         let x = b.get_cell_from_pixel(point, no_check);
                         match x {
                             Some(mut x) => {
-                                out.append(&mut x);
+                                out.0.append(&mut x.0);
                                 return Some(out);
                             }
                             None => return None,
                         }
                     } else {
-                        return Some(vec![i]);
+                        return Some(Move([i].to_vec()));
                     }
                 } else {
-                    return Some(vec![i]);
+                    return Some(Move([i].to_vec()));
                 }
             }
         }
@@ -198,7 +198,7 @@ impl Board {
         d: &mut T,
         no_check: bool,
         alpha: bool,
-        hover: Option<&[usize]>,
+        hover: Option<&Move>,
         mut legal: Legal,
         turn: Turn,
     ) {
@@ -308,9 +308,10 @@ impl Board {
 
         let mut x = 10;
         if let Some(pos) = hover {
-            x = pos[0]
+            x = pos.0[0]
         }
 
+        let new_hover = Move(hover.unwrap().0[1..].to_vec());
         for i in 0..9 {
             self.cells[i].draw(
                 self.cell_positions[i],
@@ -318,7 +319,7 @@ impl Board {
                 no_check,
                 alpha,
                 if i == x {
-                    Some(&hover.unwrap()[1..])
+                    Some(&new_hover)
                 } else {
                     None
                 },

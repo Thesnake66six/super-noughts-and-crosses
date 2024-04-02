@@ -1,13 +1,15 @@
+use crate::game::Move;
+
 #[derive(Debug)]
 pub struct MonteCarloNode {
-    pub play: Vec<usize>,
+    pub play: Move,
     pub playouts: f32,
     pub wins: f32,
     pub child_count: usize,
 }
 
 impl MonteCarloNode {
-    pub fn new(play: Vec<usize>, child_count: usize) -> MonteCarloNode {
+    pub fn new(play: Move, child_count: usize) -> MonteCarloNode {
         MonteCarloNode {
             play,
             playouts: 0.0,

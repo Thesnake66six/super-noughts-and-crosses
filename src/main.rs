@@ -15,7 +15,7 @@ use ui::{UITab, UI};
 
 use crate::{
     common::*,
-    game::Turn,
+    game::{Move, Turn},
     monte_carlo::{
         message::Message,
         monte_carlo::{MonteCarloManager, MonteCarloPolicy, MonteCarloSettings},
@@ -35,7 +35,7 @@ fn main() -> Result<()> {
     let (tx_0, rx_0) = mpsc::sync_channel::<Message>(0);
 
     // Noughbert comms witn main thread
-    let (tx_1, rx_1) = mpsc::sync_channel::<Vec<usize>>(1);
+    let (tx_1, rx_1) = mpsc::sync_channel::<Move>(1);
 
     let spawn = thread::spawn(move || {
         let rx = rx_0;
@@ -107,7 +107,7 @@ fn main() -> Result<()> {
                         }
                         board.play(&x.value().play).unwrap();
                     }
-                    if !node.value().play.is_empty() {
+                    if !node.value().play.0.is_empty() {
                         board.play(&node.value().play).unwrap();
                     }
                     let repr = board.board.dbg_repr();
@@ -246,7 +246,7 @@ fn main() -> Result<()> {
             &mut d,
             false,
             true,
-            hovered_cell.as_deref(),
+            hovered_cell.as_ref(),
         );
 
         ui.draw(ui_rect, &mut d, &g, &font_50pt);
@@ -271,7 +271,7 @@ fn handle_input(
     ui: &mut UI<'_>,
     g: &mut Game,
     state: &mut State,
-) -> Option<Vec<usize>> {
+) -> Option<Move> {
     let mouse_pos = rl.get_mouse_position();
 
     if rl.is_window_resized() {
@@ -401,7 +401,7 @@ fn handle_click(
     ui: &mut UI<'_>,
     g: &mut Game,
     game_rect: &mut Rectangle,
-    hovered_cell: &Option<Vec<usize>>,
+    hovered_cell: &Option<Move>,
 ) {
     if rl.is_mouse_button_pressed(MouseButton::MOUSE_LEFT_BUTTON) {
         if ui_rect.check_collision_point_rec(mouse_pos) {

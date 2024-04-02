@@ -30,7 +30,6 @@ impl Turn {
     }
 }
 
-
 impl Not for Turn {
     type Output = Turn;
     fn not(self) -> Self::Output {
@@ -38,6 +37,28 @@ impl Not for Turn {
             Turn::Player1 => Turn::Player2,
             Turn::Player2 => Turn::Player1,
         }
+    }
+}
+
+impl monte_carlo::Turn for Turn {
+    fn next(self) -> Self {
+        !self
+    }
+
+    fn prev(self) -> Self {
+        !self
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Move(pub Vec<usize>);
+
+impl monte_carlo::Move<Game, Turn> for Move {
+    fn play(&self, game: &mut Game, turn: Turn) {
+        todo!()
+    }
+    fn unplay(&self, board: &mut Game, turn: Turn) {
+        todo!()
     }
 }
 
@@ -56,9 +77,9 @@ pub struct Game {
     /// The number of human players
     pub players: usize,
     /// A list of all previous moves, and the legal moves that could have been made on that turn
-    pub moves: Vec<Vec<Vec<usize>>>,
+    pub moves: Vec<Vec<Move>>,
     /// The current set of legal moves
-    pub legal: Vec<usize>,
+    pub legal: Move,
 }
 
 impl Game {
@@ -74,7 +95,7 @@ impl Game {
             turn: Turn::Player1,
             players,
             moves: [].into(),
-            legal: vec![],
+            legal: Move(vec![]),
         }
     }
 
@@ -108,7 +129,7 @@ impl Game {
         d: &mut T,
         no_check: bool,
         alpha: bool,
-        hover: Option<&[usize]>,
+        hover: Option<&Move>,
     ) {
         let m = rect.width * BOARD_CELL_MARGIN;
 
@@ -123,7 +144,7 @@ impl Game {
                     Value::Player1 => COLOUR_BOARD_BG_GREYED_P1,
                     Value::Player2 => COLOUR_BOARD_BG_GREYED_P2,
                 }
-            } else if self.legal.is_empty() {
+            } else if self.legal.0.is_empty() {
                 COLOUR_BOARD_BG
             } else if self.turn == Turn::Player1 {
                 COLOUR_BOARD_BG_GREYED_P1
@@ -142,19 +163,19 @@ impl Game {
         let legal: Legal = if self.board.check() != Value::None || self.moves.is_empty() {
             Legal::ForceDefaultBg
         } else {
-            Legal::Pos(&self.legal)
+            Legal::Pos(&self.legal.0)
         };
 
         self.board
             .draw(irect, &mut c, no_check, alpha, hover, legal, self.turn)
     }
 
-    pub fn play(&mut self, pos: &[usize]) -> Result<()> {
-        if !pos.starts_with(&self.legal) {
+    pub fn play(&mut self, pos: &Move) -> Result<()> {
+        if !pos.0.starts_with(&self.legal.0) {
             bail!("Illegal move: Move is not within bounds of current play")
         }
 
-        if let Cell::Board(b) = self.board.get(&pos[..pos.len().saturating_sub(2)]).unwrap() {
+        if let Cell::Board(b) = self.board.get(&Move(pos.0[..pos.0.len().saturating_sub(2)].to_vec())).unwrap() {
             if b.check() != Value::None {
                 bail!("Illegal move: Board already completed")
             }
@@ -170,7 +191,7 @@ impl Game {
             self.board.set(pos, val)?;
             self.moves.insert(
                 self.moves.len(),
-                [pos.to_vec(), self.legal.to_vec()].to_vec(),
+                [Move(pos.0.to_vec()), Move(self.legal.0.clone())].to_vec(),
             );
             self.legal = self.get_legal(pos);
             self.turn = !self.turn;
@@ -190,24 +211,26 @@ impl Game {
         let mv = self.moves.pop().unwrap();
         let x = &mv[1];
         let _ = self.board.set(&mv[0], Cell::None);
-        self.legal = x.to_vec();
+        self.legal = x.clone();
         self.turn = !self.turn;
         Ok(())
     }
 
-    pub fn get_legal(&self, pos: &[usize]) -> Vec<usize> {
+    pub fn get_legal(&self, pos: &Move) -> Move {
         if self.board.check() != Value::None {
-            return vec![];
+            return Move(vec![]);
         }
 
-        let x = pos.last().unwrap(); // The last position in pos
-        let y = if !pos.is_empty() {
-            &pos[..pos.len().saturating_sub(1)]
+        let yo = Move(pos.0[..pos.0.len().saturating_sub(1)].to_vec());
+        let zo = Move(pos.0[..pos.0.len().saturating_sub(2)].to_vec());
+        let x = pos.0.last().unwrap(); // The last position in pos
+        let y = if !pos.0.is_empty() {
+            &yo
         } else {
             pos
         }; // The penultimate position in pos - correlates to the box that the play was made in
-        let z = if pos.len() >= 2 {
-            &pos[..pos.len().saturating_sub(2)]
+        let z = if pos.0.len() >= 2 {
+            &zo
         } else {
             pos
         }; // The position two positions up, gives the depth-two board that the next move will always be in
@@ -216,31 +239,41 @@ impl Game {
         if let Some(Cell::Board(b)) = self.board.get(y) {
             if b.check() != Value::None {
                 // ...if so, check again as if the move made was `up`
-                if pos.len() >= 3 {
+                if pos.0.len() >= 3 {
                     return self.get_legal(y);
                 }
             }
         }
         // Otherwise, check to make sure the new target board exists
-        if let Some(Cell::Board(b)) = self.board.get(&[z, &[*x]].concat()) {
+        if let Some(Cell::Board(b)) = self.board.get(&Move([z.0.clone(), Move([*x].to_vec()).0].concat())) {
             // If it's completed, then return the board above (`last`)
             if b.check() != Value::None {
-                z.to_vec()
+                z.clone()
             // Otherwise, return last, plus `n` to get the board referenced by the previous move
             } else {
-                [z, &[*x]].concat()
+                Move([z.0.clone(), [*x].to_vec()].concat())
             }
         // And, if the new target board doesn't exist, meaning that this is the top board, then return everywhere (`[]`).
         } else {
-            [].to_vec()
+            Move([].to_vec())
         }
     }
 
-    pub fn legal_moves(&self) -> Vec<Vec<usize>> {
+    pub fn legal_moves(&self) -> Vec<Move> {
         self.board.get(&self.legal).unwrap().moves(&self.legal)
     }
 
-    pub fn get_cell_from_pixel(&self, point: Vector2, no_check: bool) -> Option<Vec<usize>> {
+    pub fn get_cell_from_pixel(&self, point: Vector2, no_check: bool) -> Option<Move> {
         self.board.get_cell_from_pixel(point, no_check)
+    }
+}
+
+impl monte_carlo::Board<Move, Turn> for Game {
+    fn legal_moves(&self) -> Vec<Move> {
+        self.legal_moves()
+    }
+
+    fn completion_state(&self) -> Option<monte_carlo::Terminal<Turn>> {
+        todo!()
     }
 }

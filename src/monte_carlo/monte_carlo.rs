@@ -4,7 +4,7 @@ use ego_tree::{NodeId, Tree};
 
 use crate::{
     cell::{Cell, Value},
-    game::{Game, Turn},
+    game::{Game, Move, Turn},
 };
 
 use graphvis_ego_tree::TreeWrapper;
@@ -44,7 +44,7 @@ impl MonteCarloManager {
         let moves_count = &g.legal_moves().len();
         MonteCarloManager {
             g,
-            tree: ego_tree::Tree::new(MonteCarloNode::new(vec![], *moves_count)),
+            tree: ego_tree::Tree::new(MonteCarloNode::new(Move(vec![]), *moves_count)),
             sims: 0,
         }
     }
@@ -102,7 +102,7 @@ impl MonteCarloManager {
             count += 1;
         }
 
-        if !node.value().play.is_empty() {
+        if !node.value().play.0.is_empty() {
             self.g.play(&node.value().play).unwrap();
             count += 1;
         }
@@ -150,7 +150,7 @@ impl MonteCarloManager {
         let mut count = 0;
         for x in node.ancestors().collect::<Vec<_>>().iter().rev() {
             let x = &x.value();
-            if x.play.is_empty() {
+            if x.play.0.is_empty() {
                 continue;
             }
             self.g.play(&x.play).expect("Failed");
@@ -199,7 +199,7 @@ impl MonteCarloManager {
         }
     }
 
-    pub fn best(&mut self, policy: MonteCarloPolicy, opt_for: Turn) -> Vec<usize> {
+    pub fn best(&mut self, policy: MonteCarloPolicy, opt_for: Turn) -> Move {
         match policy {
             MonteCarloPolicy::Robust => {
                 let node = self.tree.root();

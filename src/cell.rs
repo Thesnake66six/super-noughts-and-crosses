@@ -1,6 +1,6 @@
 use raylib::{drawing::RaylibDraw, math::Rectangle};
 
-use crate::{board::Board, common::*, game::Turn, styles::*};
+use crate::{board::Board, common::*, game::{Move, Turn}, styles::*};
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 /// An enum used to differentiate the states of a board, namely:
@@ -89,9 +89,9 @@ impl Cell {
     }
 
     /// Returns the possible moves within a cell
-    pub fn moves<'a>(&'a self, pos: &'a [usize]) -> Vec<Vec<usize>> {
+    pub fn moves<'a>(&'a self, pos: &'a Move) -> Vec<Move> {
         match self {
-            Cell::None => vec![pos.to_vec()],
+            Cell::None => vec![pos.clone()],
             Cell::Player1 => vec![],
             Cell::Player2 => vec![],
             Cell::Board(b) => {
@@ -111,13 +111,13 @@ impl Cell {
         d: &mut T,
         no_check: bool,
         alpha: bool,
-        mut hover: Option<&[usize]>,
+        mut hover: Option<&Move>,
         legal: Legal,
         turn: Turn,
     ) {
         let mut flag = false;
         if let Some(pos) = hover {
-            if pos.is_empty() {
+            if pos.0.is_empty() {
                 flag = true;
                 hover = None
             }

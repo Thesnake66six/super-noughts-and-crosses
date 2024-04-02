@@ -322,6 +322,7 @@ impl UI<'_> {
                 },
             );
             let t = x[0]
+                .0
                 .iter()
                 .map(|x| (x + 1).to_string())
                 .collect::<Vec<String>>()
