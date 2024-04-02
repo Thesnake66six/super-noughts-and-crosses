@@ -35,7 +35,7 @@ pub const BOARD_DEFAULT_DEPTH: usize = 1;
 // pub const DEFAULT_EXPLORATION_FACTOR: f32 = SQRT_2 / 2.0;
 pub const DEFAULT_EXPLORATION_FACTOR: f32 = 2.0;
 pub const DEFAULT_MOVE_TIMEOUT: f32 = 20000.0;
-pub const DEFAULT_MAX_SIMS: usize = 10000;
+pub const DEFAULT_MAX_SIMS: usize = 50000;
 
 //----------// Constants determining the properties of the camera //----------//
 

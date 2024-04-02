@@ -91,7 +91,7 @@ impl Cell {
     /// Returns the possible moves within a cell
     pub fn moves<'a>(&'a self, pos: &'a Move) -> Vec<Move> {
         match self {
-            Cell::None => vec![pos.clone()],
+            Cell::None => vec![Move(pos.0.to_vec())],
             Cell::Player1 => vec![],
             Cell::Player2 => vec![],
             Cell::Board(b) => {

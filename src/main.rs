@@ -1,24 +1,23 @@
 use std::{
-    fmt::Display,
-    sync::mpsc::{self, Receiver, SyncSender},
-    thread,
-    time::{self, Duration},
+    fmt::Display, fs::File, sync::mpsc::{self, Receiver, SyncSender}, thread, time::{self, Duration}
 };
 
 use anyhow::Result;
 use cell::Value;
 use ego_tree::Tree;
 use game::Game;
+use graphvis_ego_tree::TreeWrapper;
 use raylib::{core::texture::RaylibTexture2D, prelude::*};
 use styles::*;
 use ui::{UITab, UI};
+use std::io::Write;
 
 use crate::{
     common::*,
     game::{Move, Turn},
-    monte_carlo::{
+    monte_carlo_me::{
         message::Message,
-        monte_carlo::{MonteCarloManager, MonteCarloPolicy, MonteCarloSettings},
+        monte_carlo_me::{MonteCarloManager, MonteCarloPolicy, MonteCarloSettings},
     },
 };
 
@@ -26,9 +25,38 @@ mod board;
 mod cell;
 mod common;
 mod game;
-mod monte_carlo;
+mod monte_carlo_me;
 mod styles;
 mod ui;
+
+#[derive(Debug)]
+pub struct Noughbert {}
+
+impl monte_carlo::Game for Noughbert {
+    type Turn = Turn;
+
+    type Move = Move;
+
+    type Board = Game;
+}
+
+fn write_tree_to_dot(state: &monte_carlo::State<Noughbert>) {
+    let mut file = File::create("file.dot").unwrap();
+    writeln!(
+        file,
+        "{}",
+        TreeWrapper::new(&state.tree, state.root, |x| format!(
+            "{}\nid: {:?}\nmove: {:?}\nplayouts: {}\nscore: {}\nis_complete: {}",
+            state.build_board(x.id()).0.board.dbg_repr(),
+            x.id(),
+            x.value().r#move,
+            x.value().playouts,
+            x.value().score,
+            x.value().is_complete,
+        ))
+    )
+    .unwrap();
+}
 
 fn main() -> Result<()> {
     // Main thread comms with Noughbert
@@ -50,11 +78,13 @@ fn main() -> Result<()> {
                 Message::Move(_) => continue,
                 Message::GetMoveNow() => continue,
             };
-            let mut noughbert = MonteCarloManager::new(mc_options.game);
             let start_time = time::Instant::now();
             let mut interrupt = false;
+            let mut sims = 0;
 
-            while start_time.elapsed() < mc_options.timeout && noughbert.sims < mc_options.max_sims
+            let mut state = monte_carlo::State::new(mc_options.game.turn, mc_options.opt_for, mc_options.game);
+
+            while start_time.elapsed() < mc_options.timeout && sims < mc_options.max_sims
             {
                 let message = rx.try_recv();
                 match message {
@@ -73,55 +103,24 @@ fn main() -> Result<()> {
                         mpsc::TryRecvError::Disconnected => panic!("Thread disconnected"),
                     },
                 }
-                let x = noughbert.select(mc_options.exploration_factor);
-                if x.is_none() {
-                    break;
-                }
-                let x = noughbert.expand(x.unwrap());
-                let (x, val) = noughbert.simulate(x, mc_options.opt_for);
-                noughbert.backpropogate(x, val);
-                noughbert.sims += 1;
+                state.mcts(1);
+                sims += 1;
             }
             if interrupt {
                 println!("Exited due to interrupt request");
                 continue;
-            } else if noughbert.sims >= mc_options.max_sims {
+            } else if sims >= mc_options.max_sims {
                 println!("Exited due to simulation cap")
             } else if start_time.elapsed() >= mc_options.timeout {
                 println!("Exited due to timeout")
             } else {
                 println!("Exited due to complete game tree");
             }
-            println!("{} sims", noughbert.sims);
+            println!("{} sims", sims);
 
-            let best_play = noughbert.best(mc_options.policy, mc_options.opt_for);
+            let best_play = state.suggest_move(monte_carlo::MovePolicy::MaxChild).unwrap();
             tx.send(best_play).unwrap();
-            eprintln!(
-                "{}",
-                graphvis_ego_tree::TreeWrapper::new(&noughbert.tree, noughbert.tree.root().id(), |node| {
-                    let mut board = noughbert.g.clone();
-
-                    for x in node.ancestors().collect::<Vec<_>>().iter().rev().skip(1) {
-                        if board.board.check() != Value::None {
-                            println!("{:?}", node.ancestors().collect::<Vec<_>>().iter().rev().skip(1))
-                        }
-                        board.play(&x.value().play).unwrap();
-                    }
-                    if !node.value().play.0.is_empty() {
-                        board.play(&node.value().play).unwrap();
-                    }
-                    let repr = board.board.dbg_repr();
-
-                    let done = match board.board.check() {
-                        Value::None => " ".to_owned(),
-                        Value::Draw => "Draw".to_owned(),
-                        Value::Player1 => "Crosses".to_owned(),
-                        Value::Player2 => "Noughts".to_owned(),
-                    };
-
-                    format!("{}\n{}\n{}/{}", repr, done, node.value().wins, node.value().playouts)
-                })
-            )
+            write_tree_to_dot(&state)
         }
     });
 
@@ -202,8 +201,8 @@ fn main() -> Result<()> {
             &mut state,
         );
 
-        // if g.turn == 0 && g.board.check() == Value::None && g.players == 1 && !waiting_for_move {
-        if g.board.check() == Value::None && g.players == 1 && !state.waiting_for_move {
+        if g.turn == Turn::Player2 && g.board.check() == Value::None && g.players == 1 && !state.waiting_for_move {
+        // if g.board.check() == Value::None && g.players == 1 && !state.waiting_for_move {
             state.message_queue.insert(
                 state.message_queue.len(),
                 Message::Start(MonteCarloSettings {

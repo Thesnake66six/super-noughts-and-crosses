@@ -1,6 +1,7 @@
 use std::ops::Not;
 
 use anyhow::{bail, Ok, Result};
+use monte_carlo::{Terminal, WonTerminal};
 use raylib::{
     camera::Camera2D,
     drawing::{RaylibDraw, RaylibMode2DExt},
@@ -44,21 +45,19 @@ impl monte_carlo::Turn for Turn {
     fn next(self) -> Self {
         !self
     }
-
-    fn prev(self) -> Self {
-        !self
-    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Move(pub Vec<usize>);
+pub struct Move(
+    pub Vec<usize>
+);
+
+
+
 
 impl monte_carlo::Move<Game, Turn> for Move {
-    fn play(&self, game: &mut Game, turn: Turn) {
-        todo!()
-    }
-    fn unplay(&self, board: &mut Game, turn: Turn) {
-        todo!()
+    fn play(&self, game: &mut Game, _turn: Turn) {
+        game.play(self).unwrap();
     }
 }
 
@@ -274,6 +273,17 @@ impl monte_carlo::Board<Move, Turn> for Game {
     }
 
     fn completion_state(&self) -> Option<monte_carlo::Terminal<Turn>> {
-        todo!()
+        match self.board.check() {
+            Value::None => None,
+            Value::Draw => Some(Terminal::Drawn),
+            Value::Player1 => Some(Terminal::Won(WonTerminal::new(1.0, Turn::Player1))),
+            Value::Player2 => Some(Terminal::Won(WonTerminal::new(1.0, Turn::Player2))),
+        }
+    }
+}
+
+impl Default for Game {
+    fn default() -> Self {
+        Game::new_depth(Rectangle::EMPTY, BOARD_DEFAULT_DEPTH, 2)
     }
 }

@@ -311,18 +311,18 @@ impl Board {
             x = pos.0[0]
         }
 
-        let new_hover = Move(hover.unwrap().0[1..].to_vec());
         for i in 0..9 {
+            let hover = if i == x {
+                    hover.map(|h| Move(h.0[1..].to_vec()))
+                } else {
+                    None
+                };
             self.cells[i].draw(
                 self.cell_positions[i],
                 d,
                 no_check,
                 alpha,
-                if i == x {
-                    Some(&new_hover)
-                } else {
-                    None
-                },
+                hover.as_ref(),
                 if board_complete {
                     Legal::ForceDefaultBg
                 } else if [10, i].contains(&t.unwrap_or(11)) {

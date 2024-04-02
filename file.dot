@@ -1,0 +1,1869 @@
+digraph {
+node [shape=box]
+N1 [ label = "O..\n.X.\nX..\n\nid: NodeId(1)\nmove: None\nplayouts: 441\nscore: 96\nis_complete: true" fontname = "Consolas"]
+N1 -> N2
+N1 -> N5
+N1 -> N7
+N1 -> N12
+N1 -> N15
+N1 -> N19
+N2 [ label = "O.O\n.X.\nX..\n\nid: NodeId(2)\nmove: Some(Move([2]))\nplayouts: 86\nscore: 28\nis_complete: true" fontname = "Consolas"]
+N2 -> N3
+N2 -> N32
+N2 -> N37
+N2 -> N39
+N2 -> N63
+N3 [ label = "O.O\nXX.\nX..\n\nid: NodeId(3)\nmove: Some(Move([3]))\nplayouts: 17\nscore: 9\nis_complete: true" fontname = "Consolas"]
+N3 -> N4
+N3 -> N102
+N3 -> N105
+N3 -> N108
+N4 [ label = "OOO\nXX.\nX..\n\nid: NodeId(4)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N5 [ label = "O..\nOX.\nX..\n\nid: NodeId(5)\nmove: Some(Move([3]))\nplayouts: 73\nscore: 8\nis_complete: true" fontname = "Consolas"]
+N5 -> N6
+N5 -> N49
+N5 -> N76
+N5 -> N80
+N5 -> N96
+N6 [ label = "O.X\nOX.\nX..\n\nid: NodeId(6)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N7 [ label = "O..\n.X.\nX.O\n\nid: NodeId(7)\nmove: Some(Move([8]))\nplayouts: 73\nscore: 16\nis_complete: true" fontname = "Consolas"]
+N7 -> N8
+N7 -> N28
+N7 -> N34
+N7 -> N60
+N7 -> N83
+N8 [ label = "O..\n.X.\nXXO\n\nid: NodeId(8)\nmove: Some(Move([7]))\nplayouts: 18\nscore: 6\nis_complete: true" fontname = "Consolas"]
+N8 -> N9
+N8 -> N113
+N8 -> N215
+N8 -> N252
+N9 [ label = "O.O\n.X.\nXXO\n\nid: NodeId(9)\nmove: Some(Move([2]))\nplayouts: 5\nscore: 3\nis_complete: true" fontname = "Consolas"]
+N9 -> N10
+N9 -> N325
+N9 -> N327
+N10 [ label = "O.O\n.XX\nXXO\n\nid: NodeId(10)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N10 -> N11
+N10 -> N585
+N11 [ label = "OOO\n.XX\nXXO\n\nid: NodeId(11)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N12 [ label = "OO.\n.X.\nX..\n\nid: NodeId(12)\nmove: Some(Move([1]))\nplayouts: 57\nscore: 20\nis_complete: true" fontname = "Consolas"]
+N12 -> N13
+N12 -> N23
+N12 -> N59
+N12 -> N70
+N12 -> N93
+N13 [ label = "OO.\n.X.\nXX.\n\nid: NodeId(13)\nmove: Some(Move([7]))\nplayouts: 14\nscore: 5\nis_complete: true" fontname = "Consolas"]
+N13 -> N14
+N13 -> N119
+N13 -> N122
+N13 -> N193
+N14 [ label = "OOO\n.X.\nXX.\n\nid: NodeId(14)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N15 [ label = "O..\n.X.\nXO.\n\nid: NodeId(15)\nmove: Some(Move([7]))\nplayouts: 79\nscore: 8\nis_complete: true" fontname = "Consolas"]
+N15 -> N16
+N15 -> N48
+N15 -> N73
+N15 -> N99
+N15 -> N131
+N16 [ label = "O..\nXX.\nXO.\n\nid: NodeId(16)\nmove: Some(Move([3]))\nplayouts: 18\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N16 -> N17
+N16 -> N239
+N16 -> N335
+N16 -> N407
+N17 [ label = "OO.\nXX.\nXO.\n\nid: NodeId(17)\nmove: Some(Move([1]))\nplayouts: 4\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N17 -> N18
+N17 -> N593
+N17 -> N623
+N18 [ label = "OO.\nXXX\nXO.\n\nid: NodeId(18)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N19 [ label = "O..\n.XO\nX..\n\nid: NodeId(19)\nmove: Some(Move([5]))\nplayouts: 73\nscore: 16\nis_complete: true" fontname = "Consolas"]
+N19 -> N20
+N19 -> N44
+N19 -> N54
+N19 -> N67
+N19 -> N92
+N20 [ label = "O..\n.XO\nXX.\n\nid: NodeId(20)\nmove: Some(Move([7]))\nplayouts: 15\nscore: 4\nis_complete: true" fontname = "Consolas"]
+N20 -> N21
+N20 -> N195
+N20 -> N201
+N20 -> N228
+N21 [ label = "OO.\n.XO\nXX.\n\nid: NodeId(21)\nmove: Some(Move([1]))\nplayouts: 4\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N21 -> N22
+N21 -> N566
+N21 -> N675
+N22 [ label = "OOX\n.XO\nXX.\n\nid: NodeId(22)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N23 [ label = "OO.\n.X.\nX.X\n\nid: NodeId(23)\nmove: Some(Move([8]))\nplayouts: 14\nscore: 5\nis_complete: true" fontname = "Consolas"]
+N23 -> N24
+N23 -> N178
+N23 -> N179
+N23 -> N182
+N24 [ label = "OO.\nOX.\nX.X\n\nid: NodeId(24)\nmove: Some(Move([3]))\nplayouts: 4\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N24 -> N25
+N24 -> N321
+N24 -> N571
+N25 [ label = "OO.\nOXX\nX.X\n\nid: NodeId(25)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N25 -> N26
+N25 -> N605
+N26 [ label = "OO.\nOXX\nXOX\n\nid: NodeId(26)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N26 -> N27
+N27 [ label = "OOX\nOXX\nXOX\n\nid: NodeId(27)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N28 [ label = "OX.\n.X.\nX.O\n\nid: NodeId(28)\nmove: Some(Move([1]))\nplayouts: 18\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N28 -> N29
+N28 -> N86
+N28 -> N186
+N28 -> N236
+N29 [ label = "OX.\n.XO\nX.O\n\nid: NodeId(29)\nmove: Some(Move([5]))\nplayouts: 4\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N29 -> N30
+N29 -> N315
+N29 -> N641
+N30 [ label = "OX.\nXXO\nX.O\n\nid: NodeId(30)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N30 -> N31
+N30 -> N701
+N31 [ label = "OXO\nXXO\nX.O\n\nid: NodeId(31)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N32 [ label = "O.O\n.XX\nX..\n\nid: NodeId(32)\nmove: Some(Move([5]))\nplayouts: 17\nscore: 5\nis_complete: true" fontname = "Consolas"]
+N32 -> N33
+N32 -> N88
+N32 -> N155
+N32 -> N168
+N33 [ label = "OOO\n.XX\nX..\n\nid: NodeId(33)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N34 [ label = "O..\n.XX\nX.O\n\nid: NodeId(34)\nmove: Some(Move([5]))\nplayouts: 18\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N34 -> N35
+N34 -> N166
+N34 -> N300
+N34 -> N353
+N35 [ label = "O..\nOXX\nX.O\n\nid: NodeId(35)\nmove: Some(Move([3]))\nplayouts: 5\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N35 -> N36
+N35 -> N698
+N35 -> N753
+N36 [ label = "O.X\nOXX\nX.O\n\nid: NodeId(36)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N37 [ label = "O.O\n.X.\nX.X\n\nid: NodeId(37)\nmove: Some(Move([8]))\nplayouts: 17\nscore: 5\nis_complete: true" fontname = "Consolas"]
+N37 -> N38
+N37 -> N84
+N37 -> N147
+N37 -> N211
+N38 [ label = "OOO\n.X.\nX.X\n\nid: NodeId(38)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N39 [ label = "OXO\n.X.\nX..\n\nid: NodeId(39)\nmove: Some(Move([1]))\nplayouts: 21\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N39 -> N40
+N39 -> N111
+N39 -> N224
+N39 -> N308
+N40 [ label = "OXO\n.X.\nXO.\n\nid: NodeId(40)\nmove: Some(Move([7]))\nplayouts: 6\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N40 -> N41
+N40 -> N470
+N40 -> N616
+N41 [ label = "OXO\n.X.\nXOX\n\nid: NodeId(41)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N41 -> N42
+N41 -> N647
+N42 [ label = "OXO\n.XO\nXOX\n\nid: NodeId(42)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N42 -> N43
+N43 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(43)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N44 [ label = "O..\nXXO\nX..\n\nid: NodeId(44)\nmove: Some(Move([3]))\nplayouts: 21\nscore: 8\nis_complete: true" fontname = "Consolas"]
+N44 -> N45
+N44 -> N115
+N44 -> N198
+N44 -> N207
+N45 [ label = "O.O\nXXO\nX..\n\nid: NodeId(45)\nmove: Some(Move([2]))\nplayouts: 6\nscore: 4\nis_complete: true" fontname = "Consolas"]
+N45 -> N46
+N45 -> N303
+N45 -> N478
+N46 [ label = "O.O\nXXO\nXX.\n\nid: NodeId(46)\nmove: Some(Move([7]))\nplayouts: 2\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N46 -> N47
+N46 -> N649
+N47 [ label = "O.O\nXXO\nXXO\n\nid: NodeId(47)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N48 [ label = "O.X\n.X.\nXO.\n\nid: NodeId(48)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N49 [ label = "OX.\nOX.\nX..\n\nid: NodeId(49)\nmove: Some(Move([1]))\nplayouts: 18\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N49 -> N50
+N49 -> N203
+N49 -> N311
+N49 -> N394
+N50 [ label = "OX.\nOX.\nXO.\n\nid: NodeId(50)\nmove: Some(Move([7]))\nplayouts: 5\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N50 -> N51
+N50 -> N737
+N50 -> N883
+N51 [ label = "OX.\nOX.\nXOX\n\nid: NodeId(51)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N51 -> N52
+N51 -> N922
+N52 [ label = "OXO\nOX.\nXOX\n\nid: NodeId(52)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N52 -> N53
+N53 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(53)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N54 [ label = "O..\n.XO\nX.X\n\nid: NodeId(54)\nmove: Some(Move([8]))\nplayouts: 18\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N54 -> N55
+N54 -> N172
+N54 -> N279
+N54 -> N351
+N55 [ label = "O.O\n.XO\nX.X\n\nid: NodeId(55)\nmove: Some(Move([2]))\nplayouts: 5\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N55 -> N56
+N55 -> N654
+N55 -> N775
+N56 [ label = "OXO\n.XO\nX.X\n\nid: NodeId(56)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N56 -> N57
+N56 -> N813
+N57 [ label = "OXO\n.XO\nXOX\n\nid: NodeId(57)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N57 -> N58
+N58 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(58)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N59 [ label = "OOX\n.X.\nX..\n\nid: NodeId(59)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N60 [ label = "O..\nXX.\nX.O\n\nid: NodeId(60)\nmove: Some(Move([3]))\nplayouts: 18\nscore: 6\nis_complete: true" fontname = "Consolas"]
+N60 -> N61
+N60 -> N140
+N60 -> N277
+N60 -> N333
+N61 [ label = "O.O\nXX.\nX.O\n\nid: NodeId(61)\nmove: Some(Move([2]))\nplayouts: 5\nscore: 3\nis_complete: true" fontname = "Consolas"]
+N61 -> N62
+N61 -> N687
+N61 -> N689
+N62 [ label = "O.O\nXXX\nX.O\n\nid: NodeId(62)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N63 [ label = "O.O\n.X.\nXX.\n\nid: NodeId(63)\nmove: Some(Move([7]))\nplayouts: 14\nscore: 7\nis_complete: true" fontname = "Consolas"]
+N63 -> N64
+N63 -> N65
+N63 -> N144
+N63 -> N158
+N64 [ label = "OOO\n.X.\nXX.\n\nid: NodeId(64)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N65 [ label = "O.O\nOX.\nXX.\n\nid: NodeId(65)\nmove: Some(Move([3]))\nplayouts: 4\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N65 -> N66
+N65 -> N285
+N65 -> N457
+N66 [ label = "OXO\nOX.\nXX.\n\nid: NodeId(66)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N67 [ label = "OX.\n.XO\nX..\n\nid: NodeId(67)\nmove: Some(Move([1]))\nplayouts: 18\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N67 -> N68
+N67 -> N151
+N67 -> N255
+N67 -> N331
+N68 [ label = "OX.\nOXO\nX..\n\nid: NodeId(68)\nmove: Some(Move([3]))\nplayouts: 4\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N68 -> N69
+N68 -> N533
+N68 -> N709
+N69 [ label = "OXX\nOXO\nX..\n\nid: NodeId(69)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N70 [ label = "OO.\n.XX\nX..\n\nid: NodeId(70)\nmove: Some(Move([5]))\nplayouts: 14\nscore: 5\nis_complete: true" fontname = "Consolas"]
+N70 -> N71
+N70 -> N164
+N70 -> N260
+N70 -> N261
+N71 [ label = "OO.\n.XX\nXO.\n\nid: NodeId(71)\nmove: Some(Move([7]))\nplayouts: 4\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N71 -> N72
+N71 -> N267
+N71 -> N550
+N72 [ label = "OO.\nXXX\nXO.\n\nid: NodeId(72)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N73 [ label = "O..\n.X.\nXOX\n\nid: NodeId(73)\nmove: Some(Move([8]))\nplayouts: 21\nscore: 4\nis_complete: true" fontname = "Consolas"]
+N73 -> N74
+N73 -> N220
+N73 -> N313
+N73 -> N401
+N74 [ label = "O..\nOX.\nXOX\n\nid: NodeId(74)\nmove: Some(Move([3]))\nplayouts: 5\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N74 -> N75
+N74 -> N527
+N74 -> N806
+N75 [ label = "O.X\nOX.\nXOX\n\nid: NodeId(75)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N76 [ label = "O..\nOXX\nX..\n\nid: NodeId(76)\nmove: Some(Move([5]))\nplayouts: 21\nscore: 4\nis_complete: true" fontname = "Consolas"]
+N76 -> N77
+N76 -> N124
+N76 -> N230
+N76 -> N248
+N77 [ label = "O.O\nOXX\nX..\n\nid: NodeId(77)\nmove: Some(Move([2]))\nplayouts: 6\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N77 -> N78
+N77 -> N328
+N77 -> N544
+N78 [ label = "O.O\nOXX\nX.X\n\nid: NodeId(78)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N78 -> N79
+N78 -> N645
+N79 [ label = "OOO\nOXX\nX.X\n\nid: NodeId(79)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N80 [ label = "O..\nOX.\nXX.\n\nid: NodeId(80)\nmove: Some(Move([7]))\nplayouts: 15\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N80 -> N81
+N80 -> N176
+N80 -> N298
+N80 -> N380
+N81 [ label = "O.O\nOX.\nXX.\n\nid: NodeId(81)\nmove: Some(Move([2]))\nplayouts: 4\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N81 -> N82
+N81 -> N575
+N81 -> N845
+N82 [ label = "O.O\nOX.\nXXX\n\nid: NodeId(82)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N83 [ label = "O.X\n.X.\nX.O\n\nid: NodeId(83)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N84 [ label = "O.O\n.XO\nX.X\n\nid: NodeId(84)\nmove: Some(Move([5]))\nplayouts: 5\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N84 -> N85
+N84 -> N343
+N84 -> N506
+N85 [ label = "O.O\n.XO\nXXX\n\nid: NodeId(85)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N86 [ label = "OXO\n.X.\nX.O\n\nid: NodeId(86)\nmove: Some(Move([2]))\nplayouts: 5\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N86 -> N87
+N86 -> N572
+N86 -> N756
+N87 [ label = "OXO\n.X.\nXXO\n\nid: NodeId(87)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N88 [ label = "O.O\n.XX\nXO.\n\nid: NodeId(88)\nmove: Some(Move([7]))\nplayouts: 5\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N88 -> N89
+N88 -> N339
+N88 -> N501
+N89 [ label = "O.O\n.XX\nXOX\n\nid: NodeId(89)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N89 -> N90
+N89 -> N610
+N90 [ label = "O.O\nOXX\nXOX\n\nid: NodeId(90)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N90 -> N91
+N91 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(91)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N92 [ label = "O.X\n.XO\nX..\n\nid: NodeId(92)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N93 [ label = "OO.\nXX.\nX..\n\nid: NodeId(93)\nmove: Some(Move([3]))\nplayouts: 14\nscore: 5\nis_complete: true" fontname = "Consolas"]
+N93 -> N94
+N93 -> N136
+N93 -> N250
+N93 -> N306
+N94 [ label = "OO.\nXX.\nX.O\n\nid: NodeId(94)\nmove: Some(Move([8]))\nplayouts: 4\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N94 -> N95
+N94 -> N396
+N94 -> N398
+N95 [ label = "OO.\nXXX\nX.O\n\nid: NodeId(95)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N96 [ label = "O..\nOX.\nX.X\n\nid: NodeId(96)\nmove: Some(Move([8]))\nplayouts: 18\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N96 -> N97
+N96 -> N153
+N96 -> N272
+N96 -> N355
+N97 [ label = "OO.\nOX.\nX.X\n\nid: NodeId(97)\nmove: Some(Move([1]))\nplayouts: 4\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N97 -> N98
+N97 -> N713
+N97 -> N878
+N98 [ label = "OO.\nOX.\nXXX\n\nid: NodeId(98)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N99 [ label = "O..\n.XX\nXO.\n\nid: NodeId(99)\nmove: Some(Move([5]))\nplayouts: 18\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N99 -> N100
+N99 -> N191
+N99 -> N294
+N99 -> N384
+N100 [ label = "O.O\n.XX\nXO.\n\nid: NodeId(100)\nmove: Some(Move([2]))\nplayouts: 5\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N100 -> N101
+N100 -> N730
+N100 -> N732
+N101 [ label = "O.O\nXXX\nXO.\n\nid: NodeId(101)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N102 [ label = "O.O\nXX.\nX.O\n\nid: NodeId(102)\nmove: Some(Move([8]))\nplayouts: 5\nscore: 3\nis_complete: true" fontname = "Consolas"]
+N102 -> N103
+N102 -> N254
+N102 -> N317
+N103 [ label = "O.O\nXX.\nXXO\n\nid: NodeId(103)\nmove: Some(Move([7]))\nplayouts: 2\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N103 -> N104
+N103 -> N466
+N104 [ label = "O.O\nXXO\nXXO\n\nid: NodeId(104)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N105 [ label = "O.O\nXX.\nXO.\n\nid: NodeId(105)\nmove: Some(Move([7]))\nplayouts: 5\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N105 -> N106
+N105 -> N188
+N105 -> N302
+N106 [ label = "O.O\nXX.\nXOX\n\nid: NodeId(106)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N106 -> N107
+N106 -> N419
+N107 [ label = "OOO\nXX.\nXOX\n\nid: NodeId(107)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N108 [ label = "O.O\nXXO\nX..\n\nid: NodeId(108)\nmove: Some(Move([5]))\nplayouts: 6\nscore: 4\nis_complete: true" fontname = "Consolas"]
+N108 -> N109
+N108 -> N128
+N108 -> N288
+N109 [ label = "O.O\nXXO\nXX.\n\nid: NodeId(109)\nmove: Some(Move([7]))\nplayouts: 2\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N109 -> N110
+N109 -> N465
+N110 [ label = "OOO\nXXO\nXX.\n\nid: NodeId(110)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N111 [ label = "OXO\nOX.\nX..\n\nid: NodeId(111)\nmove: Some(Move([3]))\nplayouts: 5\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N111 -> N112
+N111 -> N438
+N111 -> N611
+N112 [ label = "OXO\nOX.\nXX.\n\nid: NodeId(112)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N113 [ label = "O..\nOX.\nXXO\n\nid: NodeId(113)\nmove: Some(Move([3]))\nplayouts: 4\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N113 -> N114
+N113 -> N488
+N113 -> N708
+N114 [ label = "O.X\nOX.\nXXO\n\nid: NodeId(114)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N115 [ label = "OO.\nXXO\nX..\n\nid: NodeId(115)\nmove: Some(Move([1]))\nplayouts: 5\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N115 -> N116
+N115 -> N441
+N115 -> N445
+N116 [ label = "OO.\nXXO\nX.X\n\nid: NodeId(116)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N116 -> N117
+N116 -> N666
+N117 [ label = "OO.\nXXO\nXOX\n\nid: NodeId(117)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N117 -> N118
+N118 [ label = "OOX\nXXO\nXOX\n\nid: NodeId(118)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N119 [ label = "OO.\n.X.\nXXO\n\nid: NodeId(119)\nmove: Some(Move([8]))\nplayouts: 5\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N119 -> N120
+N119 -> N232
+N119 -> N386
+N120 [ label = "OO.\n.XX\nXXO\n\nid: NodeId(120)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N120 -> N121
+N120 -> N481
+N121 [ label = "OOO\n.XX\nXXO\n\nid: NodeId(121)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N122 [ label = "OO.\nOX.\nXX.\n\nid: NodeId(122)\nmove: Some(Move([3]))\nplayouts: 4\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N122 -> N123
+N122 -> N340
+N122 -> N581
+N123 [ label = "OOX\nOX.\nXX.\n\nid: NodeId(123)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N124 [ label = "O..\nOXX\nX.O\n\nid: NodeId(124)\nmove: Some(Move([8]))\nplayouts: 5\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N124 -> N125
+N124 -> N539
+N124 -> N827
+N125 [ label = "OX.\nOXX\nX.O\n\nid: NodeId(125)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N125 -> N126
+N125 -> N891
+N126 [ label = "OX.\nOXX\nXOO\n\nid: NodeId(126)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N126 -> N127
+N127 [ label = "OXX\nOXX\nXOO\n\nid: NodeId(127)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N128 [ label = "OXO\nXXO\nX..\n\nid: NodeId(128)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N128 -> N129
+N128 -> N467
+N129 [ label = "OXO\nXXO\nXO.\n\nid: NodeId(129)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N129 -> N130
+N130 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(130)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N131 [ label = "OX.\n.X.\nXO.\n\nid: NodeId(131)\nmove: Some(Move([1]))\nplayouts: 21\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N131 -> N132
+N131 -> N160
+N131 -> N268
+N131 -> N359
+N132 [ label = "OX.\n.XO\nXO.\n\nid: NodeId(132)\nmove: Some(Move([5]))\nplayouts: 5\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N132 -> N133
+N132 -> N712
+N132 -> N862
+N133 [ label = "OX.\n.XO\nXOX\n\nid: NodeId(133)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N133 -> N134
+N133 -> N930
+N134 [ label = "OXO\n.XO\nXOX\n\nid: NodeId(134)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N134 -> N135
+N135 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(135)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N136 [ label = "OO.\nXXO\nX..\n\nid: NodeId(136)\nmove: Some(Move([5]))\nplayouts: 5\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N136 -> N137
+N136 -> N346
+N136 -> N554
+N137 [ label = "OO.\nXXO\nXX.\n\nid: NodeId(137)\nmove: Some(Move([7]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N137 -> N138
+N137 -> N602
+N138 [ label = "OO.\nXXO\nXXO\n\nid: NodeId(138)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N138 -> N139
+N139 [ label = "OOX\nXXO\nXXO\n\nid: NodeId(139)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N140 [ label = "O..\nXXO\nX.O\n\nid: NodeId(140)\nmove: Some(Move([5]))\nplayouts: 5\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N140 -> N141
+N140 -> N609
+N140 -> N714
+N141 [ label = "OX.\nXXO\nX.O\n\nid: NodeId(141)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N141 -> N142
+N141 -> N742
+N142 [ label = "OX.\nXXO\nXOO\n\nid: NodeId(142)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N142 -> N143
+N143 [ label = "OXX\nXXO\nXOO\n\nid: NodeId(143)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N144 [ label = "O.O\n.XO\nXX.\n\nid: NodeId(144)\nmove: Some(Move([5]))\nplayouts: 4\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N144 -> N145
+N144 -> N235
+N144 -> N372
+N145 [ label = "O.O\nXXO\nXX.\n\nid: NodeId(145)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N145 -> N146
+N145 -> N456
+N146 [ label = "O.O\nXXO\nXXO\n\nid: NodeId(146)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N147 [ label = "O.O\n.X.\nXOX\n\nid: NodeId(147)\nmove: Some(Move([7]))\nplayouts: 6\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N147 -> N148
+N147 -> N341
+N147 -> N391
+N148 [ label = "O.O\n.XX\nXOX\n\nid: NodeId(148)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N148 -> N149
+N148 -> N614
+N149 [ label = "O.O\nOXX\nXOX\n\nid: NodeId(149)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N149 -> N150
+N150 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(150)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N151 [ label = "OX.\n.XO\nXO.\n\nid: NodeId(151)\nmove: Some(Move([7]))\nplayouts: 5\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N151 -> N152
+N151 -> N446
+N151 -> N684
+N152 [ label = "OXX\n.XO\nXO.\n\nid: NodeId(152)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N153 [ label = "O..\nOXO\nX.X\n\nid: NodeId(153)\nmove: Some(Move([5]))\nplayouts: 4\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N153 -> N154
+N153 -> N624
+N153 -> N856
+N154 [ label = "O..\nOXO\nXXX\n\nid: NodeId(154)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N155 [ label = "O.O\nOXX\nX..\n\nid: NodeId(155)\nmove: Some(Move([3]))\nplayouts: 6\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N155 -> N156
+N155 -> N243
+N155 -> N245
+N156 [ label = "O.O\nOXX\nXX.\n\nid: NodeId(156)\nmove: Some(Move([7]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N156 -> N157
+N156 -> N458
+N157 [ label = "OOO\nOXX\nXX.\n\nid: NodeId(157)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N158 [ label = "O.O\n.X.\nXXO\n\nid: NodeId(158)\nmove: Some(Move([8]))\nplayouts: 5\nscore: 3\nis_complete: true" fontname = "Consolas"]
+N158 -> N159
+N158 -> N283
+N158 -> N322
+N159 [ label = "OXO\n.X.\nXXO\n\nid: NodeId(159)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N160 [ label = "OXO\n.X.\nXO.\n\nid: NodeId(160)\nmove: Some(Move([2]))\nplayouts: 6\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N160 -> N161
+N160 -> N631
+N160 -> N842
+N161 [ label = "OXO\n.X.\nXOX\n\nid: NodeId(161)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N161 -> N162
+N161 -> N932
+N162 [ label = "OXO\nOX.\nXOX\n\nid: NodeId(162)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N162 -> N163
+N163 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(163)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N164 [ label = "OO.\nOXX\nX..\n\nid: NodeId(164)\nmove: Some(Move([3]))\nplayouts: 5\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N164 -> N165
+N164 -> N265
+N164 -> N368
+N165 [ label = "OOX\nOXX\nX..\n\nid: NodeId(165)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N166 [ label = "O..\n.XX\nXOO\n\nid: NodeId(166)\nmove: Some(Move([7]))\nplayouts: 4\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N166 -> N167
+N166 -> N628
+N166 -> N750
+N167 [ label = "O.X\n.XX\nXOO\n\nid: NodeId(167)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N168 [ label = "O.O\n.XX\nX.O\n\nid: NodeId(168)\nmove: Some(Move([8]))\nplayouts: 5\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N168 -> N169
+N168 -> N257
+N168 -> N473
+N169 [ label = "OXO\n.XX\nX.O\n\nid: NodeId(169)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N169 -> N170
+N169 -> N568
+N170 [ label = "OXO\n.XX\nXOO\n\nid: NodeId(170)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N170 -> N171
+N171 [ label = "OXO\nXXX\nXOO\n\nid: NodeId(171)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N172 [ label = "O..\n.XO\nXOX\n\nid: NodeId(172)\nmove: Some(Move([7]))\nplayouts: 5\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N172 -> N173
+N172 -> N598
+N172 -> N719
+N173 [ label = "OX.\n.XO\nXOX\n\nid: NodeId(173)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N173 -> N174
+N173 -> N815
+N174 [ label = "OX.\nOXO\nXOX\n\nid: NodeId(174)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N174 -> N175
+N175 [ label = "OXX\nOXO\nXOX\n\nid: NodeId(175)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N176 [ label = "O..\nOXO\nXX.\n\nid: NodeId(176)\nmove: Some(Move([5]))\nplayouts: 3\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N176 -> N177
+N176 -> N562
+N176 -> N829
+N177 [ label = "O..\nOXO\nXXX\n\nid: NodeId(177)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N178 [ label = "OOO\n.X.\nX.X\n\nid: NodeId(178)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N179 [ label = "OO.\n.XO\nX.X\n\nid: NodeId(179)\nmove: Some(Move([5]))\nplayouts: 4\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N179 -> N180
+N179 -> N219
+N179 -> N373
+N180 [ label = "OO.\nXXO\nX.X\n\nid: NodeId(180)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N180 -> N181
+N180 -> N462
+N181 [ label = "OOO\nXXO\nX.X\n\nid: NodeId(181)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N182 [ label = "OO.\n.X.\nXOX\n\nid: NodeId(182)\nmove: Some(Move([7]))\nplayouts: 5\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N182 -> N183
+N182 -> N274
+N182 -> N516
+N183 [ label = "OO.\nXX.\nXOX\n\nid: NodeId(183)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N183 -> N184
+N183 -> N604
+N184 [ label = "OO.\nXXO\nXOX\n\nid: NodeId(184)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N184 -> N185
+N185 [ label = "OOX\nXXO\nXOX\n\nid: NodeId(185)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N186 [ label = "OX.\nOX.\nX.O\n\nid: NodeId(186)\nmove: Some(Move([3]))\nplayouts: 4\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N186 -> N187
+N186 -> N491
+N186 -> N743
+N187 [ label = "OXX\nOX.\nX.O\n\nid: NodeId(187)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N188 [ label = "OXO\nXX.\nXO.\n\nid: NodeId(188)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N188 -> N189
+N188 -> N468
+N189 [ label = "OXO\nXXO\nXO.\n\nid: NodeId(189)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N189 -> N190
+N190 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(190)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N191 [ label = "O..\nOXX\nXO.\n\nid: NodeId(191)\nmove: Some(Move([3]))\nplayouts: 5\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N191 -> N192
+N191 -> N642
+N191 -> N824
+N192 [ label = "O.X\nOXX\nXO.\n\nid: NodeId(192)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N193 [ label = "OO.\n.XO\nXX.\n\nid: NodeId(193)\nmove: Some(Move([5]))\nplayouts: 4\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N193 -> N194
+N193 -> N293
+N193 -> N530
+N194 [ label = "OO.\n.XO\nXXX\n\nid: NodeId(194)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N195 [ label = "O.O\n.XO\nXX.\n\nid: NodeId(195)\nmove: Some(Move([2]))\nplayouts: 4\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N195 -> N196
+N195 -> N316
+N195 -> N635
+N196 [ label = "O.O\nXXO\nXX.\n\nid: NodeId(196)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N196 -> N197
+N196 -> N663
+N197 [ label = "O.O\nXXO\nXXO\n\nid: NodeId(197)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N198 [ label = "O..\nXXO\nX.O\n\nid: NodeId(198)\nmove: Some(Move([8]))\nplayouts: 5\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N198 -> N199
+N198 -> N238
+N198 -> N443
+N199 [ label = "O..\nXXO\nXXO\n\nid: NodeId(199)\nmove: Some(Move([7]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N199 -> N200
+N199 -> N650
+N200 [ label = "O.O\nXXO\nXXO\n\nid: NodeId(200)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N201 [ label = "O..\n.XO\nXXO\n\nid: NodeId(201)\nmove: Some(Move([8]))\nplayouts: 4\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N201 -> N202
+N201 -> N449
+N201 -> N671
+N202 [ label = "OX.\n.XO\nXXO\n\nid: NodeId(202)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N203 [ label = "OX.\nOXO\nX..\n\nid: NodeId(203)\nmove: Some(Move([5]))\nplayouts: 4\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N203 -> N204
+N203 -> N634
+N203 -> N861
+N204 [ label = "OX.\nOXO\nX.X\n\nid: NodeId(204)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N204 -> N205
+N204 -> N910
+N205 [ label = "OX.\nOXO\nXOX\n\nid: NodeId(205)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N205 -> N206
+N206 [ label = "OXX\nOXO\nXOX\n\nid: NodeId(206)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N207 [ label = "O..\nXXO\nXO.\n\nid: NodeId(207)\nmove: Some(Move([7]))\nplayouts: 5\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N207 -> N208
+N207 -> N374
+N207 -> N653
+N208 [ label = "OX.\nXXO\nXO.\n\nid: NodeId(208)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N208 -> N209
+N208 -> N669
+N209 [ label = "OX.\nXXO\nXOO\n\nid: NodeId(209)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N209 -> N210
+N210 [ label = "OXX\nXXO\nXOO\n\nid: NodeId(210)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N211 [ label = "O.O\nOX.\nX.X\n\nid: NodeId(211)\nmove: Some(Move([3]))\nplayouts: 5\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N211 -> N212
+N211 -> N290
+N211 -> N477
+N212 [ label = "O.O\nOXX\nX.X\n\nid: NodeId(212)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N212 -> N213
+N212 -> N615
+N213 [ label = "O.O\nOXX\nXOX\n\nid: NodeId(213)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N213 -> N214
+N214 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(214)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N215 [ label = "OO.\n.X.\nXXO\n\nid: NodeId(215)\nmove: Some(Move([1]))\nplayouts: 5\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N215 -> N216
+N215 -> N486
+N215 -> N504
+N216 [ label = "OO.\n.XX\nXXO\n\nid: NodeId(216)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N216 -> N217
+N216 -> N720
+N217 [ label = "OO.\nOXX\nXXO\n\nid: NodeId(217)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N217 -> N218
+N218 [ label = "OOX\nOXX\nXXO\n\nid: NodeId(218)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N219 [ label = "OOX\n.XO\nX.X\n\nid: NodeId(219)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N220 [ label = "O.O\n.X.\nXOX\n\nid: NodeId(220)\nmove: Some(Move([2]))\nplayouts: 6\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N220 -> N221
+N220 -> N483
+N220 -> N801
+N221 [ label = "O.O\nXX.\nXOX\n\nid: NodeId(221)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N221 -> N222
+N221 -> N867
+N222 [ label = "O.O\nXXO\nXOX\n\nid: NodeId(222)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N222 -> N223
+N223 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(223)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N224 [ label = "OXO\n.XO\nX..\n\nid: NodeId(224)\nmove: Some(Move([5]))\nplayouts: 5\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N224 -> N225
+N224 -> N365
+N224 -> N570
+N225 [ label = "OXO\nXXO\nX..\n\nid: NodeId(225)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N225 -> N226
+N225 -> N636
+N226 [ label = "OXO\nXXO\nXO.\n\nid: NodeId(226)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N226 -> N227
+N227 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(227)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N228 [ label = "O..\nOXO\nXX.\n\nid: NodeId(228)\nmove: Some(Move([3]))\nplayouts: 3\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N228 -> N229
+N228 -> N387
+N228 -> N664
+N229 [ label = "OX.\nOXO\nXX.\n\nid: NodeId(229)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N230 [ label = "OO.\nOXX\nX..\n\nid: NodeId(230)\nmove: Some(Move([1]))\nplayouts: 5\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N230 -> N231
+N230 -> N537
+N230 -> N542
+N231 [ label = "OOX\nOXX\nX..\n\nid: NodeId(231)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N232 [ label = "OO.\nXX.\nXXO\n\nid: NodeId(232)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N232 -> N233
+N232 -> N606
+N233 [ label = "OO.\nXXO\nXXO\n\nid: NodeId(233)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N233 -> N234
+N234 [ label = "OOX\nXXO\nXXO\n\nid: NodeId(234)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N235 [ label = "O.O\n.XO\nXXX\n\nid: NodeId(235)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N236 [ label = "OX.\n.X.\nXOO\n\nid: NodeId(236)\nmove: Some(Move([7]))\nplayouts: 5\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N236 -> N237
+N236 -> N388
+N236 -> N727
+N237 [ label = "OXX\n.X.\nXOO\n\nid: NodeId(237)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N238 [ label = "O.X\nXXO\nX.O\n\nid: NodeId(238)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N239 [ label = "O..\nXX.\nXOO\n\nid: NodeId(239)\nmove: Some(Move([8]))\nplayouts: 4\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N239 -> N240
+N239 -> N505
+N239 -> N828
+N240 [ label = "OX.\nXX.\nXOO\n\nid: NodeId(240)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N240 -> N241
+N240 -> N872
+N241 [ label = "OXO\nXX.\nXOO\n\nid: NodeId(241)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N241 -> N242
+N242 [ label = "OXO\nXXX\nXOO\n\nid: NodeId(242)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N243 [ label = "O.O\nOXX\nX.X\n\nid: NodeId(243)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N243 -> N244
+N243 -> N382
+N244 [ label = "OOO\nOXX\nX.X\n\nid: NodeId(244)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N245 [ label = "OXO\nOXX\nX..\n\nid: NodeId(245)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N245 -> N246
+N245 -> N525
+N246 [ label = "OXO\nOXX\nXO.\n\nid: NodeId(246)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N246 -> N247
+N247 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(247)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N248 [ label = "O..\nOXX\nXO.\n\nid: NodeId(248)\nmove: Some(Move([7]))\nplayouts: 5\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N248 -> N249
+N248 -> N435
+N248 -> N778
+N249 [ label = "O.X\nOXX\nXO.\n\nid: NodeId(249)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N250 [ label = "OO.\nXX.\nXO.\n\nid: NodeId(250)\nmove: Some(Move([7]))\nplayouts: 4\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N250 -> N251
+N250 -> N307
+N250 -> N512
+N251 [ label = "OOX\nXX.\nXO.\n\nid: NodeId(251)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N252 [ label = "O..\n.XO\nXXO\n\nid: NodeId(252)\nmove: Some(Move([5]))\nplayouts: 4\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N252 -> N253
+N252 -> N377
+N252 -> N659
+N253 [ label = "O.X\n.XO\nXXO\n\nid: NodeId(253)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N254 [ label = "O.O\nXXX\nX.O\n\nid: NodeId(254)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N255 [ label = "OXO\n.XO\nX..\n\nid: NodeId(255)\nmove: Some(Move([2]))\nplayouts: 5\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N255 -> N256
+N255 -> N423
+N255 -> N680
+N256 [ label = "OXO\n.XO\nXX.\n\nid: NodeId(256)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N257 [ label = "O.O\n.XX\nXXO\n\nid: NodeId(257)\nmove: Some(Move([7]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N257 -> N258
+N257 -> N567
+N258 [ label = "O.O\nOXX\nXXO\n\nid: NodeId(258)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N258 -> N259
+N259 [ label = "OXO\nOXX\nXXO\n\nid: NodeId(259)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N260 [ label = "OOO\n.XX\nX..\n\nid: NodeId(260)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N261 [ label = "OO.\n.XX\nX.O\n\nid: NodeId(261)\nmove: Some(Move([8]))\nplayouts: 4\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N261 -> N262
+N261 -> N264
+N261 -> N310
+N262 [ label = "OO.\n.XX\nXXO\n\nid: NodeId(262)\nmove: Some(Move([7]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N262 -> N263
+N262 -> N499
+N263 [ label = "OOO\n.XX\nXXO\n\nid: NodeId(263)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N264 [ label = "OOX\n.XX\nX.O\n\nid: NodeId(264)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N265 [ label = "OO.\nOXX\nXX.\n\nid: NodeId(265)\nmove: Some(Move([7]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N265 -> N266
+N265 -> N399
+N266 [ label = "OOO\nOXX\nXX.\n\nid: NodeId(266)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N267 [ label = "OOX\n.XX\nXO.\n\nid: NodeId(267)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N268 [ label = "OX.\n.X.\nXOO\n\nid: NodeId(268)\nmove: Some(Move([8]))\nplayouts: 5\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N268 -> N269
+N268 -> N557
+N268 -> N822
+N269 [ label = "OX.\n.XX\nXOO\n\nid: NodeId(269)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N269 -> N270
+N269 -> N926
+N270 [ label = "OXO\n.XX\nXOO\n\nid: NodeId(270)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N270 -> N271
+N271 [ label = "OXO\nXXX\nXOO\n\nid: NodeId(271)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N272 [ label = "O..\nOX.\nXOX\n\nid: NodeId(272)\nmove: Some(Move([7]))\nplayouts: 5\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N272 -> N273
+N272 -> N547
+N272 -> N832
+N273 [ label = "O.X\nOX.\nXOX\n\nid: NodeId(273)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N274 [ label = "OO.\n.XX\nXOX\n\nid: NodeId(274)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N274 -> N275
+N274 -> N603
+N275 [ label = "OO.\nOXX\nXOX\n\nid: NodeId(275)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N275 -> N276
+N276 [ label = "OOX\nOXX\nXOX\n\nid: NodeId(276)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N277 [ label = "O..\nXX.\nXOO\n\nid: NodeId(277)\nmove: Some(Move([7]))\nplayouts: 4\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N277 -> N278
+N277 -> N522
+N277 -> N697
+N278 [ label = "O.X\nXX.\nXOO\n\nid: NodeId(278)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N279 [ label = "O..\nOXO\nX.X\n\nid: NodeId(279)\nmove: Some(Move([3]))\nplayouts: 4\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N279 -> N280
+N279 -> N495
+N279 -> N703
+N280 [ label = "OX.\nOXO\nX.X\n\nid: NodeId(280)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N280 -> N281
+N280 -> N787
+N281 [ label = "OXO\nOXO\nX.X\n\nid: NodeId(281)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N281 -> N282
+N282 [ label = "OXO\nOXO\nXXX\n\nid: NodeId(282)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N283 [ label = "O.O\nXX.\nXXO\n\nid: NodeId(283)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N283 -> N284
+N283 -> N454
+N284 [ label = "O.O\nXXO\nXXO\n\nid: NodeId(284)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N285 [ label = "O.O\nOXX\nXX.\n\nid: NodeId(285)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N285 -> N286
+N285 -> N464
+N286 [ label = "O.O\nOXX\nXXO\n\nid: NodeId(286)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N286 -> N287
+N287 [ label = "OXO\nOXX\nXXO\n\nid: NodeId(287)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N288 [ label = "O.O\nXXO\nX.X\n\nid: NodeId(288)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N288 -> N289
+N288 -> N319
+N289 [ label = "OOO\nXXO\nX.X\n\nid: NodeId(289)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N290 [ label = "OXO\nOX.\nX.X\n\nid: NodeId(290)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N290 -> N291
+N290 -> N591
+N291 [ label = "OXO\nOXO\nX.X\n\nid: NodeId(291)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N291 -> N292
+N292 [ label = "OXO\nOXO\nXXX\n\nid: NodeId(292)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N293 [ label = "OOX\n.XO\nXX.\n\nid: NodeId(293)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N294 [ label = "O..\n.XX\nXOO\n\nid: NodeId(294)\nmove: Some(Move([8]))\nplayouts: 4\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N294 -> N295
+N294 -> N576
+N294 -> N796
+N295 [ label = "OX.\n.XX\nXOO\n\nid: NodeId(295)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N295 -> N296
+N295 -> N852
+N296 [ label = "OX.\nOXX\nXOO\n\nid: NodeId(296)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N296 -> N297
+N297 [ label = "OXX\nOXX\nXOO\n\nid: NodeId(297)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N298 [ label = "OO.\nOX.\nXX.\n\nid: NodeId(298)\nmove: Some(Move([1]))\nplayouts: 4\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N298 -> N299
+N298 -> N560
+N298 -> N662
+N299 [ label = "OO.\nOX.\nXXX\n\nid: NodeId(299)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N300 [ label = "OO.\n.XX\nX.O\n\nid: NodeId(300)\nmove: Some(Move([1]))\nplayouts: 4\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N300 -> N301
+N300 -> N536
+N300 -> N746
+N301 [ label = "OOX\n.XX\nX.O\n\nid: NodeId(301)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N302 [ label = "O.O\nXXX\nXO.\n\nid: NodeId(302)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N303 [ label = "O.O\nXXO\nX.X\n\nid: NodeId(303)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N303 -> N304
+N303 -> N665
+N304 [ label = "O.O\nXXO\nXOX\n\nid: NodeId(304)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N304 -> N305
+N305 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(305)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N306 [ label = "OOO\nXX.\nX..\n\nid: NodeId(306)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N307 [ label = "OO.\nXXX\nXO.\n\nid: NodeId(307)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N308 [ label = "OXO\n.X.\nX.O\n\nid: NodeId(308)\nmove: Some(Move([8]))\nplayouts: 5\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N308 -> N309
+N308 -> N363
+N308 -> N492
+N309 [ label = "OXO\n.X.\nXXO\n\nid: NodeId(309)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N310 [ label = "OO.\nXXX\nX.O\n\nid: NodeId(310)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N311 [ label = "OX.\nOX.\nX.O\n\nid: NodeId(311)\nmove: Some(Move([8]))\nplayouts: 4\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N311 -> N312
+N311 -> N563
+N311 -> N837
+N312 [ label = "OXX\nOX.\nX.O\n\nid: NodeId(312)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N313 [ label = "O..\n.XO\nXOX\n\nid: NodeId(313)\nmove: Some(Move([5]))\nplayouts: 5\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N313 -> N314
+N313 -> N413
+N313 -> N759
+N314 [ label = "O.X\n.XO\nXOX\n\nid: NodeId(314)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N315 [ label = "OX.\n.XO\nXXO\n\nid: NodeId(315)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N316 [ label = "O.O\n.XO\nXXX\n\nid: NodeId(316)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N317 [ label = "OXO\nXX.\nX.O\n\nid: NodeId(317)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N317 -> N318
+N317 -> N349
+N318 [ label = "OXO\nXXO\nX.O\n\nid: NodeId(318)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N319 [ label = "O.O\nXXO\nXOX\n\nid: NodeId(319)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N319 -> N320
+N320 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(320)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N321 [ label = "OO.\nOX.\nXXX\n\nid: NodeId(321)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N322 [ label = "O.O\n.XX\nXXO\n\nid: NodeId(322)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N322 -> N323
+N322 -> N455
+N323 [ label = "O.O\nOXX\nXXO\n\nid: NodeId(323)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N323 -> N324
+N324 [ label = "OXO\nOXX\nXXO\n\nid: NodeId(324)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N325 [ label = "O.O\nXX.\nXXO\n\nid: NodeId(325)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N325 -> N326
+N325 -> N584
+N326 [ label = "OOO\nXX.\nXXO\n\nid: NodeId(326)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N327 [ label = "OXO\n.X.\nXXO\n\nid: NodeId(327)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N328 [ label = "O.O\nOXX\nXX.\n\nid: NodeId(328)\nmove: Some(Move([7]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N328 -> N329
+N328 -> N888
+N329 [ label = "O.O\nOXX\nXXO\n\nid: NodeId(329)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N329 -> N330
+N330 [ label = "OXO\nOXX\nXXO\n\nid: NodeId(330)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N331 [ label = "OX.\n.XO\nX.O\n\nid: NodeId(331)\nmove: Some(Move([8]))\nplayouts: 4\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N331 -> N332
+N331 -> N421
+N331 -> N625
+N332 [ label = "OXX\n.XO\nX.O\n\nid: NodeId(332)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N333 [ label = "OO.\nXX.\nX.O\n\nid: NodeId(333)\nmove: Some(Move([1]))\nplayouts: 4\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N333 -> N334
+N333 -> N432
+N333 -> N694
+N334 [ label = "OOX\nXX.\nX.O\n\nid: NodeId(334)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N335 [ label = "O..\nXXO\nXO.\n\nid: NodeId(335)\nmove: Some(Move([5]))\nplayouts: 5\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N335 -> N336
+N335 -> N416
+N335 -> N805
+N336 [ label = "OX.\nXXO\nXO.\n\nid: NodeId(336)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N336 -> N337
+N336 -> N900
+N337 [ label = "OX.\nXXO\nXOO\n\nid: NodeId(337)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N337 -> N338
+N338 [ label = "OXX\nXXO\nXOO\n\nid: NodeId(338)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N339 [ label = "O.O\nXXX\nXO.\n\nid: NodeId(339)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N340 [ label = "OO.\nOX.\nXXX\n\nid: NodeId(340)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N341 [ label = "O.O\nXX.\nXOX\n\nid: NodeId(341)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N341 -> N342
+N341 -> N460
+N342 [ label = "OOO\nXX.\nXOX\n\nid: NodeId(342)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N343 [ label = "OXO\n.XO\nX.X\n\nid: NodeId(343)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N343 -> N344
+N343 -> N555
+N344 [ label = "OXO\nOXO\nX.X\n\nid: NodeId(344)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N344 -> N345
+N345 [ label = "OXO\nOXO\nXXX\n\nid: NodeId(345)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N346 [ label = "OO.\nXXO\nX.X\n\nid: NodeId(346)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N346 -> N347
+N346 -> N601
+N347 [ label = "OO.\nXXO\nXOX\n\nid: NodeId(347)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N347 -> N348
+N348 [ label = "OOX\nXXO\nXOX\n\nid: NodeId(348)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N349 [ label = "OXO\nXX.\nXOO\n\nid: NodeId(349)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N349 -> N350
+N350 [ label = "OXO\nXXX\nXOO\n\nid: NodeId(350)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N351 [ label = "OO.\n.XO\nX.X\n\nid: NodeId(351)\nmove: Some(Move([1]))\nplayouts: 4\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N351 -> N352
+N351 -> N426
+N351 -> N679
+N352 [ label = "OO.\n.XO\nXXX\n\nid: NodeId(352)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N353 [ label = "O.O\n.XX\nX.O\n\nid: NodeId(353)\nmove: Some(Move([2]))\nplayouts: 5\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N353 -> N354
+N353 -> N451
+N353 -> N724
+N354 [ label = "O.O\nXXX\nX.O\n\nid: NodeId(354)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N355 [ label = "O.O\nOX.\nX.X\n\nid: NodeId(355)\nmove: Some(Move([2]))\nplayouts: 5\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N355 -> N356
+N355 -> N474
+N355 -> N791
+N356 [ label = "O.O\nOXX\nX.X\n\nid: NodeId(356)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N356 -> N357
+N356 -> N915
+N357 [ label = "O.O\nOXX\nXOX\n\nid: NodeId(357)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N357 -> N358
+N358 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(358)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N359 [ label = "OX.\nOX.\nXO.\n\nid: NodeId(359)\nmove: Some(Move([3]))\nplayouts: 5\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N359 -> N360
+N359 -> N429
+N359 -> N783
+N360 [ label = "OX.\nOXX\nXO.\n\nid: NodeId(360)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N360 -> N361
+N360 -> N924
+N361 [ label = "OXO\nOXX\nXO.\n\nid: NodeId(361)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N361 -> N362
+N362 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(362)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N363 [ label = "OXO\nXX.\nX.O\n\nid: NodeId(363)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N363 -> N364
+N363 -> N534
+N364 [ label = "OXO\nXXO\nX.O\n\nid: NodeId(364)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N365 [ label = "OXO\n.XO\nX.X\n\nid: NodeId(365)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N365 -> N366
+N365 -> N621
+N366 [ label = "OXO\n.XO\nXOX\n\nid: NodeId(366)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N366 -> N367
+N367 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(367)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N368 [ label = "OO.\nOXX\nX.X\n\nid: NodeId(368)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N368 -> N369
+N368 -> N370
+N369 [ label = "OOO\nOXX\nX.X\n\nid: NodeId(369)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N370 [ label = "OO.\nOXX\nXOX\n\nid: NodeId(370)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N370 -> N371
+N371 [ label = "OOX\nOXX\nXOX\n\nid: NodeId(371)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N372 [ label = "OXO\n.XO\nXX.\n\nid: NodeId(372)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N373 [ label = "OO.\n.XO\nXXX\n\nid: NodeId(373)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N374 [ label = "O..\nXXO\nXOX\n\nid: NodeId(374)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N374 -> N375
+N374 -> N667
+N375 [ label = "OO.\nXXO\nXOX\n\nid: NodeId(375)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N375 -> N376
+N376 [ label = "OOX\nXXO\nXOX\n\nid: NodeId(376)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N377 [ label = "O..\nXXO\nXXO\n\nid: NodeId(377)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N377 -> N378
+N377 -> N721
+N378 [ label = "OO.\nXXO\nXXO\n\nid: NodeId(378)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N378 -> N379
+N379 [ label = "OOX\nXXO\nXXO\n\nid: NodeId(379)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N380 [ label = "O..\nOX.\nXXO\n\nid: NodeId(380)\nmove: Some(Move([8]))\nplayouts: 4\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N380 -> N381
+N380 -> N496
+N380 -> N823
+N381 [ label = "OX.\nOX.\nXXO\n\nid: NodeId(381)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N382 [ label = "O.O\nOXX\nXOX\n\nid: NodeId(382)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N382 -> N383
+N383 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(383)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N384 [ label = "OO.\n.XX\nXO.\n\nid: NodeId(384)\nmove: Some(Move([1]))\nplayouts: 4\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N384 -> N385
+N384 -> N450
+N384 -> N792
+N385 [ label = "OO.\nXXX\nXO.\n\nid: NodeId(385)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N386 [ label = "OOX\n.X.\nXXO\n\nid: NodeId(386)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N387 [ label = "O.X\nOXO\nXX.\n\nid: NodeId(387)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N388 [ label = "OX.\n.XX\nXOO\n\nid: NodeId(388)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N388 -> N389
+N388 -> N820
+N389 [ label = "OX.\nOXX\nXOO\n\nid: NodeId(389)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N389 -> N390
+N390 [ label = "OXX\nOXX\nXOO\n\nid: NodeId(390)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N391 [ label = "OXO\n.X.\nXOX\n\nid: NodeId(391)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N391 -> N392
+N391 -> N510
+N392 [ label = "OXO\nOX.\nXOX\n\nid: NodeId(392)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N392 -> N393
+N393 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(393)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N394 [ label = "OXO\nOX.\nX..\n\nid: NodeId(394)\nmove: Some(Move([2]))\nplayouts: 5\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N394 -> N395
+N394 -> N519
+N394 -> N809
+N395 [ label = "OXO\nOX.\nXX.\n\nid: NodeId(395)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N396 [ label = "OO.\nXX.\nXXO\n\nid: NodeId(396)\nmove: Some(Move([7]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N396 -> N397
+N396 -> N433
+N397 [ label = "OOO\nXX.\nXXO\n\nid: NodeId(397)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N398 [ label = "OOX\nXX.\nX.O\n\nid: NodeId(398)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N399 [ label = "OO.\nOXX\nXXO\n\nid: NodeId(399)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N399 -> N400
+N400 [ label = "OOX\nOXX\nXXO\n\nid: NodeId(400)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N401 [ label = "OO.\n.X.\nXOX\n\nid: NodeId(401)\nmove: Some(Move([1]))\nplayouts: 5\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N401 -> N402
+N401 -> N404
+N401 -> N406
+N402 [ label = "OO.\nXX.\nXOX\n\nid: NodeId(402)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N402 -> N403
+N402 -> N660
+N403 [ label = "OOO\nXX.\nXOX\n\nid: NodeId(403)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N404 [ label = "OO.\n.XX\nXOX\n\nid: NodeId(404)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N404 -> N405
+N404 -> N596
+N405 [ label = "OOO\n.XX\nXOX\n\nid: NodeId(405)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N406 [ label = "OOX\n.X.\nXOX\n\nid: NodeId(406)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N407 [ label = "O.O\nXX.\nXO.\n\nid: NodeId(407)\nmove: Some(Move([2]))\nplayouts: 5\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N407 -> N408
+N407 -> N410
+N407 -> N595
+N408 [ label = "O.O\nXX.\nXOX\n\nid: NodeId(408)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N408 -> N409
+N408 -> N704
+N409 [ label = "OOO\nXX.\nXOX\n\nid: NodeId(409)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N410 [ label = "OXO\nXX.\nXO.\n\nid: NodeId(410)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N410 -> N411
+N410 -> N838
+N411 [ label = "OXO\nXX.\nXOO\n\nid: NodeId(411)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N411 -> N412
+N412 [ label = "OXO\nXXX\nXOO\n\nid: NodeId(412)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N413 [ label = "O..\nXXO\nXOX\n\nid: NodeId(413)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N413 -> N414
+N413 -> N868
+N414 [ label = "OO.\nXXO\nXOX\n\nid: NodeId(414)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N414 -> N415
+N415 [ label = "OOX\nXXO\nXOX\n\nid: NodeId(415)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N416 [ label = "O..\nXXO\nXOX\n\nid: NodeId(416)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N416 -> N417
+N416 -> N854
+N417 [ label = "O.O\nXXO\nXOX\n\nid: NodeId(417)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N417 -> N418
+N418 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(418)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N419 [ label = "O.O\nXXO\nXOX\n\nid: NodeId(419)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N419 -> N420
+N420 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(420)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N421 [ label = "OX.\nXXO\nX.O\n\nid: NodeId(421)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N421 -> N422
+N421 -> N657
+N422 [ label = "OXO\nXXO\nX.O\n\nid: NodeId(422)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N423 [ label = "OXO\n.XO\nX.X\n\nid: NodeId(423)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N423 -> N424
+N423 -> N717
+N424 [ label = "OXO\nOXO\nX.X\n\nid: NodeId(424)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N424 -> N425
+N425 [ label = "OXO\nOXO\nXXX\n\nid: NodeId(425)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N426 [ label = "OO.\nXXO\nX.X\n\nid: NodeId(426)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N426 -> N427
+N426 -> N786
+N427 [ label = "OO.\nXXO\nXOX\n\nid: NodeId(427)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N427 -> N428
+N428 [ label = "OOX\nXXO\nXOX\n\nid: NodeId(428)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N429 [ label = "OX.\nOX.\nXOX\n\nid: NodeId(429)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N429 -> N430
+N429 -> N881
+N430 [ label = "OX.\nOXO\nXOX\n\nid: NodeId(430)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N430 -> N431
+N431 [ label = "OXX\nOXO\nXOX\n\nid: NodeId(431)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N432 [ label = "OO.\nXXX\nX.O\n\nid: NodeId(432)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N433 [ label = "OO.\nXXO\nXXO\n\nid: NodeId(433)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N433 -> N434
+N434 [ label = "OOX\nXXO\nXXO\n\nid: NodeId(434)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N435 [ label = "OX.\nOXX\nXO.\n\nid: NodeId(435)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N435 -> N436
+N435 -> N889
+N436 [ label = "OX.\nOXX\nXOO\n\nid: NodeId(436)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N436 -> N437
+N437 [ label = "OXX\nOXX\nXOO\n\nid: NodeId(437)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N438 [ label = "OXO\nOX.\nX.X\n\nid: NodeId(438)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N438 -> N439
+N438 -> N637
+N439 [ label = "OXO\nOXO\nX.X\n\nid: NodeId(439)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N439 -> N440
+N440 [ label = "OXO\nOXO\nXXX\n\nid: NodeId(440)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N441 [ label = "OO.\nXXO\nXX.\n\nid: NodeId(441)\nmove: Some(Move([7]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N441 -> N442
+N441 -> N577
+N442 [ label = "OOO\nXXO\nXX.\n\nid: NodeId(442)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N443 [ label = "OX.\nXXO\nX.O\n\nid: NodeId(443)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N443 -> N444
+N443 -> N517
+N444 [ label = "OXO\nXXO\nX.O\n\nid: NodeId(444)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N445 [ label = "OOX\nXXO\nX..\n\nid: NodeId(445)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N446 [ label = "OX.\nXXO\nXO.\n\nid: NodeId(446)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N446 -> N447
+N446 -> N797
+N447 [ label = "OX.\nXXO\nXOO\n\nid: NodeId(447)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N447 -> N448
+N448 [ label = "OXX\nXXO\nXOO\n\nid: NodeId(448)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N449 [ label = "O.X\n.XO\nXXO\n\nid: NodeId(449)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N450 [ label = "OOX\n.XX\nXO.\n\nid: NodeId(450)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N451 [ label = "OXO\n.XX\nX.O\n\nid: NodeId(451)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N451 -> N452
+N451 -> N765
+N452 [ label = "OXO\nOXX\nX.O\n\nid: NodeId(452)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N452 -> N453
+N453 [ label = "OXO\nOXX\nXXO\n\nid: NodeId(453)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N454 [ label = "OOO\nXX.\nXXO\n\nid: NodeId(454)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N455 [ label = "OOO\n.XX\nXXO\n\nid: NodeId(455)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N456 [ label = "OOO\nXXO\nXX.\n\nid: NodeId(456)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N457 [ label = "O.O\nOX.\nXXX\n\nid: NodeId(457)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N458 [ label = "O.O\nOXX\nXXO\n\nid: NodeId(458)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N458 -> N459
+N459 [ label = "OXO\nOXX\nXXO\n\nid: NodeId(459)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N460 [ label = "O.O\nXXO\nXOX\n\nid: NodeId(460)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N460 -> N461
+N461 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(461)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N462 [ label = "OO.\nXXO\nXOX\n\nid: NodeId(462)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N462 -> N463
+N463 [ label = "OOX\nXXO\nXOX\n\nid: NodeId(463)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N464 [ label = "OOO\nOXX\nXX.\n\nid: NodeId(464)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N465 [ label = "O.O\nXXO\nXXO\n\nid: NodeId(465)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N466 [ label = "OOO\nXX.\nXXO\n\nid: NodeId(466)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N467 [ label = "OXO\nXXO\nX.O\n\nid: NodeId(467)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N468 [ label = "OXO\nXX.\nXOO\n\nid: NodeId(468)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N468 -> N469
+N469 [ label = "OXO\nXXX\nXOO\n\nid: NodeId(469)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N470 [ label = "OXO\nXX.\nXO.\n\nid: NodeId(470)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N470 -> N471
+N470 -> N639
+N471 [ label = "OXO\nXX.\nXOO\n\nid: NodeId(471)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N471 -> N472
+N472 [ label = "OXO\nXXX\nXOO\n\nid: NodeId(472)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N473 [ label = "O.O\nXXX\nX.O\n\nid: NodeId(473)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N474 [ label = "OXO\nOX.\nX.X\n\nid: NodeId(474)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N474 -> N475
+N474 -> N894
+N475 [ label = "OXO\nOX.\nXOX\n\nid: NodeId(475)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N475 -> N476
+N476 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(476)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N477 [ label = "O.O\nOX.\nXXX\n\nid: NodeId(477)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N478 [ label = "OXO\nXXO\nX..\n\nid: NodeId(478)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N478 -> N479
+N478 -> N652
+N479 [ label = "OXO\nXXO\nXO.\n\nid: NodeId(479)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N479 -> N480
+N480 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(480)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N481 [ label = "OO.\nOXX\nXXO\n\nid: NodeId(481)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N481 -> N482
+N482 [ label = "OOX\nOXX\nXXO\n\nid: NodeId(482)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N483 [ label = "OXO\n.X.\nXOX\n\nid: NodeId(483)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N483 -> N484
+N483 -> N830
+N484 [ label = "OXO\nOX.\nXOX\n\nid: NodeId(484)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N484 -> N485
+N485 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(485)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N486 [ label = "OO.\nXX.\nXXO\n\nid: NodeId(486)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N486 -> N487
+N486 -> N587
+N487 [ label = "OOO\nXX.\nXXO\n\nid: NodeId(487)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N488 [ label = "O..\nOXX\nXXO\n\nid: NodeId(488)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N488 -> N489
+N488 -> N722
+N489 [ label = "OO.\nOXX\nXXO\n\nid: NodeId(489)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N489 -> N490
+N490 [ label = "OOX\nOXX\nXXO\n\nid: NodeId(490)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N491 [ label = "OX.\nOX.\nXXO\n\nid: NodeId(491)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N492 [ label = "OXO\n.XX\nX.O\n\nid: NodeId(492)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N492 -> N493
+N492 -> N619
+N493 [ label = "OXO\nOXX\nX.O\n\nid: NodeId(493)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N493 -> N494
+N494 [ label = "OXO\nOXX\nXXO\n\nid: NodeId(494)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N495 [ label = "O..\nOXO\nXXX\n\nid: NodeId(495)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N496 [ label = "O..\nOXX\nXXO\n\nid: NodeId(496)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N496 -> N497
+N496 -> N874
+N497 [ label = "OO.\nOXX\nXXO\n\nid: NodeId(497)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N497 -> N498
+N498 [ label = "OOX\nOXX\nXXO\n\nid: NodeId(498)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N499 [ label = "OO.\nOXX\nXXO\n\nid: NodeId(499)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N499 -> N500
+N500 [ label = "OOX\nOXX\nXXO\n\nid: NodeId(500)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N501 [ label = "OXO\n.XX\nXO.\n\nid: NodeId(501)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N501 -> N502
+N501 -> N579
+N502 [ label = "OXO\n.XX\nXOO\n\nid: NodeId(502)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N502 -> N503
+N503 [ label = "OXO\nXXX\nXOO\n\nid: NodeId(503)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N504 [ label = "OOX\n.X.\nXXO\n\nid: NodeId(504)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N505 [ label = "O.X\nXX.\nXOO\n\nid: NodeId(505)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N506 [ label = "O.O\nXXO\nX.X\n\nid: NodeId(506)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N506 -> N507
+N506 -> N508
+N507 [ label = "OOO\nXXO\nX.X\n\nid: NodeId(507)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N508 [ label = "O.O\nXXO\nXOX\n\nid: NodeId(508)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N508 -> N509
+N509 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(509)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N510 [ label = "OXO\n.XO\nXOX\n\nid: NodeId(510)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N510 -> N511
+N511 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(511)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N512 [ label = "OO.\nXX.\nXOX\n\nid: NodeId(512)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N512 -> N513
+N512 -> N514
+N513 [ label = "OOO\nXX.\nXOX\n\nid: NodeId(513)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N514 [ label = "OO.\nXXO\nXOX\n\nid: NodeId(514)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N514 -> N515
+N515 [ label = "OOX\nXXO\nXOX\n\nid: NodeId(515)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N516 [ label = "OOX\n.X.\nXOX\n\nid: NodeId(516)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N517 [ label = "OX.\nXXO\nXOO\n\nid: NodeId(517)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N517 -> N518
+N518 [ label = "OXX\nXXO\nXOO\n\nid: NodeId(518)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N519 [ label = "OXO\nOX.\nX.X\n\nid: NodeId(519)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N519 -> N520
+N519 -> N920
+N520 [ label = "OXO\nOXO\nX.X\n\nid: NodeId(520)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N520 -> N521
+N521 [ label = "OXO\nOXO\nXXX\n\nid: NodeId(521)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N522 [ label = "OX.\nXX.\nXOO\n\nid: NodeId(522)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N522 -> N523
+N522 -> N739
+N523 [ label = "OXO\nXX.\nXOO\n\nid: NodeId(523)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N523 -> N524
+N524 [ label = "OXO\nXXX\nXOO\n\nid: NodeId(524)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N525 [ label = "OXO\nOXX\nX.O\n\nid: NodeId(525)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N525 -> N526
+N526 [ label = "OXO\nOXX\nXXO\n\nid: NodeId(526)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N527 [ label = "O..\nOXX\nXOX\n\nid: NodeId(527)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N527 -> N528
+N527 -> N876
+N528 [ label = "OO.\nOXX\nXOX\n\nid: NodeId(528)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N528 -> N529
+N529 [ label = "OOX\nOXX\nXOX\n\nid: NodeId(529)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N530 [ label = "OO.\nXXO\nXX.\n\nid: NodeId(530)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N530 -> N531
+N530 -> N607
+N531 [ label = "OO.\nXXO\nXXO\n\nid: NodeId(531)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N531 -> N532
+N532 [ label = "OOX\nXXO\nXXO\n\nid: NodeId(532)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N533 [ label = "OX.\nOXO\nXX.\n\nid: NodeId(533)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N534 [ label = "OXO\nXX.\nXOO\n\nid: NodeId(534)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N534 -> N535
+N535 [ label = "OXO\nXXX\nXOO\n\nid: NodeId(535)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N536 [ label = "OO.\nXXX\nX.O\n\nid: NodeId(536)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N537 [ label = "OO.\nOXX\nXX.\n\nid: NodeId(537)\nmove: Some(Move([7]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N537 -> N538
+N537 -> N706
+N538 [ label = "OOO\nOXX\nXX.\n\nid: NodeId(538)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N539 [ label = "O..\nOXX\nXXO\n\nid: NodeId(539)\nmove: Some(Move([7]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N539 -> N540
+N539 -> N865
+N540 [ label = "O.O\nOXX\nXXO\n\nid: NodeId(540)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N540 -> N541
+N541 [ label = "OXO\nOXX\nXXO\n\nid: NodeId(541)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N542 [ label = "OO.\nOXX\nX.X\n\nid: NodeId(542)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N542 -> N543
+N542 -> N589
+N543 [ label = "OOO\nOXX\nX.X\n\nid: NodeId(543)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N544 [ label = "OXO\nOXX\nX..\n\nid: NodeId(544)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N544 -> N545
+N544 -> N840
+N545 [ label = "OXO\nOXX\nX.O\n\nid: NodeId(545)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N545 -> N546
+N546 [ label = "OXO\nOXX\nXXO\n\nid: NodeId(546)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N547 [ label = "O..\nOXX\nXOX\n\nid: NodeId(547)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N547 -> N548
+N547 -> N916
+N548 [ label = "OO.\nOXX\nXOX\n\nid: NodeId(548)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N548 -> N549
+N549 [ label = "OOX\nOXX\nXOX\n\nid: NodeId(549)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N550 [ label = "OO.\n.XX\nXOX\n\nid: NodeId(550)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N550 -> N551
+N550 -> N552
+N551 [ label = "OOO\n.XX\nXOX\n\nid: NodeId(551)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N552 [ label = "OO.\nOXX\nXOX\n\nid: NodeId(552)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N552 -> N553
+N553 [ label = "OOX\nOXX\nXOX\n\nid: NodeId(553)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N554 [ label = "OOX\nXXO\nX..\n\nid: NodeId(554)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N555 [ label = "OXO\n.XO\nXOX\n\nid: NodeId(555)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N555 -> N556
+N556 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(556)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N557 [ label = "OX.\nXX.\nXOO\n\nid: NodeId(557)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N557 -> N558
+N557 -> N904
+N558 [ label = "OXO\nXX.\nXOO\n\nid: NodeId(558)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N558 -> N559
+N559 [ label = "OXO\nXXX\nXOO\n\nid: NodeId(559)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N560 [ label = "OO.\nOXX\nXX.\n\nid: NodeId(560)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N560 -> N561
+N560 -> N769
+N561 [ label = "OOO\nOXX\nXX.\n\nid: NodeId(561)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N562 [ label = "O.X\nOXO\nXX.\n\nid: NodeId(562)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N563 [ label = "OX.\nOXX\nX.O\n\nid: NodeId(563)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N563 -> N564
+N563 -> N902
+N564 [ label = "OXO\nOXX\nX.O\n\nid: NodeId(564)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N564 -> N565
+N565 [ label = "OXO\nOXX\nXXO\n\nid: NodeId(565)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N566 [ label = "OO.\n.XO\nXXX\n\nid: NodeId(566)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N567 [ label = "OOO\n.XX\nXXO\n\nid: NodeId(567)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N568 [ label = "OXO\nOXX\nX.O\n\nid: NodeId(568)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N568 -> N569
+N569 [ label = "OXO\nOXX\nXXO\n\nid: NodeId(569)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N570 [ label = "OXO\n.XO\nXX.\n\nid: NodeId(570)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N571 [ label = "OOX\nOX.\nX.X\n\nid: NodeId(571)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N572 [ label = "OXO\n.XX\nX.O\n\nid: NodeId(572)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N572 -> N573
+N572 -> N818
+N573 [ label = "OXO\nOXX\nX.O\n\nid: NodeId(573)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N573 -> N574
+N574 [ label = "OXO\nOXX\nXXO\n\nid: NodeId(574)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N575 [ label = "OXO\nOX.\nXX.\n\nid: NodeId(575)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N576 [ label = "O..\nXXX\nXOO\n\nid: NodeId(576)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N577 [ label = "OO.\nXXO\nXXO\n\nid: NodeId(577)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N577 -> N578
+N578 [ label = "OOX\nXXO\nXXO\n\nid: NodeId(578)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N579 [ label = "OXO\nOXX\nXO.\n\nid: NodeId(579)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N579 -> N580
+N580 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(580)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N581 [ label = "OO.\nOXX\nXX.\n\nid: NodeId(581)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N581 -> N582
+N581 -> N608
+N582 [ label = "OO.\nOXX\nXXO\n\nid: NodeId(582)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N582 -> N583
+N583 [ label = "OOX\nOXX\nXXO\n\nid: NodeId(583)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N584 [ label = "O.O\nXXO\nXXO\n\nid: NodeId(584)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N585 [ label = "O.O\nOXX\nXXO\n\nid: NodeId(585)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N585 -> N586
+N586 [ label = "OXO\nOXX\nXXO\n\nid: NodeId(586)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N587 [ label = "OO.\nXXO\nXXO\n\nid: NodeId(587)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N587 -> N588
+N588 [ label = "OOX\nXXO\nXXO\n\nid: NodeId(588)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N589 [ label = "OO.\nOXX\nXOX\n\nid: NodeId(589)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N589 -> N590
+N590 [ label = "OOX\nOXX\nXOX\n\nid: NodeId(590)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N591 [ label = "OXO\nOX.\nXOX\n\nid: NodeId(591)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N591 -> N592
+N592 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(592)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N593 [ label = "OO.\nXX.\nXOX\n\nid: NodeId(593)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N593 -> N594
+N593 -> N773
+N594 [ label = "OOO\nXX.\nXOX\n\nid: NodeId(594)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N595 [ label = "O.O\nXXX\nXO.\n\nid: NodeId(595)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N596 [ label = "OO.\nOXX\nXOX\n\nid: NodeId(596)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N596 -> N597
+N597 [ label = "OOX\nOXX\nXOX\n\nid: NodeId(597)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N598 [ label = "O..\nXXO\nXOX\n\nid: NodeId(598)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N598 -> N599
+N598 -> N789
+N599 [ label = "O.O\nXXO\nXOX\n\nid: NodeId(599)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N599 -> N600
+N600 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(600)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N601 [ label = "OOO\nXXO\nX.X\n\nid: NodeId(601)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N602 [ label = "OOO\nXXO\nXX.\n\nid: NodeId(602)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N603 [ label = "OOO\n.XX\nXOX\n\nid: NodeId(603)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N604 [ label = "OOO\nXX.\nXOX\n\nid: NodeId(604)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N605 [ label = "OOO\nOXX\nX.X\n\nid: NodeId(605)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N606 [ label = "OOO\nXX.\nXXO\n\nid: NodeId(606)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N607 [ label = "OOO\nXXO\nXX.\n\nid: NodeId(607)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N608 [ label = "OOO\nOXX\nXX.\n\nid: NodeId(608)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N609 [ label = "O.X\nXXO\nX.O\n\nid: NodeId(609)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N610 [ label = "OOO\n.XX\nXOX\n\nid: NodeId(610)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N611 [ label = "OXO\nOXX\nX..\n\nid: NodeId(611)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N611 -> N612
+N611 -> N626
+N612 [ label = "OXO\nOXX\nXO.\n\nid: NodeId(612)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N612 -> N613
+N613 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(613)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N614 [ label = "OOO\n.XX\nXOX\n\nid: NodeId(614)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N615 [ label = "OOO\nOXX\nX.X\n\nid: NodeId(615)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N616 [ label = "OXO\n.XX\nXO.\n\nid: NodeId(616)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N616 -> N617
+N616 -> N629
+N617 [ label = "OXO\n.XX\nXOO\n\nid: NodeId(617)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N617 -> N618
+N618 [ label = "OXO\nXXX\nXOO\n\nid: NodeId(618)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N619 [ label = "OXO\n.XX\nXOO\n\nid: NodeId(619)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N619 -> N620
+N620 [ label = "OXO\nXXX\nXOO\n\nid: NodeId(620)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N621 [ label = "OXO\nOXO\nX.X\n\nid: NodeId(621)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N621 -> N622
+N622 [ label = "OXO\nOXO\nXXX\n\nid: NodeId(622)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N623 [ label = "OOX\nXX.\nXO.\n\nid: NodeId(623)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N624 [ label = "O.X\nOXO\nX.X\n\nid: NodeId(624)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N625 [ label = "OX.\n.XO\nXXO\n\nid: NodeId(625)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N626 [ label = "OXO\nOXX\nX.O\n\nid: NodeId(626)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N626 -> N627
+N627 [ label = "OXO\nOXX\nXXO\n\nid: NodeId(627)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N628 [ label = "O..\nXXX\nXOO\n\nid: NodeId(628)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N629 [ label = "OXO\nOXX\nXO.\n\nid: NodeId(629)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N629 -> N630
+N630 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(630)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N631 [ label = "OXO\n.XX\nXO.\n\nid: NodeId(631)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N631 -> N632
+N631 -> N928
+N632 [ label = "OXO\n.XX\nXOO\n\nid: NodeId(632)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N632 -> N633
+N633 [ label = "OXO\nXXX\nXOO\n\nid: NodeId(633)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N634 [ label = "OX.\nOXO\nXX.\n\nid: NodeId(634)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N635 [ label = "OXO\n.XO\nXX.\n\nid: NodeId(635)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N636 [ label = "OXO\nXXO\nX.O\n\nid: NodeId(636)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N637 [ label = "OXO\nOX.\nXOX\n\nid: NodeId(637)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N637 -> N638
+N638 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(638)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N639 [ label = "OXO\nXXO\nXO.\n\nid: NodeId(639)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N639 -> N640
+N640 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(640)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N641 [ label = "OXX\n.XO\nX.O\n\nid: NodeId(641)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N642 [ label = "O..\nOXX\nXOX\n\nid: NodeId(642)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N642 -> N643
+N642 -> N886
+N643 [ label = "OO.\nOXX\nXOX\n\nid: NodeId(643)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N643 -> N644
+N644 [ label = "OOX\nOXX\nXOX\n\nid: NodeId(644)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N645 [ label = "O.O\nOXX\nXOX\n\nid: NodeId(645)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N645 -> N646
+N646 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(646)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N647 [ label = "OXO\nOX.\nXOX\n\nid: NodeId(647)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N647 -> N648
+N648 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(648)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N649 [ label = "OOO\nXXO\nXX.\n\nid: NodeId(649)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N650 [ label = "OO.\nXXO\nXXO\n\nid: NodeId(650)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N650 -> N651
+N651 [ label = "OOX\nXXO\nXXO\n\nid: NodeId(651)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N652 [ label = "OXO\nXXO\nX.O\n\nid: NodeId(652)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N653 [ label = "O.X\nXXO\nXO.\n\nid: NodeId(653)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N654 [ label = "O.O\nXXO\nX.X\n\nid: NodeId(654)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N654 -> N655
+N654 -> N812
+N655 [ label = "O.O\nXXO\nXOX\n\nid: NodeId(655)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N655 -> N656
+N656 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(656)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N657 [ label = "OX.\nXXO\nXOO\n\nid: NodeId(657)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N657 -> N658
+N658 [ label = "OXX\nXXO\nXOO\n\nid: NodeId(658)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N659 [ label = "OX.\n.XO\nXXO\n\nid: NodeId(659)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N660 [ label = "OO.\nXXO\nXOX\n\nid: NodeId(660)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N660 -> N661
+N661 [ label = "OOX\nXXO\nXOX\n\nid: NodeId(661)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N662 [ label = "OOX\nOX.\nXX.\n\nid: NodeId(662)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N663 [ label = "OOO\nXXO\nXX.\n\nid: NodeId(663)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N664 [ label = "O..\nOXO\nXXX\n\nid: NodeId(664)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N665 [ label = "OOO\nXXO\nX.X\n\nid: NodeId(665)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N666 [ label = "OOO\nXXO\nX.X\n\nid: NodeId(666)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N667 [ label = "O.O\nXXO\nXOX\n\nid: NodeId(667)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N667 -> N668
+N668 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(668)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N669 [ label = "OXO\nXXO\nXO.\n\nid: NodeId(669)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N669 -> N670
+N670 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(670)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N671 [ label = "O..\nXXO\nXXO\n\nid: NodeId(671)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N671 -> N672
+N671 -> N673
+N672 [ label = "O.O\nXXO\nXXO\n\nid: NodeId(672)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N673 [ label = "OO.\nXXO\nXXO\n\nid: NodeId(673)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N673 -> N674
+N674 [ label = "OOX\nXXO\nXXO\n\nid: NodeId(674)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N675 [ label = "OO.\nXXO\nXX.\n\nid: NodeId(675)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N675 -> N676
+N675 -> N677
+N676 [ label = "OOO\nXXO\nXX.\n\nid: NodeId(676)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N677 [ label = "OO.\nXXO\nXXO\n\nid: NodeId(677)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N677 -> N678
+N678 [ label = "OOX\nXXO\nXXO\n\nid: NodeId(678)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N679 [ label = "OOX\n.XO\nX.X\n\nid: NodeId(679)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N680 [ label = "OXO\nXXO\nX..\n\nid: NodeId(680)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N680 -> N681
+N680 -> N682
+N681 [ label = "OXO\nXXO\nX.O\n\nid: NodeId(681)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N682 [ label = "OXO\nXXO\nXO.\n\nid: NodeId(682)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N682 -> N683
+N683 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(683)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N684 [ label = "OX.\n.XO\nXOX\n\nid: NodeId(684)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N684 -> N685
+N684 -> N762
+N685 [ label = "OXO\n.XO\nXOX\n\nid: NodeId(685)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N685 -> N686
+N686 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(686)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N687 [ label = "O.O\nXX.\nXXO\n\nid: NodeId(687)\nmove: Some(Move([7]))\nplayouts: 2\nscore: 2\nis_complete: true" fontname = "Consolas"]
+N687 -> N688
+N687 -> N693
+N688 [ label = "OOO\nXX.\nXXO\n\nid: NodeId(688)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N689 [ label = "OXO\nXX.\nX.O\n\nid: NodeId(689)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N689 -> N690
+N689 -> N691
+N690 [ label = "OXO\nXXO\nX.O\n\nid: NodeId(690)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N691 [ label = "OXO\nXX.\nXOO\n\nid: NodeId(691)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N691 -> N692
+N692 [ label = "OXO\nXXX\nXOO\n\nid: NodeId(692)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N693 [ label = "O.O\nXXO\nXXO\n\nid: NodeId(693)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N694 [ label = "OO.\nXX.\nXXO\n\nid: NodeId(694)\nmove: Some(Move([7]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N694 -> N695
+N694 -> N738
+N695 [ label = "OO.\nXXO\nXXO\n\nid: NodeId(695)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N695 -> N696
+N696 [ label = "OOX\nXXO\nXXO\n\nid: NodeId(696)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N697 [ label = "O..\nXXX\nXOO\n\nid: NodeId(697)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N698 [ label = "OX.\nOXX\nX.O\n\nid: NodeId(698)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N698 -> N699
+N698 -> N799
+N699 [ label = "OX.\nOXX\nXOO\n\nid: NodeId(699)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N699 -> N700
+N700 [ label = "OXX\nOXX\nXOO\n\nid: NodeId(700)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N701 [ label = "OX.\nXXO\nXOO\n\nid: NodeId(701)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N701 -> N702
+N702 [ label = "OXX\nXXO\nXOO\n\nid: NodeId(702)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N703 [ label = "O.X\nOXO\nX.X\n\nid: NodeId(703)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N704 [ label = "O.O\nXXO\nXOX\n\nid: NodeId(704)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N704 -> N705
+N705 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(705)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N706 [ label = "OO.\nOXX\nXXO\n\nid: NodeId(706)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N706 -> N707
+N707 [ label = "OOX\nOXX\nXXO\n\nid: NodeId(707)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N708 [ label = "OX.\nOX.\nXXO\n\nid: NodeId(708)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N709 [ label = "OX.\nOXO\nX.X\n\nid: NodeId(709)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N709 -> N710
+N709 -> N781
+N710 [ label = "OXO\nOXO\nX.X\n\nid: NodeId(710)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N710 -> N711
+N711 [ label = "OXO\nOXO\nXXX\n\nid: NodeId(711)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N712 [ label = "OXX\n.XO\nXO.\n\nid: NodeId(712)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N713 [ label = "OOX\nOX.\nX.X\n\nid: NodeId(713)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N714 [ label = "O..\nXXO\nXXO\n\nid: NodeId(714)\nmove: Some(Move([7]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N714 -> N715
+N714 -> N741
+N715 [ label = "OO.\nXXO\nXXO\n\nid: NodeId(715)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N715 -> N716
+N716 [ label = "OOX\nXXO\nXXO\n\nid: NodeId(716)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N717 [ label = "OXO\n.XO\nXOX\n\nid: NodeId(717)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N717 -> N718
+N718 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(718)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N719 [ label = "O.X\n.XO\nXOX\n\nid: NodeId(719)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N720 [ label = "OOO\n.XX\nXXO\n\nid: NodeId(720)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N721 [ label = "O.O\nXXO\nXXO\n\nid: NodeId(721)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N722 [ label = "O.O\nOXX\nXXO\n\nid: NodeId(722)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N722 -> N723
+N723 [ label = "OXO\nOXX\nXXO\n\nid: NodeId(723)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N724 [ label = "O.O\n.XX\nXXO\n\nid: NodeId(724)\nmove: Some(Move([7]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N724 -> N725
+N724 -> N764
+N725 [ label = "O.O\nOXX\nXXO\n\nid: NodeId(725)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N725 -> N726
+N726 [ label = "OXO\nOXX\nXXO\n\nid: NodeId(726)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N727 [ label = "OX.\nXX.\nXOO\n\nid: NodeId(727)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N727 -> N728
+N727 -> N771
+N728 [ label = "OXO\nXX.\nXOO\n\nid: NodeId(728)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N728 -> N729
+N729 [ label = "OXO\nXXX\nXOO\n\nid: NodeId(729)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N730 [ label = "O.O\n.XX\nXOX\n\nid: NodeId(730)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N730 -> N731
+N730 -> N735
+N731 [ label = "OOO\n.XX\nXOX\n\nid: NodeId(731)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N732 [ label = "OXO\n.XX\nXO.\n\nid: NodeId(732)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N732 -> N733
+N732 -> N835
+N733 [ label = "OXO\n.XX\nXOO\n\nid: NodeId(733)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N733 -> N734
+N734 [ label = "OXO\nXXX\nXOO\n\nid: NodeId(734)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N735 [ label = "O.O\nOXX\nXOX\n\nid: NodeId(735)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N735 -> N736
+N736 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(736)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N737 [ label = "OXX\nOX.\nXO.\n\nid: NodeId(737)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N738 [ label = "OOO\nXX.\nXXO\n\nid: NodeId(738)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N739 [ label = "OX.\nXXO\nXOO\n\nid: NodeId(739)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N739 -> N740
+N740 [ label = "OXX\nXXO\nXOO\n\nid: NodeId(740)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N741 [ label = "O.O\nXXO\nXXO\n\nid: NodeId(741)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N742 [ label = "OXO\nXXO\nX.O\n\nid: NodeId(742)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N743 [ label = "OX.\nOXX\nX.O\n\nid: NodeId(743)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N743 -> N744
+N743 -> N784
+N744 [ label = "OX.\nOXX\nXOO\n\nid: NodeId(744)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N744 -> N745
+N745 [ label = "OXX\nOXX\nXOO\n\nid: NodeId(745)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N746 [ label = "OO.\n.XX\nXXO\n\nid: NodeId(746)\nmove: Some(Move([7]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N746 -> N747
+N746 -> N748
+N747 [ label = "OOO\n.XX\nXXO\n\nid: NodeId(747)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N748 [ label = "OO.\nOXX\nXXO\n\nid: NodeId(748)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N748 -> N749
+N749 [ label = "OOX\nOXX\nXXO\n\nid: NodeId(749)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N750 [ label = "OX.\n.XX\nXOO\n\nid: NodeId(750)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N750 -> N751
+N750 -> N767
+N751 [ label = "OX.\nOXX\nXOO\n\nid: NodeId(751)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N751 -> N752
+N752 [ label = "OXX\nOXX\nXOO\n\nid: NodeId(752)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N753 [ label = "O..\nOXX\nXXO\n\nid: NodeId(753)\nmove: Some(Move([7]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N753 -> N754
+N753 -> N776
+N754 [ label = "O.O\nOXX\nXXO\n\nid: NodeId(754)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N754 -> N755
+N755 [ label = "OXO\nOXX\nXXO\n\nid: NodeId(755)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N756 [ label = "OXO\nXX.\nX.O\n\nid: NodeId(756)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N756 -> N757
+N756 -> N817
+N757 [ label = "OXO\nXX.\nXOO\n\nid: NodeId(757)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N757 -> N758
+N758 [ label = "OXO\nXXX\nXOO\n\nid: NodeId(758)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N759 [ label = "OX.\n.XO\nXOX\n\nid: NodeId(759)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N759 -> N760
+N759 -> N848
+N760 [ label = "OXO\n.XO\nXOX\n\nid: NodeId(760)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N760 -> N761
+N761 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(761)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N762 [ label = "OX.\nOXO\nXOX\n\nid: NodeId(762)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N762 -> N763
+N763 [ label = "OXX\nOXO\nXOX\n\nid: NodeId(763)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N764 [ label = "OOO\n.XX\nXXO\n\nid: NodeId(764)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N765 [ label = "OXO\n.XX\nXOO\n\nid: NodeId(765)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N765 -> N766
+N766 [ label = "OXO\nXXX\nXOO\n\nid: NodeId(766)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N767 [ label = "OXO\n.XX\nXOO\n\nid: NodeId(767)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N767 -> N768
+N768 [ label = "OXO\nXXX\nXOO\n\nid: NodeId(768)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N769 [ label = "OO.\nOXX\nXXO\n\nid: NodeId(769)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N769 -> N770
+N770 [ label = "OOX\nOXX\nXXO\n\nid: NodeId(770)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N771 [ label = "OX.\nXXO\nXOO\n\nid: NodeId(771)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N771 -> N772
+N772 [ label = "OXX\nXXO\nXOO\n\nid: NodeId(772)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N773 [ label = "OO.\nXXO\nXOX\n\nid: NodeId(773)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N773 -> N774
+N774 [ label = "OOX\nXXO\nXOX\n\nid: NodeId(774)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N775 [ label = "O.O\n.XO\nXXX\n\nid: NodeId(775)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N776 [ label = "OO.\nOXX\nXXO\n\nid: NodeId(776)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N776 -> N777
+N777 [ label = "OOX\nOXX\nXXO\n\nid: NodeId(777)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N778 [ label = "O..\nOXX\nXOX\n\nid: NodeId(778)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N778 -> N779
+N778 -> N850
+N779 [ label = "O.O\nOXX\nXOX\n\nid: NodeId(779)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N779 -> N780
+N780 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(780)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N781 [ label = "OX.\nOXO\nXOX\n\nid: NodeId(781)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N781 -> N782
+N782 [ label = "OXX\nOXO\nXOX\n\nid: NodeId(782)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N783 [ label = "OXX\nOX.\nXO.\n\nid: NodeId(783)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N784 [ label = "OXO\nOXX\nX.O\n\nid: NodeId(784)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N784 -> N785
+N785 [ label = "OXO\nOXX\nXXO\n\nid: NodeId(785)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N786 [ label = "OOO\nXXO\nX.X\n\nid: NodeId(786)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N787 [ label = "OX.\nOXO\nXOX\n\nid: NodeId(787)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N787 -> N788
+N788 [ label = "OXX\nOXO\nXOX\n\nid: NodeId(788)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N789 [ label = "OO.\nXXO\nXOX\n\nid: NodeId(789)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N789 -> N790
+N790 [ label = "OOX\nXXO\nXOX\n\nid: NodeId(790)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N791 [ label = "O.O\nOX.\nXXX\n\nid: NodeId(791)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N792 [ label = "OO.\n.XX\nXOX\n\nid: NodeId(792)\nmove: Some(Move([8]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N792 -> N793
+N792 -> N794
+N793 [ label = "OOO\n.XX\nXOX\n\nid: NodeId(793)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N794 [ label = "OO.\nOXX\nXOX\n\nid: NodeId(794)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N794 -> N795
+N795 [ label = "OOX\nOXX\nXOX\n\nid: NodeId(795)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N796 [ label = "O.X\n.XX\nXOO\n\nid: NodeId(796)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N797 [ label = "OXO\nXXO\nXO.\n\nid: NodeId(797)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N797 -> N798
+N798 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(798)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N799 [ label = "OXO\nOXX\nX.O\n\nid: NodeId(799)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N799 -> N800
+N800 [ label = "OXO\nOXX\nXXO\n\nid: NodeId(800)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N801 [ label = "O.O\n.XX\nXOX\n\nid: NodeId(801)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N801 -> N802
+N801 -> N803
+N802 [ label = "OOO\n.XX\nXOX\n\nid: NodeId(802)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N803 [ label = "O.O\nOXX\nXOX\n\nid: NodeId(803)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N803 -> N804
+N804 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(804)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N805 [ label = "O.X\nXXO\nXO.\n\nid: NodeId(805)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N806 [ label = "OX.\nOX.\nXOX\n\nid: NodeId(806)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N806 -> N807
+N806 -> N859
+N807 [ label = "OXO\nOX.\nXOX\n\nid: NodeId(807)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N807 -> N808
+N808 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(808)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N809 [ label = "OXO\nOXX\nX..\n\nid: NodeId(809)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N809 -> N810
+N809 -> N896
+N810 [ label = "OXO\nOXX\nXO.\n\nid: NodeId(810)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N810 -> N811
+N811 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(811)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N812 [ label = "OOO\nXXO\nX.X\n\nid: NodeId(812)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N813 [ label = "OXO\nOXO\nX.X\n\nid: NodeId(813)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N813 -> N814
+N814 [ label = "OXO\nOXO\nXXX\n\nid: NodeId(814)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N815 [ label = "OXO\n.XO\nXOX\n\nid: NodeId(815)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N815 -> N816
+N816 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(816)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N817 [ label = "OXO\nXXO\nX.O\n\nid: NodeId(817)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N818 [ label = "OXO\n.XX\nXOO\n\nid: NodeId(818)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N818 -> N819
+N819 [ label = "OXO\nXXX\nXOO\n\nid: NodeId(819)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N820 [ label = "OXO\n.XX\nXOO\n\nid: NodeId(820)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N820 -> N821
+N821 [ label = "OXO\nXXX\nXOO\n\nid: NodeId(821)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N822 [ label = "OXX\n.X.\nXOO\n\nid: NodeId(822)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N823 [ label = "O.X\nOX.\nXXO\n\nid: NodeId(823)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N824 [ label = "OX.\nOXX\nXO.\n\nid: NodeId(824)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N824 -> N825
+N824 -> N870
+N825 [ label = "OX.\nOXX\nXOO\n\nid: NodeId(825)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N825 -> N826
+N826 [ label = "OXX\nOXX\nXOO\n\nid: NodeId(826)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N827 [ label = "O.X\nOXX\nX.O\n\nid: NodeId(827)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N828 [ label = "O..\nXXX\nXOO\n\nid: NodeId(828)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N829 [ label = "OX.\nOXO\nXX.\n\nid: NodeId(829)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N830 [ label = "OXO\n.XO\nXOX\n\nid: NodeId(830)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N830 -> N831
+N831 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(831)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N832 [ label = "OX.\nOX.\nXOX\n\nid: NodeId(832)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N832 -> N833
+N832 -> N898
+N833 [ label = "OX.\nOXO\nXOX\n\nid: NodeId(833)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N833 -> N834
+N834 [ label = "OXX\nOXO\nXOX\n\nid: NodeId(834)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N835 [ label = "OXO\nOXX\nXO.\n\nid: NodeId(835)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N835 -> N836
+N836 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(836)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N837 [ label = "OX.\nOX.\nXXO\n\nid: NodeId(837)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N838 [ label = "OXO\nXXO\nXO.\n\nid: NodeId(838)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N838 -> N839
+N839 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(839)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N840 [ label = "OXO\nOXX\nXO.\n\nid: NodeId(840)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N840 -> N841
+N841 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(841)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N842 [ label = "OXO\nXX.\nXO.\n\nid: NodeId(842)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N842 -> N843
+N842 -> N908
+N843 [ label = "OXO\nXXO\nXO.\n\nid: NodeId(843)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N843 -> N844
+N844 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(844)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N845 [ label = "O.O\nOXX\nXX.\n\nid: NodeId(845)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N845 -> N846
+N845 -> N893
+N846 [ label = "O.O\nOXX\nXXO\n\nid: NodeId(846)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N846 -> N847
+N847 [ label = "OXO\nOXX\nXXO\n\nid: NodeId(847)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N848 [ label = "OX.\nOXO\nXOX\n\nid: NodeId(848)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N848 -> N849
+N849 [ label = "OXX\nOXO\nXOX\n\nid: NodeId(849)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N850 [ label = "OO.\nOXX\nXOX\n\nid: NodeId(850)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N850 -> N851
+N851 [ label = "OOX\nOXX\nXOX\n\nid: NodeId(851)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N852 [ label = "OXO\n.XX\nXOO\n\nid: NodeId(852)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N852 -> N853
+N853 [ label = "OXO\nXXX\nXOO\n\nid: NodeId(853)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N854 [ label = "OO.\nXXO\nXOX\n\nid: NodeId(854)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N854 -> N855
+N855 [ label = "OOX\nXXO\nXOX\n\nid: NodeId(855)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N856 [ label = "OX.\nOXO\nX.X\n\nid: NodeId(856)\nmove: Some(Move([1]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N856 -> N857
+N856 -> N906
+N857 [ label = "OXO\nOXO\nX.X\n\nid: NodeId(857)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N857 -> N858
+N858 [ label = "OXO\nOXO\nXXX\n\nid: NodeId(858)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N859 [ label = "OX.\nOXO\nXOX\n\nid: NodeId(859)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N859 -> N860
+N860 [ label = "OXX\nOXO\nXOX\n\nid: NodeId(860)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N861 [ label = "OXX\nOXO\nX..\n\nid: NodeId(861)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N862 [ label = "OX.\nXXO\nXO.\n\nid: NodeId(862)\nmove: Some(Move([3]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N862 -> N863
+N862 -> N912
+N863 [ label = "OX.\nXXO\nXOO\n\nid: NodeId(863)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N863 -> N864
+N864 [ label = "OXX\nXXO\nXOO\n\nid: NodeId(864)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N865 [ label = "OO.\nOXX\nXXO\n\nid: NodeId(865)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N865 -> N866
+N866 [ label = "OOX\nOXX\nXXO\n\nid: NodeId(866)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N867 [ label = "OOO\nXX.\nXOX\n\nid: NodeId(867)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N868 [ label = "O.O\nXXO\nXOX\n\nid: NodeId(868)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N868 -> N869
+N869 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(869)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N870 [ label = "OXO\nOXX\nXO.\n\nid: NodeId(870)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N870 -> N871
+N871 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(871)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N872 [ label = "OX.\nXXO\nXOO\n\nid: NodeId(872)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N872 -> N873
+N873 [ label = "OXX\nXXO\nXOO\n\nid: NodeId(873)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N874 [ label = "O.O\nOXX\nXXO\n\nid: NodeId(874)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N874 -> N875
+N875 [ label = "OXO\nOXX\nXXO\n\nid: NodeId(875)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N876 [ label = "O.O\nOXX\nXOX\n\nid: NodeId(876)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N876 -> N877
+N877 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(877)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N878 [ label = "OO.\nOXX\nX.X\n\nid: NodeId(878)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N878 -> N879
+N878 -> N914
+N879 [ label = "OO.\nOXX\nXOX\n\nid: NodeId(879)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N879 -> N880
+N880 [ label = "OOX\nOXX\nXOX\n\nid: NodeId(880)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N881 [ label = "OXO\nOX.\nXOX\n\nid: NodeId(881)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N881 -> N882
+N882 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(882)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N883 [ label = "OX.\nOXX\nXO.\n\nid: NodeId(883)\nmove: Some(Move([5]))\nplayouts: 2\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N883 -> N884
+N883 -> N918
+N884 [ label = "OXO\nOXX\nXO.\n\nid: NodeId(884)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N884 -> N885
+N885 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(885)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N886 [ label = "O.O\nOXX\nXOX\n\nid: NodeId(886)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N886 -> N887
+N887 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(887)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N888 [ label = "OOO\nOXX\nXX.\n\nid: NodeId(888)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N889 [ label = "OXO\nOXX\nXO.\n\nid: NodeId(889)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N889 -> N890
+N890 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(890)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N891 [ label = "OXO\nOXX\nX.O\n\nid: NodeId(891)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N891 -> N892
+N892 [ label = "OXO\nOXX\nXXO\n\nid: NodeId(892)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N893 [ label = "OOO\nOXX\nXX.\n\nid: NodeId(893)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N894 [ label = "OXO\nOXO\nX.X\n\nid: NodeId(894)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N894 -> N895
+N895 [ label = "OXO\nOXO\nXXX\n\nid: NodeId(895)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N896 [ label = "OXO\nOXX\nX.O\n\nid: NodeId(896)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N896 -> N897
+N897 [ label = "OXO\nOXX\nXXO\n\nid: NodeId(897)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N898 [ label = "OXO\nOX.\nXOX\n\nid: NodeId(898)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N898 -> N899
+N899 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(899)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N900 [ label = "OXO\nXXO\nXO.\n\nid: NodeId(900)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N900 -> N901
+N901 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(901)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N902 [ label = "OX.\nOXX\nXOO\n\nid: NodeId(902)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N902 -> N903
+N903 [ label = "OXX\nOXX\nXOO\n\nid: NodeId(903)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N904 [ label = "OX.\nXXO\nXOO\n\nid: NodeId(904)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N904 -> N905
+N905 [ label = "OXX\nXXO\nXOO\n\nid: NodeId(905)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N906 [ label = "OX.\nOXO\nXOX\n\nid: NodeId(906)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N906 -> N907
+N907 [ label = "OXX\nOXO\nXOX\n\nid: NodeId(907)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N908 [ label = "OXO\nXX.\nXOO\n\nid: NodeId(908)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N908 -> N909
+N909 [ label = "OXO\nXXX\nXOO\n\nid: NodeId(909)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N910 [ label = "OXO\nOXO\nX.X\n\nid: NodeId(910)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N910 -> N911
+N911 [ label = "OXO\nOXO\nXXX\n\nid: NodeId(911)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N912 [ label = "OXO\nXXO\nXO.\n\nid: NodeId(912)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N912 -> N913
+N913 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(913)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N914 [ label = "OOO\nOXX\nX.X\n\nid: NodeId(914)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N915 [ label = "OOO\nOXX\nX.X\n\nid: NodeId(915)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 1\nis_complete: true" fontname = "Consolas"]
+N916 [ label = "O.O\nOXX\nXOX\n\nid: NodeId(916)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N916 -> N917
+N917 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(917)\nmove: Some(Move([1]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N918 [ label = "OX.\nOXX\nXOO\n\nid: NodeId(918)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N918 -> N919
+N919 [ label = "OXX\nOXX\nXOO\n\nid: NodeId(919)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N920 [ label = "OXO\nOX.\nXOX\n\nid: NodeId(920)\nmove: Some(Move([7]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N920 -> N921
+N921 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(921)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N922 [ label = "OX.\nOXO\nXOX\n\nid: NodeId(922)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N922 -> N923
+N923 [ label = "OXX\nOXO\nXOX\n\nid: NodeId(923)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N924 [ label = "OX.\nOXX\nXOO\n\nid: NodeId(924)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N924 -> N925
+N925 [ label = "OXX\nOXX\nXOO\n\nid: NodeId(925)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N926 [ label = "OX.\nOXX\nXOO\n\nid: NodeId(926)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N926 -> N927
+N927 [ label = "OXX\nOXX\nXOO\n\nid: NodeId(927)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N928 [ label = "OXO\nOXX\nXO.\n\nid: NodeId(928)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N928 -> N929
+N929 [ label = "OXO\nOXX\nXOX\n\nid: NodeId(929)\nmove: Some(Move([8]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N930 [ label = "OX.\nOXO\nXOX\n\nid: NodeId(930)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N930 -> N931
+N931 [ label = "OXX\nOXO\nXOX\n\nid: NodeId(931)\nmove: Some(Move([2]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N932 [ label = "OXO\n.XO\nXOX\n\nid: NodeId(932)\nmove: Some(Move([5]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+N932 -> N933
+N933 [ label = "OXO\nXXO\nXOX\n\nid: NodeId(933)\nmove: Some(Move([3]))\nplayouts: 1\nscore: 0\nis_complete: true" fontname = "Consolas"]
+}
+
