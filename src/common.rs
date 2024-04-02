@@ -6,7 +6,7 @@ use raylib::{
     color::Color, drawing::RaylibDraw, math::{Rectangle, Vector2}, text::{measure_text_ex, Font}, RaylibHandle
 };
 
-use crate::{game::Turn, monte_carlo::Message, styles::*};
+use crate::{game::Turn, monte_carlo::message::Message, styles::*};
 
 #[derive(PartialEq, Clone, Copy)]
 /// An enum used to represent the legal moves in the `Game` draw function

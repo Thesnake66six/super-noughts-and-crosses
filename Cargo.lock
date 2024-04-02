@@ -63,9 +63,9 @@ checksum = "42703706b716c37f96a77aea830392ad231f44c9e9a67872fa5548707e11b11c"
 
 [[package]]
 name = "graphvis_ego_tree"
-version = "0.2.0"
+version = "0.3.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "06f88bdf928f29ea1a7cf9752741fb61694412b68396a4eea3e3663a180de7ed"
+checksum = "cfe828709f64d3947ab50a22d179fc41308daae8caa310435070838c6e455953"
 dependencies = [
  "ego-tree",
 ]

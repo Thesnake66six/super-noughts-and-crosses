@@ -4,7 +4,6 @@ pub struct MonteCarloNode {
     pub playouts: f32,
     pub wins: f32,
     pub child_count: usize,
-    pub complete: bool,
 }
 
 impl MonteCarloNode {
@@ -14,7 +13,6 @@ impl MonteCarloNode {
             playouts: 0.0,
             wins: 0.0,
             child_count,
-            complete: false,
         }
     }
 

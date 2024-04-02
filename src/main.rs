@@ -1,5 +1,8 @@
 use std::{
-    fmt::Display, sync::mpsc::{self, Receiver, SyncSender}, thread, time::{self, Duration}
+    fmt::Display,
+    sync::mpsc::{self, Receiver, SyncSender},
+    thread,
+    time::{self, Duration},
 };
 
 use anyhow::Result;
@@ -10,8 +13,14 @@ use raylib::{core::texture::RaylibTexture2D, prelude::*};
 use styles::*;
 use ui::{UITab, UI};
 
-use crate::{common::*, game::Turn, monte_carlo::{Message, MonteCarloManager, MonteCarloSettings}};
-use monte_carlo::MonteCarloPolicy;
+use crate::{
+    common::*,
+    game::Turn,
+    monte_carlo::{
+        message::Message,
+        monte_carlo::{MonteCarloManager, MonteCarloPolicy, MonteCarloSettings},
+    },
+};
 
 mod board;
 mod cell;
@@ -28,30 +37,39 @@ fn main() -> Result<()> {
     // Noughbert comms witn main thread
     let (tx_1, rx_1) = mpsc::sync_channel::<Vec<usize>>(1);
 
-    thread::spawn(move || {
+    let spawn = thread::spawn(move || {
         let rx = rx_0;
         let tx = tx_1;
 
         loop {
             let message = rx.recv().unwrap();
             let mc_options = match message {
-                Message::GetMove(x) => x,
+                Message::Start(x) => x,
                 Message::Interrupt => continue,
+                Message::GetThoughts() => continue,
+                Message::Move(_) => continue,
+                Message::GetMoveNow() => continue,
             };
             let mut noughbert = MonteCarloManager::new(mc_options.game);
             let start_time = time::Instant::now();
             let mut interrupt = false;
-            
+
             while start_time.elapsed() < mc_options.timeout && noughbert.sims < mc_options.max_sims
             {
                 let message = rx.try_recv();
                 match message {
                     Ok(m) => match m {
-                        Message::GetMove(_) => {},
-                        Message::Interrupt => {interrupt = true; break},
+                        Message::Start(_) => {}
+                        Message::Interrupt => {
+                            interrupt = true;
+                            break;
+                        }
+                        Message::GetThoughts() => todo!(),
+                        Message::Move(_) => {}
+                        Message::GetMoveNow() => todo!(),
                     },
                     Err(e) => match e {
-                        mpsc::TryRecvError::Empty => {},
+                        mpsc::TryRecvError::Empty => {}
                         mpsc::TryRecvError::Disconnected => panic!("Thread disconnected"),
                     },
                 }
@@ -76,11 +94,34 @@ fn main() -> Result<()> {
             }
             println!("{} sims", noughbert.sims);
 
-            let best_play = noughbert.best(mc_options.policy);
-            dbg!(&best_play);
+            let best_play = noughbert.best(mc_options.policy, mc_options.opt_for);
             tx.send(best_play).unwrap();
-            eprintln!("{}", graphvis_ego_tree::TreeWrapper::new(&noughbert.tree, |x| format!("{:?}", x.value().play)))
-            
+            eprintln!(
+                "{}",
+                graphvis_ego_tree::TreeWrapper::new(&noughbert.tree, noughbert.tree.root().id(), |node| {
+                    let mut board = noughbert.g.clone();
+
+                    for x in node.ancestors().collect::<Vec<_>>().iter().rev().skip(1) {
+                        if board.board.check() != Value::None {
+                            println!("{:?}", node.ancestors().collect::<Vec<_>>().iter().rev().skip(1))
+                        }
+                        board.play(&x.value().play).unwrap();
+                    }
+                    if !node.value().play.is_empty() {
+                        board.play(&node.value().play).unwrap();
+                    }
+                    let repr = board.board.dbg_repr();
+
+                    let done = match board.board.check() {
+                        Value::None => " ".to_owned(),
+                        Value::Draw => "Draw".to_owned(),
+                        Value::Player1 => "Crosses".to_owned(),
+                        Value::Player2 => "Noughts".to_owned(),
+                    };
+
+                    format!("{}\n{}\n{}/{}", repr, done, node.value().wins, node.value().playouts)
+                })
+            )
         }
     });
 
@@ -163,23 +204,24 @@ fn main() -> Result<()> {
 
         // if g.turn == 0 && g.board.check() == Value::None && g.players == 1 && !waiting_for_move {
         if g.board.check() == Value::None && g.players == 1 && !state.waiting_for_move {
-            state.message_queue.insert(state.message_queue.len(),  Message::GetMove(MonteCarloSettings {
-                game: g.clone(),
-                timeout: Duration::from_secs(DEFAULT_MOVE_TIMEOUT as u64),
-                max_sims: DEFAULT_MAX_SIMS,
-                exploration_factor: DEFAULT_EXPLORATION_FACTOR,
-                opt_for: g.turn,
-                carry_forward: false,
-                policy: MonteCarloPolicy::Robust,
-            }));
+            state.message_queue.insert(
+                state.message_queue.len(),
+                Message::Start(MonteCarloSettings {
+                    game: g.clone(),
+                    timeout: Duration::from_secs(DEFAULT_MOVE_TIMEOUT as u64),
+                    max_sims: DEFAULT_MAX_SIMS,
+                    exploration_factor: DEFAULT_EXPLORATION_FACTOR,
+                    opt_for: g.turn,
+                    carry_forward: false,
+                    policy: MonteCarloPolicy::Robust,
+                }),
+            );
             state.waiting_for_move = true;
         }
 
         for message in state.message_queue.drain(0..state.message_queue.len()) {
             tx.send(message).unwrap();
         }
-
-
 
         let mv = rx.try_recv();
         match mv {
@@ -321,22 +363,27 @@ fn handle_input(
     if rl.is_key_pressed(KeyboardKey::KEY_ENTER) {
         g.centre_camera(*game_rect);
     }
-    
+
     if rl.is_key_pressed(KeyboardKey::KEY_BACKSPACE) {
         let _ = g.unplay();
-        state.message_queue.insert(state.message_queue.len(), Message::Interrupt)
+        state
+            .message_queue
+            .insert(state.message_queue.len(), Message::Interrupt)
     }
-    
+
     if rl.is_key_pressed(KeyboardKey::KEY_SLASH) {
-        state.message_queue.insert(state.message_queue.len(), Message::GetMove(MonteCarloSettings {
-            game: g.clone(),
-            timeout: Duration::from_secs(DEFAULT_MOVE_TIMEOUT as u64),
-            max_sims: DEFAULT_MAX_SIMS,
-            exploration_factor: DEFAULT_EXPLORATION_FACTOR,
-            opt_for: g.turn,
-            carry_forward: false,
-            policy: MonteCarloPolicy::Robust,
-        }))
+        state.message_queue.insert(
+            state.message_queue.len(),
+            Message::Start(MonteCarloSettings {
+                game: g.clone(),
+                timeout: Duration::from_secs(DEFAULT_MOVE_TIMEOUT as u64),
+                max_sims: DEFAULT_MAX_SIMS,
+                exploration_factor: DEFAULT_EXPLORATION_FACTOR,
+                opt_for: g.turn,
+                carry_forward: false,
+                policy: MonteCarloPolicy::Robust,
+            }),
+        )
     }
 
     if rl.is_key_pressed(KeyboardKey::KEY_GRAVE) {

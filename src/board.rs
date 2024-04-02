@@ -1,3 +1,5 @@
+use std::fmt::DebugStruct;
+
 use anyhow::{bail, Ok, Result};
 use raylib::{core::math::Rectangle, prelude::*};
 
@@ -330,5 +332,21 @@ impl Board {
                 turn,
             )
         }
+    }
+
+    pub fn dbg_repr(&self) -> String {
+        let mut out = String::new();
+        for (i, cell) in self.cells.iter().map(|x| x.value()).enumerate() {
+            out += match cell {
+                Value::None => ".",
+                Value::Draw => "=",
+                Value::Player1 => "X",
+                Value::Player2 => "O",
+            };
+            if i % 3 == 2 {
+                out += "\n"
+            }
+        }
+        out
     }
 }
