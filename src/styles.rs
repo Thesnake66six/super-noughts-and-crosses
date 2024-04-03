@@ -2,6 +2,20 @@ use std::f32::consts::SQRT_2;
 
 use raylib::color::Color;
 
+//----------// Constants determining debug settings //----------//
+
+/// Sets the default toggle psoition of the FPS counter
+pub const DEFAULT_SHOW_FPS_COUNTER: bool = false;
+
+/// Enables the FPS counter keybind
+pub const ALLOW_FPS_COUNTER: bool = true;
+
+/// Enables the logging of tree graphs
+pub const OUTPUT_GRAPHVIS_FILES: bool = false;
+
+/// Enables the automatic compilation of tree graphs to .svg files
+pub const AUTOCOMPILE_GRAPHVIS_FILES: bool = true;
+
 //----------// Constants determining UI settings //----------//
 
 /// Specifies the width of the UI panel
@@ -28,13 +42,12 @@ pub const UI_SCROLL_SPEED: f32 = 35.0;
 //----------// Constants determining default game settings //----------//
 
 /// Specifies the default depth of a board
-pub const BOARD_DEFAULT_DEPTH: usize = 1;
+pub const BOARD_DEFAULT_DEPTH: usize = 2;
 
 //----------// Constants determining default AI settings //----------//
 
-// pub const DEFAULT_EXPLORATION_FACTOR: f32 = SQRT_2 / 2.0;
-pub const DEFAULT_EXPLORATION_FACTOR: f32 = 2.0;
-pub const DEFAULT_MOVE_TIMEOUT: f32 = 20000.0;
+pub const DEFAULT_EXPLORATION_FACTOR: f32 = SQRT_2 / 2.0;
+pub const DEFAULT_MOVE_TIMEOUT: f32 = 30.0;
 pub const DEFAULT_MAX_SIMS: usize = 10000;
 
 //----------// Constants determining the properties of the camera //----------//

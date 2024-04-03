@@ -1,4 +1,4 @@
-use std::ops::Not;
+use std::ops::{Deref, Not};
 
 use anyhow::{bail, Ok, Result};
 use raylib::{
@@ -15,6 +15,16 @@ use crate::{
     styles::*,
 };
 
+pub struct Move(Vec<usize>);
+
+impl Deref for Move {
+    type Target = Vec<usize>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Turn {
     Player1,
@@ -29,7 +39,6 @@ impl Turn {
         }
     }
 }
-
 
 impl Not for Turn {
     type Output = Turn;
@@ -237,7 +246,10 @@ impl Game {
     }
 
     pub fn legal_moves(&self) -> Vec<Vec<usize>> {
-        self.board.get(&self.legal).unwrap().moves(&self.legal)
+        self.board
+            .get(&self.legal)
+            .unwrap()
+            .legal_moves(&self.legal)
     }
 
     pub fn get_cell_from_pixel(&self, point: Vector2, no_check: bool) -> Option<Vec<usize>> {

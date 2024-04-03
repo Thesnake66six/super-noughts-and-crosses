@@ -2,16 +2,16 @@ use raylib::{drawing::RaylibDraw, math::Rectangle};
 
 use crate::{board::Board, common::*, game::Turn, styles::*};
 
+/// An enum used to differentiate the states of a board.
 #[derive(Debug, Copy, Clone, PartialEq)]
-/// An enum used to differentiate the states of a board, namely:
-/// `Player1`: The first player has won;
-/// `Player2`: The second player has won;
-/// `Draw`: The board has drawn;
-/// `None`: The board may still be played into.
 pub enum Value {
+    /// The board is still being played
     None,
+    /// The board is drawn
     Draw,
+    /// The first player has won
     Player1,
+    /// The second player has won
     Player2,
 }
 
@@ -64,16 +64,16 @@ impl Value {
     }
 }
 
+/// An enum used to differentiate the states of a cell.
 #[derive(Debug, Clone, PartialEq)]
-/// An enum used to differentiate the states of a cell, namely:
-/// `None`: An empty cell;
-/// `Player1`: The first player;
-/// `Player2`: The second player;
-/// `Board(Board)`: Another board.
 pub enum Cell {
+    /// An empty cell
     None,
+    /// The first player
     Player1,
+    /// The second player
     Player2,
+    /// Another board
     Board(Board),
 }
 
@@ -90,6 +90,16 @@ impl Cell {
 
     /// Returns the possible moves within a cell
     pub fn moves<'a>(&'a self, pos: &'a [usize]) -> Vec<Vec<usize>> {
+        match self {
+            Cell::None => vec![pos.to_vec()],
+            Cell::Player1 => vec![pos.to_vec()],
+            Cell::Player2 => vec![pos.to_vec()],
+            Cell::Board(b) => b.moves(pos),
+        }
+    }
+
+    /// Returns the possible legal moves within a cell
+    pub fn legal_moves<'a>(&'a self, pos: &'a [usize]) -> Vec<Vec<usize>> {
         match self {
             Cell::None => vec![pos.to_vec()],
             Cell::Player1 => vec![],

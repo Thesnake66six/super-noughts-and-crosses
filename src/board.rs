@@ -1,10 +1,11 @@
-use std::fmt::DebugStruct;
-
 use anyhow::{bail, Ok, Result};
 use raylib::{core::math::Rectangle, prelude::*};
 
 use crate::{
-    cell::{Cell, Value}, common::*, game::Turn, styles::*
+    cell::{Cell, Value},
+    common::*,
+    game::Turn,
+    styles::*,
 };
 
 #[derive(Debug, Clone, PartialEq)]
@@ -124,13 +125,29 @@ impl Board {
     }
 
     /// Returns a Vec of all possible moves in the board
-    pub fn legal_moves(&self, pos: &[usize]) -> Vec<Vec<usize>> {
+    pub fn moves(&self, pos: &[usize]) -> Vec<Vec<usize>> {
         let mut l = vec![];
         for (i, x) in self.cells.iter().enumerate() {
             let mut v = Vec::with_capacity(pos.len() + 1);
             v.extend_from_slice(pos);
             v.push(i);
             l.append(&mut x.moves(&v))
+        }
+        l
+    }
+
+    /// Returns a Vec of all possible legal moves in the board
+    pub fn legal_moves(&self, pos: &[usize]) -> Vec<Vec<usize>> {
+        // Create the output vector
+        let mut l = vec![];
+
+        // Iterate over each cell, enumerated
+        for (i, x) in self.cells.iter().enumerate() {
+            // Create a new vector corresponding to the selected cell
+            let mut v = Vec::with_capacity(pos.len() + 1);
+            v.extend_from_slice(pos);
+            v.push(i);
+            l.append(&mut x.legal_moves(&v))
         }
         l
     }

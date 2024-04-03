@@ -3,7 +3,11 @@
 use std::f32::consts::SQRT_2;
 
 use raylib::{
-    color::Color, drawing::RaylibDraw, math::{Rectangle, Vector2}, text::{measure_text_ex, Font}, RaylibHandle
+    color::Color,
+    drawing::RaylibDraw,
+    math::{Rectangle, Vector2},
+    text::{measure_text_ex, Font},
+    RaylibHandle,
 };
 
 use crate::{game::Turn, monte_carlo::message::Message, styles::*};

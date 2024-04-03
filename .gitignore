@@ -1,1 +1,5 @@
 /target
+/outs
+/.vscode
+changes.txt
+out.txt

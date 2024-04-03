@@ -1,13 +1,14 @@
 use std::{
-    fmt::Display,
-    sync::mpsc::{self, Receiver, SyncSender},
+    fs,
+    path::Path,
+    process::Command,
+    sync::mpsc,
     thread,
     time::{self, Duration},
 };
 
 use anyhow::Result;
 use cell::Value;
-use ego_tree::Tree;
 use game::Game;
 use raylib::{core::texture::RaylibTexture2D, prelude::*};
 use styles::*;
@@ -35,11 +36,17 @@ fn main() -> Result<()> {
     let (tx_0, rx_0) = mpsc::sync_channel::<Message>(0);
 
     // Noughbert comms witn main thread
-    let (tx_1, rx_1) = mpsc::sync_channel::<Vec<usize>>(1);
+    let (tx_1, rx_1) = mpsc::sync_channel::<Option<Vec<usize>>>(1);
 
     let spawn = thread::spawn(move || {
         let rx = rx_0;
         let tx = tx_1;
+        let mut runs = 0;
+
+        if OUTPUT_GRAPHVIS_FILES {
+            let _ = fs::remove_dir_all("./outs");
+            let _ = fs::create_dir("./outs");
+        }
 
         loop {
             let message = rx.recv().unwrap();
@@ -50,11 +57,22 @@ fn main() -> Result<()> {
                 Message::Move(_) => continue,
                 Message::GetMoveNow() => continue,
             };
-            let mut noughbert = MonteCarloManager::new(mc_options.game);
+
+            println!("Simulation requested");
+
+            let mut noughbert = MonteCarloManager::new(mc_options.game, mc_options.opt_for);
             let start_time = time::Instant::now();
             let mut interrupt = false;
 
-            while start_time.elapsed() < mc_options.timeout && noughbert.sims < mc_options.max_sims
+            assert_eq!(noughbert.g.board.check(), Value::None);
+
+            if noughbert.g.board.check() != Value::None {
+                interrupt = true
+            }
+
+            while start_time.elapsed() < mc_options.timeout
+                && noughbert.sims < mc_options.max_sims
+                && !interrupt
             {
                 let message = rx.try_recv();
                 match message {
@@ -73,7 +91,7 @@ fn main() -> Result<()> {
                         mpsc::TryRecvError::Disconnected => panic!("Thread disconnected"),
                     },
                 }
-                let x = noughbert.select(mc_options.exploration_factor);
+                let x = noughbert.select(mc_options.exploration_factor, mc_options.opt_for);
                 if x.is_none() {
                     break;
                 }
@@ -94,34 +112,135 @@ fn main() -> Result<()> {
             }
             println!("{} sims", noughbert.sims);
 
-            let best_play = noughbert.best(mc_options.policy, mc_options.opt_for);
+            // Assertions true
+            // assert_eq!(noughbert.g.board, sgame.board);
+            // assert_eq!(noughbert.g.turn, sgame.turn);
+            // assert_eq!(noughbert.g.moves, sgame.moves);
+
+            let best_play = noughbert.best(
+                mc_options.policy,
+                mc_options.opt_for,
+                mc_options.exploration_factor,
+            );
+
             tx.send(best_play).unwrap();
-            eprintln!(
-                "{}",
-                graphvis_ego_tree::TreeWrapper::new(&noughbert.tree, noughbert.tree.root().id(), |node| {
-                    let mut board = noughbert.g.clone();
+            runs += 1;
 
-                    for x in node.ancestors().collect::<Vec<_>>().iter().rev().skip(1) {
-                        if board.board.check() != Value::None {
-                            println!("{:?}", node.ancestors().collect::<Vec<_>>().iter().rev().skip(1))
-                        }
-                        board.play(&x.value().play).unwrap();
-                    }
-                    if !node.value().play.is_empty() {
-                        board.play(&node.value().play).unwrap();
-                    }
-                    let repr = board.board.dbg_repr();
+            if OUTPUT_GRAPHVIS_FILES {
+                let _ = fs::write(Path::new(&format!("./outs/{}.dot", runs)), {
+                    let s = format!(
+                        "{}",
+                        graphvis_ego_tree::TreeWrapper::new(
+                            &noughbert.tree,
+                            noughbert.tree.root().id(),
+                            |node| {
+                                let mut board = noughbert.g.clone();
+                                let id = format!("Node ID: {:?}", node.id());
+                                let play = {
+                                    if node.id() == noughbert.tree.root().id() {
+                                        format!(
+                                            "Starting Board: {}",
+                                            match noughbert.g.turn {
+                                                Turn::Player1 => "Crosses".to_owned(),
+                                                Turn::Player2 => "Noughts".to_owned(),
+                                            }
+                                        )
+                                    } else {
+                                        match node.value().turn {
+                                            Turn::Player1 => {
+                                                format!("Crosses' turn: {:?}", &node.value().play)
+                                            }
+                                            Turn::Player2 => {
+                                                format!("Noughts' turn: {:?}", &node.value().play)
+                                            }
+                                        }
+                                    }
+                                };
 
-                    let done = match board.board.check() {
-                        Value::None => " ".to_owned(),
-                        Value::Draw => "Draw".to_owned(),
-                        Value::Player1 => "Crosses".to_owned(),
-                        Value::Player2 => "Noughts".to_owned(),
-                    };
+                                for x in node.ancestors().collect::<Vec<_>>().iter().rev().skip(1) {
+                                    if board.board.check() != Value::None {
+                                        // println!(
+                                        //     "{:?}",
+                                        //     node.ancestors().collect::<Vec<_>>().iter().rev().skip(1)
+                                        // )
+                                    }
+                                    board.play(&x.value().play).unwrap();
+                                }
+                                if !node.value().play.is_empty() {
+                                    board.play(&node.value().play).unwrap();
+                                }
+                                let repr = board.board.dbg_repr();
 
-                    format!("{}\n{}\n{}/{}", repr, done, node.value().wins, node.value().playouts)
-                })
-            )
+                                let done = match board.board.check() {
+                                    Value::None => " ".to_owned(),
+                                    Value::Draw => "Draw".to_owned(),
+                                    Value::Player1 => "Crosses".to_owned(),
+                                    Value::Player2 => "Noughts".to_owned(),
+                                };
+
+                                let score = {
+                                    if node.id() == noughbert.tree.root().id() {
+                                        format!(
+                                            "{} / {} = {}",
+                                            node.value().score(!mc_options.opt_for),
+                                            node.value().playouts,
+                                            if node.id() == noughbert.tree.root().id() {
+                                                "".to_owned()
+                                            } else {
+                                                (node.value().score(!mc_options.opt_for)
+                                                    / node.value().playouts)
+                                                    .to_string()
+                                            },
+                                        )
+                                    } else {
+                                        format!(
+                                            "{} / {} = {}",
+                                            node.value().score(mc_options.opt_for),
+                                            node.value().playouts,
+                                            if node.id() == noughbert.tree.root().id() {
+                                                "".to_owned()
+                                            } else {
+                                                (node.value().score(mc_options.opt_for)
+                                                    / node.value().playouts)
+                                                    .to_string()
+                                            },
+                                        )
+                                    }
+                                };
+
+                                let ucb1 = {
+                                    if node.id() == noughbert.tree.root().id() {
+                                        "".to_owned()
+                                    } else {
+                                        format!(
+                                            "{}",
+                                            node.value().ucb1(
+                                                mc_options.exploration_factor,
+                                                match node.parent() {
+                                                    Some(n) => n.value().playouts,
+                                                    None => node.value().playouts,
+                                                },
+                                                mc_options.opt_for
+                                            )
+                                        )
+                                    }
+                                };
+
+                                format!(
+                                    "{}\n{}\n{}\n{}\n{}\nucb1 = {}",
+                                    id, play, repr, done, score, ucb1
+                                )
+                            }
+                        )
+                    );
+                    s.replace("\"]", "\" fontname = \"Consolas\"]")
+                });
+                if AUTOCOMPILE_GRAPHVIS_FILES {
+                    let _ = Command::new("dot")
+                        .args(["-T", "svg", "-O", &format!("./outs/{}.dot", runs)])
+                        .spawn();
+                }
+            }
         }
     });
 
@@ -160,7 +279,9 @@ fn main() -> Result<()> {
     // Set some settings for the window
     rl.set_target_fps(120);
     rl.set_window_min_size(UI_PANEL_WIDTH as i32, UI_PANEL_MIN_HEIGHT as i32);
-    rl.set_window_icon(raylib::texture::Image::load_image("./resources/icon.png").expect("Couldn't load icon oof"));
+    rl.set_window_icon(
+        raylib::texture::Image::load_image("./resources/icon.png").expect("Couldn't load icon oof"),
+    );
 
     // Create the game
     let mut g = Game::new_depth(get_board_rect(BOARD_DEFAULT_DEPTH), BOARD_DEFAULT_DEPTH, 1);
@@ -176,7 +297,7 @@ fn main() -> Result<()> {
     let mut state = State {
         mouse_prev: Vector2::zero(),
         good_right_click: false,
-        show_fps: true,
+        show_fps: DEFAULT_SHOW_FPS_COUNTER,
         waiting_for_move: false,
         response_time: COMPUTER_RESPONSE_DELAY,
         message_queue: vec![],
@@ -203,8 +324,12 @@ fn main() -> Result<()> {
             &mut state,
         );
 
-        // if g.turn == 0 && g.board.check() == Value::None && g.players == 1 && !waiting_for_move {
-        if g.board.check() == Value::None && g.players == 1 && !state.waiting_for_move {
+        if g.turn == Turn::Player2
+            && g.board.check() == Value::None
+            && g.players == 1
+            && !state.waiting_for_move
+        {
+            // if g.board.check() == Value::None && g.players == 1 && !state.waiting_for_move {
             state.message_queue.insert(
                 state.message_queue.len(),
                 Message::Start(MonteCarloSettings {
@@ -228,7 +353,9 @@ fn main() -> Result<()> {
         match mv {
             Ok(mv) => {
                 if state.waiting_for_move {
-                    g.play(&mv).unwrap();
+                    if let Some(y) = mv {
+                        g.play(&y).unwrap();
+                    }
                     state.waiting_for_move = false;
                 }
             }
@@ -354,9 +481,9 @@ fn handle_input(
         rl,
         ui_rect,
         mouse_pos,
-        &mut state.response_time,
         ui,
         g,
+        state,
         game_rect,
         &hovered_cell,
     );
@@ -372,7 +499,10 @@ fn handle_input(
             .insert(state.message_queue.len(), Message::Interrupt)
     }
 
-    if rl.is_key_pressed(KeyboardKey::KEY_SLASH) {
+    if rl.is_key_pressed(KeyboardKey::KEY_SLASH)
+        && g.board.check() == Value::None
+        && !state.waiting_for_move
+    {
         state.message_queue.insert(
             state.message_queue.len(),
             Message::Start(MonteCarloSettings {
@@ -384,11 +514,16 @@ fn handle_input(
                 carry_forward: false,
                 policy: MonteCarloPolicy::Robust,
             }),
-        )
+        );
+        state.waiting_for_move = true;
     }
 
     if rl.is_key_pressed(KeyboardKey::KEY_GRAVE) {
-        state.show_fps ^= true;
+        if ALLOW_FPS_COUNTER {
+            state.show_fps ^= true;
+        } else {
+            state.show_fps = false;
+        }
     }
 
     hovered_cell
@@ -398,9 +533,9 @@ fn handle_click(
     rl: &RaylibHandle,
     ui_rect: &mut Rectangle,
     mouse_pos: Vector2,
-    response_time: &mut f32,
     ui: &mut UI<'_>,
     g: &mut Game,
+    state: &mut State,
     game_rect: &mut Rectangle,
     hovered_cell: &Option<Vec<usize>>,
 ) {
@@ -450,6 +585,10 @@ fn handle_click(
                         // Start a new Game with the selected settings if New Game is clicked
                         } else if ui.settings_elements["New Game"].check_collision_point_rec(offset)
                         {
+                            state
+                                .message_queue
+                                .insert(state.message_queue.len(), Message::Interrupt);
+                            state.waiting_for_move = false;
                             *g = Game::new_depth(
                                 get_board_rect(ui.state["Depth"]),
                                 ui.state["Depth"],
@@ -469,8 +608,11 @@ fn handle_click(
             // This means that the mouse click was in the game.
             if g.players == 2 || g.turn == Turn::Player1 {
                 let _ = g.play(cell);
+                state
+                    .message_queue
+                    .insert(state.message_queue.len(), Message::Interrupt);
                 let x = fastrand::usize(5..20) as f32;
-                *response_time = COMPUTER_RESPONSE_DELAY * x / 10.0;
+                state.response_time = COMPUTER_RESPONSE_DELAY * x / 10.0;
             }
         }
     }

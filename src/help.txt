@@ -1,9 +1,0 @@
-Expand function (takes the node id of the node to expand) {
-    store the node to be expanded 
-    play up to the current node position
-    play the current node's move
-
-    store the legal moves after the selected node
-    remove any move that has already been created as a child
-        if no moves remain (leaf node)
-}
