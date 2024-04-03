@@ -160,6 +160,7 @@ fn main() -> Result<()> {
     // Set some settings for the window
     rl.set_target_fps(120);
     rl.set_window_min_size(UI_PANEL_WIDTH as i32, UI_PANEL_MIN_HEIGHT as i32);
+    rl.set_window_icon(raylib::texture::Image::load_image("./resources/icon.png").expect("Couldn't load icon oof"));
 
     // Create the game
     let mut g = Game::new_depth(get_board_rect(BOARD_DEFAULT_DEPTH), BOARD_DEFAULT_DEPTH, 1);
