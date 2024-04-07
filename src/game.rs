@@ -74,6 +74,7 @@ pub struct Game {
 }
 
 impl Game {
+    /// Constructs a new game
     pub fn new_depth(rect: Rectangle, depth: usize, players: usize) -> Self {
         Game {
             rect,
@@ -90,6 +91,7 @@ impl Game {
         }
     }
 
+    /// Updates the positions of each cell
     pub fn update_positions(&mut self) {
         let m = self.rect.width * BOARD_CELL_MARGIN;
 
@@ -103,6 +105,7 @@ impl Game {
         self.board.update_positions(irect)
     }
 
+    /// Centres the game camera
     pub fn centre_camera(&mut self, rect: Rectangle) {
         self.camera.target = Vector2 {
             x: self.rect.x + self.rect.width / 2.0f32,
@@ -114,6 +117,7 @@ impl Game {
         );
     }
 
+    /// Draws the game into the rectangle
     pub fn draw<T: RaylibDraw>(
         &self,
         rect: Rectangle,
@@ -126,6 +130,7 @@ impl Game {
 
         let mut c = d.begin_mode2D(self.camera);
 
+        // Draws the background
         c.draw_rectangle_rec(
             rect,
             if self.board.check() != Value::None {
@@ -151,16 +156,19 @@ impl Game {
             height: rect.height - 2.0 * m,
         };
 
+        // Draws the background for the board
         let legal: Legal = if self.board.check() != Value::None || self.moves.is_empty() {
             Legal::ForceDefaultBg
         } else {
             Legal::Pos(&self.legal)
         };
 
+        /// Draws the board
         self.board
             .draw(irect, &mut c, no_check, alpha, hover, legal, self.turn)
     }
 
+    /// Makes a move
     pub fn play(&mut self, pos: &[usize]) -> Result<()> {
         if !pos.starts_with(&self.legal) {
             bail!("Illegal move: Move is not within bounds of current play")
@@ -194,6 +202,7 @@ impl Game {
         }
     }
 
+    /// Removes the last played move
     pub fn unplay(&mut self) -> Result<()> {
         if self.moves.is_empty() {
             bail!("No move to unplay")
@@ -207,6 +216,7 @@ impl Game {
         Ok(())
     }
 
+    /// Gets the coordinate of the next legal move board
     pub fn get_legal(&self, pos: &[usize]) -> Vec<usize> {
         if self.board.check() != Value::None {
             return vec![];
@@ -248,6 +258,7 @@ impl Game {
         }
     }
 
+    /// Returns a list of the legal moves
     pub fn legal_moves(&self) -> Vec<Vec<usize>> {
         self.board
             .get(&self.legal)
@@ -255,6 +266,7 @@ impl Game {
             .legal_moves(&self.legal)
     }
 
+    /// Wrapper function 
     pub fn get_cell_from_pixel(&self, point: Vector2, no_check: bool) -> Option<Vec<usize>> {
         self.board.get_cell_from_pixel(point, no_check)
     }

@@ -49,9 +49,18 @@ pub const BOARD_DEFAULT_PLAYERS: usize = 2;
 
 //----------// Constants determining default AI settings //----------//
 
+/// The default exploration fator for the `UCB1` function;
 pub const DEFAULT_EXPLORATION_FACTOR: f32 = SQRT_2 / 2.0;
-pub const DEFAULT_MOVE_TIMEOUT: f32 = 30.0;
+
+/// The default value for `Max Sims`
 pub const DEFAULT_MAX_SIMS: usize = 100;
+
+/// The time between the computer making a move
+pub const DEFAULT_MAX_TIME: usize = 10;
+
+/// The default value for `Max Time`
+pub const COMPUTER_RESPONSE_DELAY: f32 = 0.1;
+
 
 //----------// Constants determining the properties of the camera //----------//
 
@@ -75,13 +84,13 @@ pub const CAMERA_SCROLL_SPEED: f32 = 0.1;
 /// When false: illegal cells are chosen to be highlighted.
 ///
 /// When true: legal cells are chosen to be highlighted.
-pub const INVERT_GREYS: bool = false;
+pub const INVERT_GREYS: bool = true;
 
 /// Changes the colours with which 'greyed out' cells are rendered.
 ///
 ///
 /// When true: cells that should be 'greyed out' are instead coloured based on which player's turn it is.
-pub const DO_COLOURED_GREYS: bool = true;
+pub const DO_COLOURED_GREYS: bool = false;
 
 /// The fractional width of the margin between the edge of the board and the cell.
 pub const BOARD_CELL_MARGIN: f32 = 0.02;
@@ -98,10 +107,6 @@ pub const NOUGHT_THICK: f32 = 0.15;
 /// The fractional padding between the ring of the nought and the edge of the cell
 pub const NOUGHT_PADDING: f32 = 0.05;
 
-//----------// Constants of colours used in rendering the UI //----------//
-
-/// The time between the computer making a move
-pub const COMPUTER_RESPONSE_DELAY: f32 = 0.1;
 
 //----------// Constants of colours used in rendering the UI //----------//
 

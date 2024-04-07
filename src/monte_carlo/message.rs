@@ -7,7 +7,13 @@ pub enum Message {
 
     /// Requests that the Monte Carlo thread return a move
     GetMoveNow(),
+
+    /// Requests the confidence values for each move
     GetThoughts(),
+
+    /// Sends a move 
     Move(Vec<usize>),
+
+    /// Stops the calculation of a move
     Interrupt,
 }

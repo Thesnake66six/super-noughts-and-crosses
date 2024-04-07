@@ -14,18 +14,28 @@ use crate::{
     styles::*,
 };
 
+/// An enum representing the different possible UI tabs
+#[derive(Debug, PartialEq, Eq)]
 pub enum UITab {
     Game,
     Settings,
+    None,
 }
 
 pub struct UI<'a> {
+    /// The current selected `UITab`
     pub tab: UITab,
+    /// The current amount that the game tab has scrolled
     pub scroll_offset_game: f32,
+    /// The current amount that the settings tab has scrolled
     pub scroll_offset_settings: f32,
+    /// Stores the positions of the constant elements
     pub constant_elements: HashMap<&'a str, Rectangle>,
+    /// Stores the positions of the elements of the game tab
     pub game_elements: HashMap<&'a str, Rectangle>,
+    /// Stores the positions of the elements of the settings tab
     pub settings_elements: HashMap<&'a str, Rectangle>,
+    /// Stores the current UI state
     pub state: HashMap<&'a str, usize>,
 }
 
@@ -33,7 +43,7 @@ impl UI<'_> {
     /// Returns a new UI
     pub fn new() -> Self {
         UI {
-            tab: UITab::Game,
+            tab: UITab::None,
             scroll_offset_game: 0.0,
             scroll_offset_settings: 0.0,
             constant_elements: HashMap::from([
@@ -67,11 +77,11 @@ impl UI<'_> {
                 ("AI Max Time", Rectangle::EMPTY),
             ]),
             state: HashMap::from([
-                ("Depth", BOARD_DEFAULT_DEPTH), 
+                ("Depth", BOARD_DEFAULT_DEPTH),
                 ("Players", BOARD_DEFAULT_PLAYERS),
                 ("AI Strength", 1),
-                ("Max Sims", 3000),
-                ("Max Time", 30),
+                ("Max Sims", DEFAULT_MAX_SIMS),
+                ("Max Time", DEFAULT_MAX_TIME),
             ]),
         }
     }
@@ -139,16 +149,16 @@ impl UI<'_> {
             height: padding,
         };
         *self.game_elements.get_mut("Padding").unwrap() = p;
-        
+
         // Calculate the position of the Moves list
         let r = Rectangle {
             x: r.x,
             y: r.y + r.height + padding,
             width: r.width,
-            height: inner_content.height - r.height * 2.0 - p.height * 2.0 ,
+            height: inner_content.height - r.height * 2.0 - p.height * 2.0,
         };
         *self.game_elements.get_mut("Moves").unwrap() = r;
-        
+
         let p = Rectangle {
             x: p.x,
             y: r.y + r.height,
@@ -156,15 +166,15 @@ impl UI<'_> {
             height: padding,
         };
         *self.game_elements.get_mut("Padding 2").unwrap() = p;
-        
+
         let r = Rectangle {
             x: r.x,
             y: p.y + p.height,
             width: r.width,
-            height: 100.0
+            height: 100.0,
         };
         *self.game_elements.get_mut("Export").unwrap() = r;
-        
+
         // Calculate the settings elements' positions --------
 
         // Calculate the position of the Depth buttons
@@ -193,7 +203,7 @@ impl UI<'_> {
             height: 100.0,
         };
         *self.settings_elements.get_mut("New Game").unwrap() = r;
-        
+
         // Calculate the position of the AI strength buttons
         let r = Rectangle {
             x: r.x,
@@ -202,7 +212,7 @@ impl UI<'_> {
             height: 200.0,
         };
         *self.settings_elements.get_mut("AI Strength").unwrap() = r;
-        
+
         let r = Rectangle {
             x: r.x,
             y: r.y + r.height + padding,
@@ -213,7 +223,7 @@ impl UI<'_> {
 
         // Calculate the positions of the clickable content
         let padding = UI_CONTENT_PADDING * self.constant_elements["Inner Content"].width;
-        
+
         let dp = self.settings_elements["Depth"];
         let button_side = dp.height - 2.0 * padding;
 
@@ -260,7 +270,6 @@ impl UI<'_> {
         };
         *self.settings_elements.get_mut("2 Players").unwrap() = r;
 
-
         // Calculate the position of the AI strength values
         let ai = self.settings_elements["AI Strength"];
         let column_width = (ai.width - 2.0 * padding) / 3.0;
@@ -286,8 +295,8 @@ impl UI<'_> {
             width: button_side,
             height: button_side,
         };
-        *self.settings_elements.get_mut("AI 3").unwrap() = r;     
-        
+        *self.settings_elements.get_mut("AI 3").unwrap() = r;
+
         // Calculate positions of the AI text boxes
         let ai = self.settings_elements["AI Settings"];
         let column_width = (ai.width - padding) / 2.0;
@@ -298,7 +307,7 @@ impl UI<'_> {
             width: column_width - p,
             height: button_side,
         };
-        *self.settings_elements.get_mut("AI Max Sims").unwrap() = r;    
+        *self.settings_elements.get_mut("AI Max Sims").unwrap() = r;
 
         let r = Rectangle {
             x: r.x,
@@ -306,13 +315,21 @@ impl UI<'_> {
             width: column_width - p,
             height: button_side,
         };
-        *self.settings_elements.get_mut("AI Max Time").unwrap() = r;     
+        *self.settings_elements.get_mut("AI Max Time").unwrap() = r;
 
         //Do the same .. for max time, then add rendering, then add input routing (mian function)
         // also add in handle click to change the active textbox
     }
 
-    pub fn draw<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, g: &Game, font: &Font, state: &State) {
+    /// Draws the constant elements onto the screen
+    pub fn draw<T: RaylibDraw>(
+        &self,
+        rect: Rectangle,
+        d: &mut T,
+        g: &Game,
+        font: &Font,
+        state: &State,
+    ) {
         // Draw the background for the UI
         d.draw_rectangle_rec(rect, COLOUR_UI_BG);
 
@@ -323,6 +340,7 @@ impl UI<'_> {
         match self.tab {
             UITab::Game => self.draw_game(content_rec_inner, d, g, font, state),
             UITab::Settings => self.draw_settings(content_rec_inner, d, g, font, state),
+            UITab::None => {}
         }
 
         // Redraw the padding of the tab content and navbar (with divider) to remove any overspill
@@ -346,8 +364,8 @@ impl UI<'_> {
         d.draw_rectangle_rec(
             tab_rect,
             match self.tab {
-                UITab::Settings => COLOUR_UI_ELEMENT,
                 UITab::Game => COLOUR_UI_BG,
+                _ => COLOUR_UI_ELEMENT,
             },
         );
 
@@ -362,7 +380,7 @@ impl UI<'_> {
             tab_rect,
             match self.tab {
                 UITab::Settings => COLOUR_UI_BG,
-                UITab::Game => COLOUR_UI_ELEMENT,
+                _ => COLOUR_UI_ELEMENT,
             },
         );
 
@@ -371,29 +389,27 @@ impl UI<'_> {
         d.draw_text_rec(font, "Settings", text_rec, 50.0, 0.0, false, Color::BLACK);
 
         // Draw the lower divider based on the selected tab
-        match self.tab {
-            UITab::Settings => {
-                d.draw_rectangle_rec(
-                    Rectangle {
-                        x: rect.x,
-                        y: rect.y + UI_NAVBAR_HEIGHT as f32,
-                        width: rect.width * 0.5,
-                        height: UI_DIVIDER_THICKNESS as f32,
-                    },
-                    COLOUR_UI_DIVIDER,
-                );
-            }
-            UITab::Game => {
-                d.draw_rectangle_rec(
-                    Rectangle {
-                        x: rect.x + rect.width * 0.5,
-                        y: rect.y + UI_NAVBAR_HEIGHT as f32,
-                        width: rect.width * 0.5,
-                        height: UI_DIVIDER_THICKNESS as f32,
-                    },
-                    COLOUR_UI_DIVIDER,
-                );
-            }
+        if self.tab != UITab::Game {
+            d.draw_rectangle_rec(
+                Rectangle {
+                    x: rect.x,
+                    y: rect.y + UI_NAVBAR_HEIGHT as f32,
+                    width: rect.width * 0.5,
+                    height: UI_DIVIDER_THICKNESS as f32,
+                },
+                COLOUR_UI_DIVIDER,
+            );
+        }
+        if self.tab != UITab::Settings {
+            d.draw_rectangle_rec(
+                Rectangle {
+                    x: rect.x + rect.width * 0.5,
+                    y: rect.y + UI_NAVBAR_HEIGHT as f32,
+                    width: rect.width * 0.5,
+                    height: UI_DIVIDER_THICKNESS as f32,
+                },
+                COLOUR_UI_DIVIDER,
+            );
         }
 
         d.draw_line_ex(
@@ -410,7 +426,15 @@ impl UI<'_> {
         );
     }
 
-    pub fn draw_game<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, g: &Game, font: &Font, state: &State) {
+    /// Draws the game tab
+    pub fn draw_game<T: RaylibDraw>(
+        &self,
+        rect: Rectangle,
+        d: &mut T,
+        g: &Game,
+        font: &Font,
+        state: &State,
+    ) {
         // Draw the move history
         let mv = self.game_elements["Moves"];
 
@@ -496,11 +520,30 @@ impl UI<'_> {
         d.draw_rectangle_rec(eb, COLOUR_UI_ELEMENT);
         let text = "Export game";
         let trec = centre_text_rec(font, text, 50.0, 0.0, eb);
-        d.draw_text_rec(font, text, trec, 50.0, 0.0, false, if state.can_export {Color::BLACK} else {Color::RED})
-
+        d.draw_text_rec(
+            font,
+            text,
+            trec,
+            50.0,
+            0.0,
+            false,
+            if state.can_export {
+                Color::BLACK
+            } else {
+                Color::RED
+            },
+        )
     }
 
-    pub fn draw_settings<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, g: &Game, font: &Font, state: &State) {
+    /// Draw the settings tab
+    pub fn draw_settings<T: RaylibDraw>(
+        &self,
+        rect: Rectangle,
+        d: &mut T,
+        g: &Game,
+        font: &Font,
+        state: &State,
+    ) {
         let padding = UI_CONTENT_PADDING * rect.width;
 
         // Draw the depth selector
@@ -580,7 +623,7 @@ impl UI<'_> {
             width: pl.width - 2.0 * padding,
             height: (pl.height - 4.0 * padding) / 3.0,
         };
-        
+
         let mut brec = self.settings_elements["0 Players"];
         brec.y += self.scroll_offset_settings;
 
@@ -683,7 +726,7 @@ impl UI<'_> {
         let mut ai = self.settings_elements["AI Strength"];
         ai.y += self.scroll_offset_settings;
         d.draw_rectangle_rec(ai, COLOUR_UI_ELEMENT);
-        
+
         let text = "AI Strength:";
         let text_rec = Rectangle {
             x: ai.x + padding,
@@ -694,7 +737,7 @@ impl UI<'_> {
 
         let text_rec = centre_text_rec(font, text, 50.0, 0.0, text_rec);
         d.draw_text_rec(font, text, text_rec, 50.0, 0.0, false, Color::BLACK);
-        
+
         let column_width = (ai.width - 2.0 * padding) / 3.0;
         // let text = "1";
         // let text = "1";
@@ -705,7 +748,7 @@ impl UI<'_> {
         //     height: button_side,
         // };
         // d.draw_text_rec(font, text, centre_text_rec(font, text, 50.0, 0.0, trec), 50.0, 0.0, false, Color::BLACK);
-        
+
         let mut a1 = self.settings_elements["AI 1"];
         a1.y += self.scroll_offset_settings;
         d.draw_rectangle_rec(a1, COLOUR_UI_BUTTON);
@@ -721,7 +764,7 @@ impl UI<'_> {
                 COLOUR_UI_RADIAL,
             )
         }
-        
+
         let text = "1";
         let trec = Rectangle {
             x: a1.x - column_width + button_side,
@@ -729,9 +772,16 @@ impl UI<'_> {
             width: column_width - a1.width,
             height: a1.height,
         };
-        d.draw_text_rec(font, text, centre_text_rec(font, text, 50.0, 0.0, trec), 50.0, 0.0, false, Color::BLACK);
-        
-        
+        d.draw_text_rec(
+            font,
+            text,
+            centre_text_rec(font, text, 50.0, 0.0, trec),
+            50.0,
+            0.0,
+            false,
+            Color::BLACK,
+        );
+
         let mut a2 = self.settings_elements["AI 2"];
         a2.y += self.scroll_offset_settings;
         d.draw_rectangle_rec(a2, COLOUR_UI_BUTTON);
@@ -755,8 +805,16 @@ impl UI<'_> {
             width: column_width - a2.width,
             height: a2.height,
         };
-        d.draw_text_rec(font, text, centre_text_rec(font, text, 50.0, 0.0, trec), 50.0, 0.0, false, Color::BLACK);
-        
+        d.draw_text_rec(
+            font,
+            text,
+            centre_text_rec(font, text, 50.0, 0.0, trec),
+            50.0,
+            0.0,
+            false,
+            Color::BLACK,
+        );
+
         let mut a3 = self.settings_elements["AI 3"];
         a3.y += self.scroll_offset_settings;
         d.draw_rectangle_rec(a3, COLOUR_UI_BUTTON);
@@ -772,7 +830,7 @@ impl UI<'_> {
                 COLOUR_UI_RADIAL,
             )
         }
-        
+
         let text = "3";
         let trec = Rectangle {
             x: a3.x - column_width + button_side,
@@ -780,7 +838,15 @@ impl UI<'_> {
             width: column_width - a3.width,
             height: a3.height,
         };
-        d.draw_text_rec(font, text, centre_text_rec(font, text, 50.0, 0.0, trec), 50.0, 0.0, false, Color::BLACK);
+        d.draw_text_rec(
+            font,
+            text,
+            centre_text_rec(font, text, 50.0, 0.0, trec),
+            50.0,
+            0.0,
+            false,
+            Color::BLACK,
+        );
 
         let mut ai = self.settings_elements["AI Settings"];
         ai.y += self.scroll_offset_settings;
@@ -798,10 +864,18 @@ impl UI<'_> {
         let mut tbox = self.settings_elements["AI Max Sims"];
         tbox.y += self.scroll_offset_settings;
         d.draw_rectangle_rec(tbox, COLOUR_UI_BUTTON);
-        let text = format!("{}{}", self.state["Max Sims"], if state.typing == TextBox::MaxSims { "_" } else { "" });
-        
+        let text = format!(
+            "{}{}",
+            self.state["Max Sims"],
+            if state.typing == Textbox::MaxSims {
+                "_"
+            } else {
+                ""
+            }
+        );
+
         d.draw_text_rec(font, &text, tbox, 50.0, 0.0, false, Color::BLACK);
-        
+
         let trec = Rectangle {
             x: trec.x,
             y: trec.y + 100.0,
@@ -813,8 +887,15 @@ impl UI<'_> {
         let mut tbox = self.settings_elements["AI Max Time"];
         tbox.y += self.scroll_offset_settings;
         d.draw_rectangle_rec(tbox, COLOUR_UI_BUTTON);
-        let text = format!("{}{}", self.state["Max Time"], if state.typing == TextBox::MaxTime { "_" } else { "" });
+        let text = format!(
+            "{}{}",
+            self.state["Max Time"],
+            if state.typing == Textbox::MaxTime {
+                "_"
+            } else {
+                ""
+            }
+        );
         d.draw_text_rec(font, &text, tbox, 50.0, 0.0, false, Color::BLACK);
-
     }
 }

@@ -12,34 +12,52 @@ use super::node::MonteCarloNode;
 
 #[derive(Debug, Clone, Copy)]
 pub enum MonteCarloPolicy {
+    /// Largest number of simulations
     Robust,
+    /// Highest total value
     Maximum,
+    /// Lowest number of simulations
     Frail,
+    /// Lowest total value
     Minimum,
+    /// A random move
     Random,
+    /// Highest UCB1 value
     UCB1,
 }
 
 /// A struct to govern the settings of the AI
 #[derive(Debug, Clone)]
 pub struct MonteCarloSettings {
+    /// The game that is being evaluated
     pub game: Game,
+    /// The maximum time allowed for calculation
     pub timeout: Duration,
+    /// The maximum number of simulations allowed for calculation
     pub max_sims: usize,
+    /// The exploration factor for the UCB1 algorithm
     pub exploration_factor: f32,
+    /// The player for which the move should be optimised
     pub opt_for: Turn,
+    /// Whether the tree should carry forward (unused)
     pub carry_forward: bool,
+    /// The policy with which the move should be selected
     pub policy: MonteCarloPolicy,
 }
 
+/// The Monte Carlo manager struct
 #[derive(Debug)]
 pub struct MonteCarloManager {
+    /// The game that is being evaluated
     pub g: Game,
+    /// The game tree
     pub tree: Tree<MonteCarloNode>,
+    /// The number of simulations that have been run
     pub sims: usize,
 }
 
 impl MonteCarloManager {
+    /// Constructor function
     pub fn new(g: Game, t: Turn) -> MonteCarloManager {
         let moves_count = &g.legal_moves().len();
         MonteCarloManager {
@@ -49,8 +67,8 @@ impl MonteCarloManager {
         }
     }
 
+    /// Selects the next move for simulation
     pub fn select(&mut self, exploration_factor: f32, opt_for: Turn) -> Option<NodeId> {
-        // print_ego_tree(&self.tree, |x| format!("{:?}", x.value().play));
         let mut plays = 0;
         let mut current_node_id = self.tree.root().id();
         let mut current_node = self.tree.get(current_node_id).unwrap();
@@ -59,6 +77,7 @@ impl MonteCarloManager {
             let chn = current_node.children();
             let moves = self.g.legal_moves().len();
 
+            // Break if a terminal node or node that has not beenm fully expanded is selected
             if current_node.children().count() < moves
                 || current_node.value().child_count == 0
                 || self.g.board.check() != Value::None
@@ -69,8 +88,7 @@ impl MonteCarloManager {
             let mut best_node_ids: Vec<NodeId> = vec![];
             let mut best_score = f32::MIN;
 
-            // assert_eq!(moves, current_node.value().child_count);
-
+            // Calculate the child(ren) with the highest UCB1 value
             for node in chn {
                 let val = node.value();
                 let ucb1 = val.ucb1(exploration_factor, current_node.value().playouts, opt_for);
@@ -82,6 +100,7 @@ impl MonteCarloManager {
                 }
             }
 
+            // Choose a random next best node
             current_node_id = fastrand::choice(best_node_ids).unwrap();
             current_node = self.tree.get(current_node_id).unwrap();
 
@@ -89,13 +108,9 @@ impl MonteCarloManager {
                 Ok(_) => plays += 1,
                 Err(_) => panic!(),
             }
-
-            // eprintln!("Select Loop:");
-            // eprintln!("Node {:?}", current_node_id);
-            // eprintln!("Player: {:#?}, val: [N/A]", opt_for);
-            // eprintln!("{:?}", self.g.board.check());
-            // eprintln!("{}", self.g.board.dbg_repr());
         }
+
+        // Unplay each move made
         for _ in 0..plays {
             match self.g.unplay() {
                 Ok(_) => {}
@@ -103,6 +118,7 @@ impl MonteCarloManager {
             }
         }
 
+        // Return the selected node
         Some(current_node_id)
     }
 
@@ -111,30 +127,27 @@ impl MonteCarloManager {
 
         let mut count = 0;
 
+        // Play each move preceeding the selected node
         for x in node.ancestors().collect::<Vec<_>>().iter().rev().skip(1) {
             match self.g.play(&x.value().play) {
                 Ok(_) => count += 1,
                 Err(_) => panic!(),
             }
         }
-
+        
+        // Play the move of the selected node
         if !node.value().play.is_empty() {
             match self.g.play(&node.value().play) {
                 Ok(_) => count += 1,
                 Err(_) => panic!(),
             }
         }
-
+        
+        // Filter off each move that has not yet been expanded
         let mut moves = self.g.legal_moves();
         moves.retain(|x| !node.children().any(|a| &a.value().play == x));
-
-        // eprintln!("Expansion:");
-        // eprintln!("Node {:?}", node_id);
-        // eprintln!("Player: {:#?}, val: [N/A]", opt_for);
-        // eprintln!("Moves: {:?}", moves);
-        // eprintln!("{:?}", self.g.board.check());
-        // eprintln!("{}", self.g.board.dbg_repr());
-
+        
+        // If all moves are expanded, or the node is terminal, return the node
         if moves.is_empty() || self.g.board.check() != Value::None {
             for _ in 0..count {
                 match self.g.unplay() {
@@ -144,37 +157,41 @@ impl MonteCarloManager {
             }
             return node_id;
         }
-
+        
+        // Choose a random remaining move and play it
         let play = fastrand::choice(moves).unwrap();
-
         self.g.play(&play).unwrap();
         count += 1;
-
+        
         let moves_count = self.g.legal_moves().len();
 
         for _ in 0..count {
             self.g.unplay().unwrap()
         }
-
+        
         let new_turn = !self.tree.get(node_id).unwrap().value().turn;
         let mut node_mut = self.tree.get_mut(node_id).unwrap();
-
+        
+        // Append the new child and return it
         let out = node_mut
-            .append(MonteCarloNode {
-                play,
-                playouts: 0.0,
-                score: 0.0,
-                child_count: moves_count,
-                turn: new_turn,
-            })
-            .id();
-
-        out
+        .append(MonteCarloNode {
+            play,
+            playouts: 0.0,
+            score: 0.0,
+            child_count: moves_count,
+            turn: new_turn,
+        })
+        .id();
+    
+    out
     }
 
+    /// Runs a playout on the selected node
     pub fn simulate(&mut self, node_id: NodeId, opt_for: Turn) -> (NodeId, f32) {
         let node = self.tree.get(node_id).unwrap();
-
+        
+        
+        // Play each move preceeding the selected node
         let mut count = 0;
         for x in node.ancestors().collect::<Vec<_>>().iter().rev() {
             if !x.value().play.is_empty() {
@@ -186,35 +203,25 @@ impl MonteCarloManager {
             }
         }
 
+        // Play the move of the selected node
         match self.g.play(&node.value().play) {
             Ok(_) => count += 1,
             Err(_) => panic!(),
         }
 
-        // eprintln!("Simulation (before loop):");
-        // eprintln!("Node {:?}", node_id);
-        // eprintln!("Player: {:#?}, val: [N/A]", opt_for);
-        // eprintln!("{:?}", self.g.board.check());
-        // eprintln!("{}", self.g.board.dbg_repr());
-
+        // Repeatedly play moves until a terminal state is reached
         while self.g.board.check() == Value::None {
             self.g
                 .play(fastrand::choice(self.g.legal_moves().iter()).unwrap())
                 .unwrap();
             count += 1;
-            // eprintln!("Simulation (in loop):");
-            // eprintln!("Node {:?}", node_id);
-            // eprintln!("Player: {:#?}, val: [N/A]", opt_for);
-            // eprintln!("{:?}", self.g.board.check());
-            // eprintln!("{}", self.g.board.dbg_repr());
         }
-
-        assert_ne!(self.g.board.check(), Value::None);
 
         let mut node_mut = self.tree.get_mut(node_id).unwrap();
 
-        node_mut.value().playouts += 1.0;
+        // Adjust the value of the node based on the playout result
 
+        node_mut.value().playouts += 1.0;
         let val = if self.g.board.check() == opt_for.val() {
             1.0
         } else if self.g.board.check() == Value::Draw {
@@ -224,22 +231,20 @@ impl MonteCarloManager {
         };
         node_mut.value().score += val;
 
-        // eprintln!("Simulation (after loop):");
-        // eprintln!("Node {:?}", node_id);
-        // eprintln!("Player: {:#?}, val: {}", opt_for, val);
-        // eprintln!("{:?}", self.g.board.check());
-        // eprintln!("{}", self.g.board.dbg_repr());
-
+        // Unplay all moves made
         for _ in 0..count {
             self.g.unplay().unwrap()
         }
 
+        // Return the node, and the simulation result
         (node_mut.id(), val)
     }
 
+    /// Propogates the value up the tree
     pub fn backpropogate(&mut self, node_id: NodeId, val: f32) {
         let node = self.tree.get(node_id).unwrap();
 
+        // Loop over each parent node of the selected node
         for ancestor in node
             .ancestors()
             .map(|x| x.id())
@@ -247,12 +252,14 @@ impl MonteCarloManager {
             .iter()
             .rev()
         {
+            // Adjust the value of the parent node
             let mut anode = self.tree.get_mut(*ancestor).unwrap();
             anode.value().playouts += 1.0;
             anode.value().score += val;
         }
     }
 
+    /// Return the best move based on the selected policy
     pub fn best(
         &mut self,
         policy: MonteCarloPolicy,

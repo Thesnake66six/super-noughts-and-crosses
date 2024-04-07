@@ -1,4 +1,3 @@
-//----------// Symbol rendering functions //----------//
 
 use std::f32::consts::SQRT_2;
 
@@ -12,36 +11,51 @@ use raylib::{
 
 use crate::{game::Turn, monte_carlo::message::Message, styles::*};
 
+//----------// Miscelaneous structs //----------//
+
 #[derive(PartialEq, Clone, Copy)]
 /// An enum used to represent the legal moves in the `Game` draw function
-///
-/// Pos(&usize): The relative coordinates of the legal board.
-/// None: There are no legal moves below this point.
-/// ForceDefaultBg: Forces the default board background colour (`COLOUR_BOUARD_BG`).
 pub enum Legal<'a> {
+    /// The relative coordinates of the legal board
     Pos(&'a [usize]),
+    /// There are no legal moves below this point.
     None,
+    /// Forces the default board background colour (`COLOUR_BOUARD_BG`).
     ForceDefaultBg,
 }
 
 pub struct State {
+    /// Declares whether, if right-click is held, the game should be panned
     pub good_right_click: bool,
+    /// Stores the position of the mouse last frame
     pub mouse_prev: Vector2,
+    /// Stores whether the main thread is waiting for a move
     pub waiting_for_move: bool,
+    /// Stores a queue of messages to be sent to the AI thread
     pub message_queue: Vec<Message>,
+    /// Stores a list of the incoming moves from the AI thread
     pub move_queue: Vec<Vec<usize>>,
+    /// Stores how long the incoming response should be delayed by
     pub response_time: f32,
+    /// Stores whether the fps should be displayed
     pub show_fps: bool,
-    pub typing: TextBox,
+    /// Stores the current textbox that text is being entered into
+    pub typing: Textbox,
+    /// Stores whether previous attempts to export a game have been successful
     pub can_export: bool,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum TextBox {
+pub enum Textbox {
+    /// The Max Sims textbox
     MaxSims,
+    /// The Max Time textbox
     MaxTime,
+    /// No textbox selected
     None,
 }
+
+//----------// Symbol rendering functions //----------//
 
 /// Draws a cross (`Cell::Player1` or `Value::Player1`) into the given rectangle 'rect' onto `d`.
 pub fn draw_cross<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
