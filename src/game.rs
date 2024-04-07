@@ -8,7 +8,7 @@ use raylib::{
     prelude::Vector2,
 };
 
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 use crate::{
     board::Board,
@@ -266,7 +266,7 @@ impl Game {
             .legal_moves(&self.legal)
     }
 
-    /// Wrapper function 
+    /// Wrapper function
     pub fn get_cell_from_pixel(&self, point: Vector2, no_check: bool) -> Option<Vec<usize>> {
         self.board.get_cell_from_pixel(point, no_check)
     }

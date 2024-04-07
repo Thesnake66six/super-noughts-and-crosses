@@ -11,7 +11,7 @@ pub enum Message {
     /// Requests the confidence values for each move
     GetThoughts(),
 
-    /// Sends a move 
+    /// Sends a move
     Move(Vec<usize>),
 
     /// Stops the calculation of a move

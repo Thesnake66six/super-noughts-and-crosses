@@ -61,7 +61,6 @@ pub const DEFAULT_MAX_TIME: usize = 10;
 /// The default value for `Max Time`
 pub const COMPUTER_RESPONSE_DELAY: f32 = 0.1;
 
-
 //----------// Constants determining the properties of the camera //----------//
 
 /// Governs how fast the camera moves when panning.
@@ -106,7 +105,6 @@ pub const NOUGHT_THICK: f32 = 0.15;
 
 /// The fractional padding between the ring of the nought and the edge of the cell
 pub const NOUGHT_PADDING: f32 = 0.05;
-
 
 //----------// Constants of colours used in rendering the UI //----------//
 

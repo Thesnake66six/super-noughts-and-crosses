@@ -134,7 +134,7 @@ impl MonteCarloManager {
                 Err(_) => panic!(),
             }
         }
-        
+
         // Play the move of the selected node
         if !node.value().play.is_empty() {
             match self.g.play(&node.value().play) {
@@ -142,11 +142,11 @@ impl MonteCarloManager {
                 Err(_) => panic!(),
             }
         }
-        
+
         // Filter off each move that has not yet been expanded
         let mut moves = self.g.legal_moves();
         moves.retain(|x| !node.children().any(|a| &a.value().play == x));
-        
+
         // If all moves are expanded, or the node is terminal, return the node
         if moves.is_empty() || self.g.board.check() != Value::None {
             for _ in 0..count {
@@ -157,40 +157,39 @@ impl MonteCarloManager {
             }
             return node_id;
         }
-        
+
         // Choose a random remaining move and play it
         let play = fastrand::choice(moves).unwrap();
         self.g.play(&play).unwrap();
         count += 1;
-        
+
         let moves_count = self.g.legal_moves().len();
 
         for _ in 0..count {
             self.g.unplay().unwrap()
         }
-        
+
         let new_turn = !self.tree.get(node_id).unwrap().value().turn;
         let mut node_mut = self.tree.get_mut(node_id).unwrap();
-        
+
         // Append the new child and return it
         let out = node_mut
-        .append(MonteCarloNode {
-            play,
-            playouts: 0.0,
-            score: 0.0,
-            child_count: moves_count,
-            turn: new_turn,
-        })
-        .id();
-    
-    out
+            .append(MonteCarloNode {
+                play,
+                playouts: 0.0,
+                score: 0.0,
+                child_count: moves_count,
+                turn: new_turn,
+            })
+            .id();
+
+        out
     }
 
     /// Runs a playout on the selected node
     pub fn simulate(&mut self, node_id: NodeId, opt_for: Turn) -> (NodeId, f32) {
         let node = self.tree.get(node_id).unwrap();
-        
-        
+
         // Play each move preceeding the selected node
         let mut count = 0;
         for x in node.ancestors().collect::<Vec<_>>().iter().rev() {
