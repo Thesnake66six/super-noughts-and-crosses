@@ -8,6 +8,8 @@ use raylib::{
     prelude::Vector2,
 };
 
+use serde::{Serialize, Deserialize};
+
 use crate::{
     board::Board,
     cell::{Cell, Value},
@@ -25,7 +27,7 @@ impl Deref for Move {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Turn {
     Player1,
     Player2,
@@ -50,10 +52,11 @@ impl Not for Turn {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Game {
     /// The rectange in which the board is rendered to the camera
     pub rect: Rectangle,
+    #[serde(skip)]
     /// The camera
     pub camera: Camera2D,
     /// The top level board

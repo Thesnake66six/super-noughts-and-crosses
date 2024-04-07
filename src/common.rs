@@ -29,8 +29,18 @@ pub struct State {
     pub mouse_prev: Vector2,
     pub waiting_for_move: bool,
     pub message_queue: Vec<Message>,
+    pub move_queue: Vec<Vec<usize>>,
     pub response_time: f32,
     pub show_fps: bool,
+    pub typing: TextBox,
+    pub can_export: bool,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum TextBox {
+    MaxSims,
+    MaxTime,
+    None,
 }
 
 /// Draws a cross (`Cell::Player1` or `Value::Player1`) into the given rectangle 'rect' onto `d`.

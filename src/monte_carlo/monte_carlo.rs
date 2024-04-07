@@ -276,7 +276,7 @@ impl MonteCarloManager {
                 if let Some(id) = best_id {
                     Some(self.tree.get(id).unwrap().value().play.clone())
                 } else {
-                    None
+                    fastrand::choice(self.g.legal_moves())
                 }
             }
             MonteCarloPolicy::Maximum => {

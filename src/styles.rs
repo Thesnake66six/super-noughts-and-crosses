@@ -44,11 +44,14 @@ pub const UI_SCROLL_SPEED: f32 = 35.0;
 /// Specifies the default depth of a board
 pub const BOARD_DEFAULT_DEPTH: usize = 2;
 
+/// Specifies the default number of players
+pub const BOARD_DEFAULT_PLAYERS: usize = 2;
+
 //----------// Constants determining default AI settings //----------//
 
 pub const DEFAULT_EXPLORATION_FACTOR: f32 = SQRT_2 / 2.0;
 pub const DEFAULT_MOVE_TIMEOUT: f32 = 30.0;
-pub const DEFAULT_MAX_SIMS: usize = 10000;
+pub const DEFAULT_MAX_SIMS: usize = 100;
 
 //----------// Constants determining the properties of the camera //----------//
 
@@ -98,7 +101,7 @@ pub const NOUGHT_PADDING: f32 = 0.05;
 //----------// Constants of colours used in rendering the UI //----------//
 
 /// The time between the computer making a move
-pub const COMPUTER_RESPONSE_DELAY: f32 = 0.0;
+pub const COMPUTER_RESPONSE_DELAY: f32 = 0.1;
 
 //----------// Constants of colours used in rendering the UI //----------//
 
@@ -120,6 +123,9 @@ pub const COLOUR_UI_BUTTON: Color = Color {
     b: 150,
     a: 255,
 };
+
+/// Foreground colour of a UI radial
+pub const COLOUR_UI_RADIAL: Color = Color::BLACK;
 
 /// Colour of the divider between the navbar and the tab content
 pub const COLOUR_UI_DIVIDER: Color = Color::BLACK;

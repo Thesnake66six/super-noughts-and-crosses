@@ -1,5 +1,6 @@
 use anyhow::{bail, Ok, Result};
 use raylib::{core::math::Rectangle, prelude::*};
+use serde::{Deserialize, Serialize};
 
 use crate::{
     cell::{Cell, Value},
@@ -8,7 +9,7 @@ use crate::{
     styles::*,
 };
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Board {
     pub cells: Vec<Cell>,
     pub cell_positions: Vec<Rectangle>,

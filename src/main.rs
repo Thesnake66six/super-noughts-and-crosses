@@ -284,7 +284,7 @@ fn main() -> Result<()> {
     );
 
     // Create the game
-    let mut g = Game::new_depth(get_board_rect(BOARD_DEFAULT_DEPTH), BOARD_DEFAULT_DEPTH, 1);
+    let mut g = Game::new_depth(get_board_rect(BOARD_DEFAULT_DEPTH), BOARD_DEFAULT_DEPTH, BOARD_DEFAULT_PLAYERS);
 
     // Create the ui
     let mut ui = UI::new();
@@ -301,9 +301,10 @@ fn main() -> Result<()> {
         waiting_for_move: false,
         response_time: COMPUTER_RESPONSE_DELAY,
         message_queue: vec![],
+        move_queue: vec![],
+        typing: TextBox::None,
+        can_export: true,
     };
-
-    let mut response_time = COMPUTER_RESPONSE_DELAY;
 
     // Centre
     g.centre_camera(game_rect);
@@ -316,7 +317,7 @@ fn main() -> Result<()> {
         //----------// Handle input //----------//
 
         let hovered_cell = handle_input(
-            &rl,
+            &mut rl,
             &mut game_rect,
             &mut ui_rect,
             &mut ui,
@@ -324,18 +325,14 @@ fn main() -> Result<()> {
             &mut state,
         );
 
-        if g.turn == Turn::Player2
-            && g.board.check() == Value::None
-            && g.players == 1
-            && !state.waiting_for_move
+        if (g.players == 0 || (g.players == 1 && g.turn == Turn::Player2)) && g.board.check() == Value::None && !state.waiting_for_move
         {
-            // if g.board.check() == Value::None && g.players == 1 && !state.waiting_for_move {
             state.message_queue.insert(
                 state.message_queue.len(),
                 Message::Start(MonteCarloSettings {
                     game: g.clone(),
-                    timeout: Duration::from_secs(DEFAULT_MOVE_TIMEOUT as u64),
-                    max_sims: DEFAULT_MAX_SIMS,
+                    timeout: Duration::from_secs(ui.state["Max Time"] as u64),
+                    max_sims: ui.state["Max Sims"],
                     exploration_factor: DEFAULT_EXPLORATION_FACTOR,
                     opt_for: g.turn,
                     carry_forward: false,
@@ -348,21 +345,30 @@ fn main() -> Result<()> {
         for message in state.message_queue.drain(0..state.message_queue.len()) {
             tx.send(message).unwrap();
         }
-
+        
         let mv = rx.try_recv();
         match mv {
             Ok(mv) => {
                 if state.waiting_for_move {
                     if let Some(y) = mv {
-                        g.play(&y).unwrap();
+                        state.move_queue.insert(0, y);
+                        println!("{:?}", state.move_queue)
                     }
-                    state.waiting_for_move = false;
                 }
             }
             Err(e) => match e {
                 mpsc::TryRecvError::Empty => {}
                 mpsc::TryRecvError::Disconnected => panic!("Thread disconnected"),
             },
+        }
+        
+        if state.response_time <= 0.0 {
+            if let Some(mv) = state.move_queue.pop() {
+                println!("Some move");
+                dbg!(&state.move_queue);
+                g.play(&mv).unwrap();
+                state.waiting_for_move = false;
+            }
         }
 
         let mut d = rl.begin_drawing(&thread);
@@ -377,15 +383,15 @@ fn main() -> Result<()> {
             hovered_cell.as_deref(),
         );
 
-        ui.draw(ui_rect, &mut d, &g, &font_50pt);
+        ui.draw(ui_rect, &mut d, &g, &font_50pt, &state);
 
         if state.show_fps {
             d.draw_fps(10, 10);
         }
 
-        response_time -= delta;
-        if response_time < 0.0 {
-            response_time = 0.0
+        state.response_time -= delta;
+        if state.response_time < 0.0 {
+            state.response_time = 0.0
         }
     }
 
@@ -393,7 +399,7 @@ fn main() -> Result<()> {
 }
 
 fn handle_input(
-    rl: &RaylibHandle,
+    rl: &mut RaylibHandle,
     game_rect: &mut Rectangle,
     ui_rect: &mut Rectangle,
     ui: &mut UI<'_>,
@@ -493,10 +499,22 @@ fn handle_input(
     }
 
     if rl.is_key_pressed(KeyboardKey::KEY_BACKSPACE) {
-        let _ = g.unplay();
-        state
-            .message_queue
-            .insert(state.message_queue.len(), Message::Interrupt)
+        match state.typing {
+            TextBox::MaxSims => {
+                let x = ui.state.get_mut("Max Sims").unwrap();
+                *x /= 10;
+            },
+            TextBox::MaxTime => {
+                let x = ui.state.get_mut("Max Time").unwrap();
+                *x /= 10;
+            },
+            TextBox::None => {
+                let _ = g.unplay();
+                state
+                    .message_queue
+                    .insert(state.message_queue.len(), Message::Interrupt)
+            },
+        }
     }
 
     if rl.is_key_pressed(KeyboardKey::KEY_SLASH)
@@ -526,6 +544,199 @@ fn handle_input(
         }
     }
 
+    if rl.is_key_pressed(KeyboardKey::KEY_ZERO) || rl.is_key_pressed(KeyboardKey::KEY_KP_0){
+        match state.typing {
+            TextBox::MaxSims => {
+                let x = ui.state.get_mut("Max Sims").unwrap();
+                *x *= 10;
+            },
+            TextBox::MaxTime => {
+                let x = ui.state.get_mut("Max Time").unwrap();
+                *x *= 10;
+            },
+            TextBox::None => {},
+        }
+    }
+    if rl.is_key_pressed(KeyboardKey::KEY_ONE)  || rl.is_key_pressed(KeyboardKey::KEY_KP_1){
+        match state.typing {
+            TextBox::MaxSims => {
+                let x = ui.state.get_mut("Max Sims").unwrap();
+                *x *= 10;
+                *x += 1
+            },
+            TextBox::MaxTime => {
+                let x = ui.state.get_mut("Max Time").unwrap();
+                *x *= 10;
+                *x += 1
+            },
+            TextBox::None => {},
+        }
+    }
+    if rl.is_key_pressed(KeyboardKey::KEY_TWO)  || rl.is_key_pressed(KeyboardKey::KEY_KP_2){
+        match state.typing {
+            TextBox::MaxSims => {
+                let x = ui.state.get_mut("Max Sims").unwrap();
+                *x *= 10;
+                *x += 2
+            },
+            TextBox::MaxTime => {
+                let x = ui.state.get_mut("Max Time").unwrap();
+                *x *= 10;
+                *x += 2
+            },
+            TextBox::None => {},
+        }
+    }
+    if rl.is_key_pressed(KeyboardKey::KEY_THREE)  || rl.is_key_pressed(KeyboardKey::KEY_KP_3){
+        match state.typing {
+            TextBox::MaxSims => {
+                let x = ui.state.get_mut("Max Sims").unwrap();
+                *x *= 10;
+                *x += 3
+            },
+            TextBox::MaxTime => {
+                let x = ui.state.get_mut("Max Time").unwrap();
+                *x *= 10;
+                *x += 3
+            },
+            TextBox::None => {},
+        }
+    }
+    if rl.is_key_pressed(KeyboardKey::KEY_FOUR)  || rl.is_key_pressed(KeyboardKey::KEY_KP_4){
+        match state.typing {
+            TextBox::MaxSims => {
+                let x = ui.state.get_mut("Max Sims").unwrap();
+                *x *= 10;
+                *x += 4
+            },
+            TextBox::MaxTime => {
+                let x = ui.state.get_mut("Max Time").unwrap();
+                *x *= 10;
+                *x += 4
+            },
+            TextBox::None => {},
+        }
+    }
+    if rl.is_key_pressed(KeyboardKey::KEY_FIVE)  || rl.is_key_pressed(KeyboardKey::KEY_KP_5){
+        match state.typing {
+            TextBox::MaxSims => {
+                let x = ui.state.get_mut("Max Sims").unwrap();
+                *x *= 10;
+                *x += 5
+            },
+            TextBox::MaxTime => {
+                let x = ui.state.get_mut("Max Time").unwrap();
+                *x *= 10;
+                *x += 5
+            },
+            TextBox::None => {},
+        }
+    }
+    if rl.is_key_pressed(KeyboardKey::KEY_SIX)  || rl.is_key_pressed(KeyboardKey::KEY_KP_6) {
+        match state.typing {
+            TextBox::MaxSims => {
+                let x = ui.state.get_mut("Max Sims").unwrap();
+                *x *= 10;
+                *x += 6
+            },
+            TextBox::MaxTime => {
+                let x = ui.state.get_mut("Max Time").unwrap();
+                *x *= 10;
+                *x += 6
+            },
+            TextBox::None => {},
+        }
+    }
+    if rl.is_key_pressed(KeyboardKey::KEY_SEVEN)  || rl.is_key_pressed(KeyboardKey::KEY_KP_7){
+        match state.typing {
+            TextBox::MaxSims => {
+                let x = ui.state.get_mut("Max Sims").unwrap();
+                *x *= 10;
+                *x += 7
+            },
+            TextBox::MaxTime => {
+                let x = ui.state.get_mut("Max Time").unwrap();
+                *x *= 10;
+                *x += 7
+            },
+            TextBox::None => {},
+        }
+    }
+    if rl.is_key_pressed(KeyboardKey::KEY_EIGHT)  || rl.is_key_pressed(KeyboardKey::KEY_KP_8){
+        match state.typing {
+            TextBox::MaxSims => {
+                let x = ui.state.get_mut("Max Sims").unwrap();
+                *x *= 10;
+                *x += 8
+            },
+            TextBox::MaxTime => {
+                let x = ui.state.get_mut("Max Time").unwrap();
+                *x *= 10;
+                *x += 8
+            },
+            TextBox::None => {},
+        }
+    }
+    if rl.is_key_pressed(KeyboardKey::KEY_NINE)  || rl.is_key_pressed(KeyboardKey::KEY_KP_9){
+        match state.typing {
+            TextBox::MaxSims => {
+                let x = ui.state.get_mut("Max Sims").unwrap();
+                *x *= 10;
+                *x += 9
+            },
+            TextBox::MaxTime => {
+                let x = ui.state.get_mut("Max Time").unwrap();
+                *x *= 10;
+                *x += 9
+            },
+            TextBox::None => {},
+        }
+    }
+
+    if rl.is_file_dropped() {
+        let paths = rl.get_dropped_files();
+        let path = paths.last().unwrap();
+        let json = fs::read(path).unwrap();
+        match serde_json::from_slice::<Game>(&json) {
+            Ok(new_game) => {
+                
+
+            // Game {
+            //     rect,
+            //     camera: Camera2D {
+            //         zoom: 1.0,
+            //         ..Default::default()
+            //     },
+            //     board: Board::new_depth(depth),
+            //     depth,
+            //     turn: Turn::Player1,
+            //     players,
+            //     moves: [].into(),
+            //     legal: vec![],
+            // }
+                *g = Game {
+                    rect: new_game.rect,
+                    camera: Camera2D {
+                        zoom: 1.0,
+                        ..Default::default()
+                    },
+                    board: new_game.board,
+                    depth: new_game.depth,
+                    turn: new_game.turn,
+                    players: new_game.players,
+                    moves: new_game.moves,
+                    legal: new_game.legal,
+                };
+                g.update_positions();
+                g.centre_camera(*game_rect);
+            },
+            Err(_) => {
+                println!("Could not read game from file")
+            },
+        }
+        rl.clear_dropped_files();
+    }   
+
     hovered_cell
 }
 
@@ -540,6 +751,7 @@ fn handle_click(
     hovered_cell: &Option<Vec<usize>>,
 ) {
     if rl.is_mouse_button_pressed(MouseButton::MOUSE_LEFT_BUTTON) {
+        state.typing = TextBox::None;
         if ui_rect.check_collision_point_rec(mouse_pos) {
             // This means that the mouse click was in the UI.
             // Oh boy, get ready
@@ -553,12 +765,27 @@ fn handle_click(
                 // If the tab content was clicked...
                 match ui.tab {
                     UITab::Game => {
-                        // Nothing, yet
+                        // Export the game to a file if Export is clicked
+                        if ui.game_elements["Export"].check_collision_point_rec(mouse_pos) {
+                            let game_serial = serde_json::to_string(g).unwrap();
+                            let _ = fs::create_dir("./exports");
+                            let filename = &format!("{:x}", md5::compute(game_serial.clone()))[..16];
+                            match fs::write(format!("./exports/{}", filename), game_serial) {
+                                Ok(_) => println!("Game exported as file \"./exports/{}.xo\"", filename),
+                                Err(_) => {
+                                    eprintln!("Game export failed");
+                                    state.can_export = false;
+                                },
+                            }
+                        }
+
                     }
                     UITab::Settings => {
                         // Account for scroll offset
-                        let offset = mouse_pos + ui.scroll_offset_settings;
-
+                        let offset = Vector2 {
+                            x: mouse_pos.x,
+                            y: mouse_pos.y - ui.scroll_offset_settings ,
+                        };
                         // Increment the depth if Depth Plus is clicked
                         if ui.settings_elements["Depth Plus"].check_collision_point_rec(offset) {
                             *ui.state.get_mut("Depth").unwrap() += 1;
@@ -573,40 +800,59 @@ fn handle_click(
                             };
 
                         // Set the player to 1 if Player 1 is clicked
-                        } else if ui.settings_elements["Player 1"].check_collision_point_rec(offset)
+                        } else if ui.settings_elements["0 Players"].check_collision_point_rec(offset)
+                        {
+                            *ui.state.get_mut("Players").unwrap() = 0;
+
+                        // Set the player to 1 if Player 1 is clicked
+                        } else if ui.settings_elements["1 Player"].check_collision_point_rec(offset)
                         {
                             *ui.state.get_mut("Players").unwrap() = 1;
 
                         // Set the player to 2 if Player 2 is clicked
-                        } else if ui.settings_elements["Player 2"].check_collision_point_rec(offset)
+                        } else if ui.settings_elements["2 Players"].check_collision_point_rec(offset)
                         {
                             *ui.state.get_mut("Players").unwrap() = 2;
 
                         // Start a new Game with the selected settings if New Game is clicked
                         } else if ui.settings_elements["New Game"].check_collision_point_rec(offset)
                         {
+                            // Stop any currently calculating moves
                             state
                                 .message_queue
                                 .insert(state.message_queue.len(), Message::Interrupt);
+                            // Stop waiting to recieve a move
                             state.waiting_for_move = false;
+                            // Set a new game based on the current UI state
                             *g = Game::new_depth(
                                 get_board_rect(ui.state["Depth"]),
                                 ui.state["Depth"],
                                 ui.state["Players"],
                             );
+                            // Re-inititalise the game
                             g.update_positions();
                             g.centre_camera(*game_rect);
                             g.camera.offset = Vector2 {
                                 x: game_rect.width / 2.0f32,
                                 y: game_rect.height,
                             };
+                        } else if ui.settings_elements["AI 1"].check_collision_point_rec(offset) {
+                            *ui.state.get_mut("AI Strength").unwrap() = 1;
+                        } else if ui.settings_elements["AI 2"].check_collision_point_rec(offset) {
+                            *ui.state.get_mut("AI Strength").unwrap() = 2;
+                        } else if ui.settings_elements["AI 3"].check_collision_point_rec(offset) {
+                            *ui.state.get_mut("AI Strength").unwrap() = 3;
+                        } else if ui.settings_elements["AI Max Sims"].check_collision_point_rec(offset) {
+                            state.typing = TextBox::MaxSims
+                        } else if ui.settings_elements["AI Max Time"].check_collision_point_rec(offset) {
+                            state.typing = TextBox::MaxTime
                         }
                     }
                 }
             }
         } else if let Some(ref cell) = *hovered_cell {
             // This means that the mouse click was in the game.
-            if g.players == 2 || g.turn == Turn::Player1 {
+            if g.players == 2 || (g.players == 1 && g.turn == Turn::Player1) {
                 let _ = g.play(cell);
                 state
                     .message_queue

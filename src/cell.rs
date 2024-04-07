@@ -1,4 +1,5 @@
 use raylib::{drawing::RaylibDraw, math::Rectangle};
+use serde::{Deserialize, Serialize};
 
 use crate::{board::Board, common::*, game::Turn, styles::*};
 
@@ -65,7 +66,7 @@ impl Value {
 }
 
 /// An enum used to differentiate the states of a cell.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum Cell {
     /// An empty cell
     None,
