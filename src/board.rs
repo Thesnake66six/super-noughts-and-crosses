@@ -262,7 +262,7 @@ impl Board {
         );
 
         let length = rect.width; // Side length of the board
-        let thickness = BOARD_LINE_THICK * rect.width; // Thickness of the lines in px
+        let thickness = BOARD_LINE_THICK * rect.width; // Thickness of the lines in pixels
 
         let column_size = (length - 2.0 * thickness) / 3.0;
         let g1 = column_size + 0.5 * thickness;

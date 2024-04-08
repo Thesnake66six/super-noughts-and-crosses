@@ -54,7 +54,7 @@ impl Not for Turn {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Game {
-    /// The rectange in which the board is rendered to the camera
+    /// The rectangle in which the board is rendered to the camera
     pub rect: Rectangle,
     #[serde(skip)]
     /// The camera

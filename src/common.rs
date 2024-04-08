@@ -10,7 +10,7 @@ use raylib::{
 
 use crate::{game::Turn, monte_carlo::message::Message, styles::*};
 
-//----------// Miscelaneous structs //----------//
+//----------// Miscellaneous structs //----------//
 
 #[derive(PartialEq, Clone, Copy)]
 /// An enum used to represent the legal moves in the `Game` draw function
@@ -133,7 +133,7 @@ pub fn draw_draw<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
     d.draw_rectangle_rec(target_rec, COLOUR_DRAW_FG);
 }
 
-//----------// Miscelaneous quick procedures //----------//
+//----------// Miscellaneous quick procedures //----------//
 
 /// Returns the correct colour for a greyed out cell.
 pub fn get_greyed_colour_cell(turn: Turn) -> Color {

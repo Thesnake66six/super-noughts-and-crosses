@@ -4,7 +4,7 @@ use raylib::color::Color;
 
 //----------// Constants determining debug settings //----------//
 
-/// Sets the default toggle psoition of the FPS counter
+/// Sets the default toggle position of the FPS counter
 pub const DEFAULT_SHOW_FPS_COUNTER: bool = false;
 
 /// Enables the FPS counter keybind
@@ -49,7 +49,7 @@ pub const BOARD_DEFAULT_PLAYERS: usize = 2;
 
 //----------// Constants determining default AI settings //----------//
 
-/// The default exploration fator for the `UCB1` function;
+/// The default exploration factor for the `UCB1` function;
 pub const DEFAULT_EXPLORATION_FACTOR: f32 = SQRT_2 / 2.0;
 
 /// The default value for `Max Sims`
@@ -94,7 +94,7 @@ pub const DO_COLOURED_GREYS: bool = false;
 /// The fractional width of the margin between the edge of the board and the cell.
 pub const BOARD_CELL_MARGIN: f32 = 0.02;
 
-/// The fractional thichness of the board lines.
+/// The fractional thickness of the board lines.
 pub const BOARD_LINE_THICK: f32 = 0.02;
 
 /// The fractional thickness of the lines in a cross symbol
@@ -186,10 +186,10 @@ pub const COLOUR_CROSS_FG: Color = Color {
     a: 255,
 };
 
-/// Specific backgorund colour of cross cells.
+/// Specific background colour of cross cells.
 pub const COLOUR_CROSS_BG: Color = COLOUR_CELL_BG;
 
-/// Specific transparrent backgorund colour of cross cells.
+/// Specific transparent background colour of cross cells.
 pub const COLOUR_CROSS_BGA: Color = Color {
     r: 230,
     g: 41,
@@ -215,10 +215,10 @@ pub const COLOUR_NOUGHT_FG: Color = Color {
     a: 255,
 };
 
-/// Specific backgorund colour of nought cells.
+/// Specific background colour of nought cells.
 pub const COLOUR_NOUGHT_BG: Color = COLOUR_CELL_BG;
 
-/// Specific transparrent backgorund colour of nought cells.
+/// Specific transparent background colour of nought cells.
 pub const COLOUR_NOUGHT_BGA: Color = Color {
     r: 49,
     g: 148,
@@ -244,10 +244,10 @@ pub const COLOUR_DRAW_FG: Color = Color {
     a: 255,
 };
 
-/// Specific backgorund colour of drawn cells.
+/// Specific background colour of drawn cells.
 pub const COLOUR_DRAW_BG: Color = COLOUR_CELL_BG;
 
-/// Specific transparrent backgorund colour of drawn cells.
+/// Specific transparent backgruond colour of drawn cells.
 pub const COLOUR_DRAW_BGA: Color = Color {
     r: 0,
     g: 0,
@@ -255,7 +255,7 @@ pub const COLOUR_DRAW_BGA: Color = Color {
     a: 127,
 };
 
-//-----// Miscelaneous //-----//
+//-----// Miscellaneous //-----//
 
 /// The overlay imposed upon a hovered cell
 pub const COLOUR_CELL_HOVER: Color = Color {

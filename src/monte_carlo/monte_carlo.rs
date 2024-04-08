@@ -77,7 +77,7 @@ impl MonteCarloManager {
             let chn = current_node.children();
             let moves = self.g.legal_moves().len();
 
-            // Break if a terminal node or node that has not beenm fully expanded is selected
+            // Break if a terminal node or node that has not been fully expanded is selected
             if current_node.children().count() < moves
                 || current_node.value().child_count == 0
                 || self.g.board.check() != Value::None
@@ -127,7 +127,7 @@ impl MonteCarloManager {
 
         let mut count = 0;
 
-        // Play each move preceeding the selected node
+        // Play each move preceding the selected node
         for x in node.ancestors().collect::<Vec<_>>().iter().rev().skip(1) {
             match self.g.play(&x.value().play) {
                 Ok(_) => count += 1,
@@ -190,7 +190,7 @@ impl MonteCarloManager {
     pub fn simulate(&mut self, node_id: NodeId, opt_for: Turn) -> (NodeId, f32) {
         let node = self.tree.get(node_id).unwrap();
 
-        // Play each move preceeding the selected node
+        // Play each move preceding the selected node
         let mut count = 0;
         for x in node.ancestors().collect::<Vec<_>>().iter().rev() {
             if !x.value().play.is_empty() {
@@ -239,7 +239,7 @@ impl MonteCarloManager {
         (node_mut.id(), val)
     }
 
-    /// Propogates the value up the tree
+    /// Propagates the value up the tree
     pub fn backpropogate(&mut self, node_id: NodeId, val: f32) {
         let node = self.tree.get(node_id).unwrap();
 

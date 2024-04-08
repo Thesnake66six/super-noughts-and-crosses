@@ -88,7 +88,7 @@ impl UI<'_> {
 
     /// A function that updates the elements hashmaps' values.
     ///
-    /// Called every frame before rendereing, so as to save on rl.get_screen_size() calls
+    /// Called every frame before rendering, so as to save on rl.get_screen_size() calls
     pub fn update_positions(&mut self, rect: Rectangle) {
         // Calculate the size of the padding in pixels
         let padding = UI_CONTENT_PADDING * rect.width;
@@ -316,9 +316,6 @@ impl UI<'_> {
             height: button_side,
         };
         *self.settings_elements.get_mut("AI Max Time").unwrap() = r;
-
-        //Do the same .. for max time, then add rendering, then add input routing (mian function)
-        // also add in handle click to change the active textbox
     }
 
     /// Draws the constant elements onto the screen
@@ -739,15 +736,6 @@ impl UI<'_> {
         d.draw_text_rec(font, text, text_rec, 50.0, 0.0, false, Color::BLACK);
 
         let column_width = (ai.width - 2.0 * padding) / 3.0;
-        // let text = "1";
-        // let text = "1";
-        // let trec = Rectangle {
-        //     x: ai.x + padding,
-        //     y: ai.y + 100.0 + padding,
-        //     width: column_width - button_side - padding,
-        //     height: button_side,
-        // };
-        // d.draw_text_rec(font, text, centre_text_rec(font, text, 50.0, 0.0, trec), 50.0, 0.0, false, Color::BLACK);
 
         let mut a1 = self.settings_elements["AI 1"];
         a1.y += self.scroll_offset_settings;

@@ -6,9 +6,9 @@ pub struct MonteCarloNode {
     pub play: Vec<usize>,
     /// The number of simulations where this move was made
     pub playouts: f32,
-    /// The score of simulatrions
+    /// The score of simulations
     pub score: f32,
-    /// The number of children the node has
+    /// The number of children that node will have once fully expanded
     pub child_count: usize,
     /// The turn for which the node's move is
     pub turn: Turn,

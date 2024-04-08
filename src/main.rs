@@ -426,7 +426,7 @@ fn handle_input(
         y: game_rect.height / 2.0,
     };
 
-    // Increment the zoom based of the mousewheel and mouse position
+    // Increment the zoom based of the mouse wheel and mouse position
     let x = rl.get_mouse_wheel_move();
     if ui_rect.check_collision_point_rec(mouse_pos) {
         // If the mouse is over the UI...
@@ -830,7 +830,7 @@ fn handle_click(
                             state
                                 .message_queue
                                 .insert(state.message_queue.len(), Message::Interrupt);
-                            // Stop waiting to recieve a move
+                            // Stop waiting to receive a move
                             state.waiting_for_move = false;
                             // Set a new game based on the current UI state
                             *g = Game::new_depth(
@@ -838,7 +838,7 @@ fn handle_click(
                                 ui.state["Depth"],
                                 ui.state["Players"],
                             );
-                            // Re-inititalise the game
+                            // Re-initialise the game
                             g.update_positions();
                             g.centre_camera(*game_rect);
                             g.camera.offset = Vector2 {
