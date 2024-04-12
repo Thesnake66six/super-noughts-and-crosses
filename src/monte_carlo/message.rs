@@ -6,13 +6,13 @@ pub enum Message {
     Start(MonteCarloSettings),
 
     /// Requests that the Monte Carlo thread return a move
-    GetMoveNow(),
+    Return(),
 
     /// Requests the confidence values for each move
     GetThoughts(),
 
     /// Sends a move
-    Move(Vec<usize>),
+    Move(Option<Vec<usize>>),
 
     /// Stops the calculation of a move
     Interrupt,

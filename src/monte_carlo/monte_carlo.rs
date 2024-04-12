@@ -26,8 +26,8 @@ pub enum MonteCarloPolicy {
     UCB1,
 }
 
-/// A struct to govern the settings of the AI
 #[derive(Debug, Clone)]
+/// A struct to govern the settings of the AI
 pub struct MonteCarloSettings {
     /// The game that is being evaluated
     pub game: Game,
@@ -45,8 +45,8 @@ pub struct MonteCarloSettings {
     pub policy: MonteCarloPolicy,
 }
 
-/// The Monte Carlo manager struct
 #[derive(Debug)]
+/// The Monte Carlo manager struct
 pub struct MonteCarloManager {
     /// The game that is being evaluated
     pub g: Game,
@@ -122,6 +122,7 @@ impl MonteCarloManager {
         Some(current_node_id)
     }
 
+    /// Adds a child node (where applicable) to the selected node
     pub fn expand(&mut self, node_id: NodeId) -> NodeId {
         let node = self.tree.get(node_id).unwrap();
 
@@ -289,7 +290,7 @@ impl MonteCarloManager {
                 let node = self.tree.root();
                 let mut best_score = 0.0;
                 let mut best_id = None;
-
+                
                 for child in node.children().map(|x| x.id()) {
                     let cnode = self.tree.get(child).unwrap();
                     if cnode.value().score(opt_for) >= best_score {
@@ -297,16 +298,16 @@ impl MonteCarloManager {
                         best_id = Some(cnode.id());
                     }
                 }
-
+                
                 if let Some(id) = best_id {
                     Some(self.tree.get(id).unwrap().value().play.clone())
                 } else {
-                    None
+                    fastrand::choice(self.g.legal_moves())
                 }
             }
-            MonteCarloPolicy::Frail => todo!(),
-            MonteCarloPolicy::Minimum => todo!(),
-            MonteCarloPolicy::Random => todo!(),
+            MonteCarloPolicy::Frail => unimplemented!(),
+            MonteCarloPolicy::Minimum => unimplemented!(),
+            MonteCarloPolicy::Random => unimplemented!(),
             // Don't use ever
             MonteCarloPolicy::UCB1 => {
                 let node = self.tree.root();

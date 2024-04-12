@@ -558,8 +558,12 @@ impl UI<'_> {
         // Draw the background
         d.draw_rectangle_rec(dp, COLOUR_UI_ELEMENT);
 
+        // Change the colour of the text based on the current depth
+        let colour = if self.state["Depth"] >= 6 {
+            Color::RED
+        } else { Color::BLACK };
         // Draw the current depth text
-        d.draw_text_rec(font, &text, text_rec, 50.0, 0.0, false, Color::BLACK);
+        d.draw_text_rec(font, &text, text_rec, 50.0, 0.0, false, colour);
 
         // Draw the buttons
         let mut brec = self.settings_elements["Depth Plus"];

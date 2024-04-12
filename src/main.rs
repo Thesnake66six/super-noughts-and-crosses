@@ -35,8 +35,8 @@ fn main() -> Result<()> {
     // Main thread comms with Noughbert
     let (tx_0, rx_0) = mpsc::sync_channel::<Message>(0);
 
-    // Noughbert comms witn main thread
-    let (tx_1, rx_1) = mpsc::sync_channel::<Option<Vec<usize>>>(1);
+    // Noughbert comms with main thread
+    let (tx_1, rx_1) = mpsc::sync_channel::<Message>(1);
 
     let spawn = thread::spawn(move || {
         let rx = rx_0;
@@ -55,7 +55,7 @@ fn main() -> Result<()> {
                 Message::Interrupt => continue,
                 Message::GetThoughts() => continue,
                 Message::Move(_) => continue,
-                Message::GetMoveNow() => continue,
+                Message::Return() => continue,
             };
 
             println!("Simulation requested");
@@ -63,6 +63,7 @@ fn main() -> Result<()> {
             let mut noughbert = MonteCarloManager::new(mc_options.game, mc_options.opt_for);
             let start_time = time::Instant::now();
             let mut interrupt = false;
+            let mut interrupt_return = true;
 
             assert_eq!(noughbert.g.board.check(), Value::None);
 
@@ -82,9 +83,12 @@ fn main() -> Result<()> {
                             interrupt = true;
                             break;
                         }
-                        Message::GetThoughts() => todo!(),
+                        Message::GetThoughts() => unimplemented!(),
                         Message::Move(_) => {}
-                        Message::GetMoveNow() => todo!(),
+                        Message::Return() => {
+                            interrupt_return = true;
+                            break
+                        },
                     },
                     Err(e) => match e {
                         mpsc::TryRecvError::Empty => {}
@@ -103,6 +107,8 @@ fn main() -> Result<()> {
             if interrupt {
                 println!("Exited due to interrupt request");
                 continue;
+            } else if interrupt_return {
+                println!("Exited due to return request")
             } else if noughbert.sims >= mc_options.max_sims {
                 println!("Exited due to simulation cap")
             } else if start_time.elapsed() >= mc_options.timeout {
@@ -110,7 +116,7 @@ fn main() -> Result<()> {
             } else {
                 println!("Exited due to complete game tree");
             }
-            println!("{} sims", noughbert.sims);
+            println!("Move selected after {} sims and {} seconds.", noughbert.sims, start_time.elapsed().as_secs_f32());
 
             // Assertions true
             // assert_eq!(noughbert.g.board, sgame.board);
@@ -123,7 +129,7 @@ fn main() -> Result<()> {
                 mc_options.exploration_factor,
             );
 
-            tx.send(best_play).unwrap();
+            tx.send(Message::Move(best_play)).unwrap();
             runs += 1;
 
             if OUTPUT_GRAPHVIS_FILES {
@@ -356,7 +362,7 @@ fn main() -> Result<()> {
         match mv {
             Ok(mv) => {
                 if state.waiting_for_move {
-                    if let Some(y) = mv {
+                    if let Message::Move(Some(y)) = mv {
                         state.move_queue.insert(0, y);
                         println!("{:?}", state.move_queue)
                     }
@@ -532,8 +538,8 @@ fn handle_input(
             state.message_queue.len(),
             Message::Start(MonteCarloSettings {
                 game: g.clone(),
-                timeout: Duration::from_secs(DEFAULT_MAX_TIME as u64),
-                max_sims: DEFAULT_MAX_SIMS,
+                timeout: Duration::from_secs(ui.state["Max Time"] as u64),
+                max_sims: ui.state["Max Sims"],
                 exploration_factor: DEFAULT_EXPLORATION_FACTOR,
                 opt_for: g.turn,
                 carry_forward: false,
@@ -706,19 +712,6 @@ fn handle_input(
         let json = fs::read(path).unwrap();
         match serde_json::from_slice::<Game>(&json) {
             Ok(new_game) => {
-                // Game {
-                //     rect,
-                //     camera: Camera2D {
-                //         zoom: 1.0,
-                //         ..Default::default()
-                //     },
-                //     board: Board::new_depth(depth),
-                //     depth,
-                //     turn: Turn::Player1,
-                //     players,
-                //     moves: [].into(),
-                //     legal: vec![],
-                // }
                 *g = Game {
                     rect: new_game.rect,
                     camera: Camera2D {
@@ -776,7 +769,7 @@ fn handle_click(
                             let _ = fs::create_dir("./exports");
                             let filename =
                                 &format!("{:x}", md5::compute(game_serial.clone()))[..16];
-                            match fs::write(format!("./exports/{}", filename), game_serial) {
+                            match fs::write(format!("./exports/{}.xo", filename), game_serial) {
                                 Ok(_) => {
                                     println!("Game exported as file \"./exports/{}.xo\"", filename)
                                 }

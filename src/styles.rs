@@ -83,13 +83,13 @@ pub const CAMERA_SCROLL_SPEED: f32 = 0.1;
 /// When false: illegal cells are chosen to be highlighted.
 ///
 /// When true: legal cells are chosen to be highlighted.
-pub const INVERT_GREYS: bool = true;
+pub const INVERT_GREYS: bool = false;
 
 /// Changes the colours with which 'greyed out' cells are rendered.
 ///
 ///
 /// When true: cells that should be 'greyed out' are instead coloured based on which player's turn it is.
-pub const DO_COLOURED_GREYS: bool = false;
+pub const DO_COLOURED_GREYS: bool = true;
 
 /// The fractional width of the margin between the edge of the board and the cell.
 pub const BOARD_CELL_MARGIN: f32 = 0.02;
