@@ -290,7 +290,6 @@ impl UI {
         rect: Rectangle,
         d: &mut T,
         g: &Game,
-        font: &Font,
         state: &State,
     ) {
         // Draw the background for the UI
@@ -301,8 +300,8 @@ impl UI {
         let content_rec_inner = self.constant_elements.inner_content;
 
         match self.tab {
-            UITab::Game => self.draw_game(content_rec_inner, d, g, font, state),
-            UITab::Settings => self.draw_settings(content_rec_inner, d, g, font, state),
+            UITab::Game => self.draw_game(content_rec_inner, d, g, state),
+            UITab::Settings => self.draw_settings(content_rec_inner, d, g, state),
             UITab::None => {}
         }
 
@@ -332,9 +331,9 @@ impl UI {
             },
         );
 
-        let text_rec = centre_text_rec(font, "Game", 50.0, 0.0, tab_rect);
+        let text_rec = centre_text_rec(&state.fonts.regular, "Game", 50.0, 0.0, tab_rect);
 
-        d.draw_text_rec(font, "Game", text_rec, 50.0, 0.0, false, Color::BLACK);
+        d.draw_text_rec(&state.fonts.regular, "Game", text_rec, 50.0, 0.0, false, Color::BLACK);
 
         // Draw the Settings tab button
         let tab_rect = self.constant_elements.settings;
@@ -347,9 +346,9 @@ impl UI {
             },
         );
 
-        let text_rec = centre_text_rec(font, "Settings", 50.0, 0.0, tab_rect);
+        let text_rec = centre_text_rec(&state.fonts.regular, "Settings", 50.0, 0.0, tab_rect);
 
-        d.draw_text_rec(font, "Settings", text_rec, 50.0, 0.0, false, Color::BLACK);
+        d.draw_text_rec(&state.fonts.regular, "Settings", text_rec, 50.0, 0.0, false, Color::BLACK);
 
         // Draw the lower divider based on the selected tab
         if self.tab != UITab::Game {
@@ -395,7 +394,6 @@ impl UI {
         rect: Rectangle,
         d: &mut T,
         g: &Game,
-        font: &Font,
         state: &State,
     ) {
         // Draw the move history
@@ -429,8 +427,8 @@ impl UI {
                 .map(|x| (x + 1).to_string())
                 .collect::<Vec<String>>()
                 .join(", ");
-            let r = centre_text_rec(font, &t, 50.0, 0.0, rect);
-            d.draw_text_rec(font, &t, r, 50.0, 0.0, false, Color::BLACK);
+            let r = centre_text_rec(&state.fonts.regular, &t, 50.0, 0.0, rect);
+            d.draw_text_rec(&state.fonts.regular, &t, r, 50.0, 0.0, false, Color::BLACK);
         }
 
         // Redraw the blank padding
@@ -450,9 +448,9 @@ impl UI {
                 Value::Player1 => "Crosses Win",
                 Value::Player2 => "Noughts Win",
             };
-            let rec = centre_text_rec(font, text, 50.0, 0.0, tc);
+            let rec = centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, tc);
             d.draw_text_rec(
-                font,
+                &state.fonts.regular,
                 text,
                 rec,
                 50.0,
@@ -467,13 +465,13 @@ impl UI {
             );
         } else if g.turn == Turn::Player1 {
             let text = "Crosses' Turn";
-            let rec = centre_text_rec(font, text, 50.0, 0.0, tc);
+            let rec = centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, tc);
 
-            d.draw_text_rec(font, text, rec, 50.0, 0.0, false, COLOUR_UI_HIGHLIGHT_P1);
+            d.draw_text_rec(&state.fonts.regular, text, rec, 50.0, 0.0, false, COLOUR_UI_HIGHLIGHT_P1);
         } else {
             let text = "Noughts' Turn";
-            let rec = centre_text_rec(font, text, 50.0, 0.0, tc);
-            d.draw_text_rec(font, text, rec, 50.0, 0.0, true, COLOUR_UI_HIGHLIGHT_P2);
+            let rec = centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, tc);
+            d.draw_text_rec(&state.fonts.regular, text, rec, 50.0, 0.0, true, COLOUR_UI_HIGHLIGHT_P2);
         }
 
         let p = self.game_elements.padding_2;
@@ -482,9 +480,9 @@ impl UI {
         let eb = self.game_elements.export;
         d.draw_rectangle_rec(eb, COLOUR_UI_ELEMENT);
         let text = "Export game";
-        let trec = centre_text_rec(font, text, 50.0, 0.0, eb);
+        let trec = centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, eb);
         d.draw_text_rec(
-            font,
+            &state.fonts.regular,
             text,
             trec,
             50.0,
@@ -504,7 +502,6 @@ impl UI {
         rect: Rectangle,
         d: &mut T,
         g: &Game,
-        font: &Font,
         state: &State,
     ) {
         let padding = UI_CONTENT_PADDING * rect.width;
@@ -531,7 +528,7 @@ impl UI {
             Color::BLACK
         };
         // Draw the current depth text
-        d.draw_text_rec(font, &text, text_rec, 50.0, 0.0, false, colour);
+        d.draw_text_rec(&state.fonts.regular, &text, text_rec, 50.0, 0.0, false, colour);
 
         // Draw the buttons
         let mut brec = self.settings_elements.depth_plus;
@@ -615,8 +612,8 @@ impl UI {
             width: p0.width - button_side - p,
             height: button_side,
         };
-        let trec = centre_text_rec(font, "0 Players", 50.0, 0.0, trec);
-        d.draw_text_rec(font, "0 Players", trec, 50.0, 0.0, false, Color::BLACK);
+        let trec = centre_text_rec(&state.fonts.regular, "0 Players", 50.0, 0.0, trec);
+        d.draw_text_rec(&state.fonts.regular, "0 Players", trec, 50.0, 0.0, false, Color::BLACK);
 
         let p1 = Rectangle {
             x: pl.x + padding,
@@ -647,8 +644,8 @@ impl UI {
             width: p1.width - button_side - p,
             height: button_side,
         };
-        let trec = centre_text_rec(font, "1 Player", 50.0, 0.0, trec);
-        d.draw_text_rec(font, "1 Player", trec, 50.0, 0.0, false, Color::BLACK);
+        let trec = centre_text_rec(&state.fonts.regular, "1 Player", 50.0, 0.0, trec);
+        d.draw_text_rec(&state.fonts.regular, "1 Player", trec, 50.0, 0.0, false, Color::BLACK);
 
         let p2 = Rectangle {
             x: pl.x + padding,
@@ -679,8 +676,8 @@ impl UI {
             width: p1.width - button_side - inner_button_padding,
             height: button_side,
         };
-        let trec = centre_text_rec(font, "2 Players", 50.0, 0.0, trec);
-        d.draw_text_rec(font, "2 Players", trec, 50.0, 0.0, false, Color::BLACK);
+        let trec = centre_text_rec(&state.fonts.regular, "2 Players", 50.0, 0.0, trec);
+        d.draw_text_rec(&state.fonts.regular, "2 Players", trec, 50.0, 0.0, false, Color::BLACK);
 
         // Draw New Game button
         let mut ng = self.settings_elements.new_game;
@@ -688,8 +685,8 @@ impl UI {
 
         d.draw_rectangle_rec(ng, COLOUR_UI_ELEMENT);
 
-        let trec = centre_text_rec(font, "New game", 50.0, 0.0, ng);
-        d.draw_text_rec(font, "New game", trec, 50.0, 0.0, false, Color::BLACK);
+        let trec = centre_text_rec(&state.fonts.regular, "New game", 50.0, 0.0, ng);
+        d.draw_text_rec(&state.fonts.regular, "New game", trec, 50.0, 0.0, false, Color::BLACK);
 
         // Draw AI strength buttons
         let mut ai = self.settings_elements.ai_strength;
@@ -704,8 +701,8 @@ impl UI {
             height: button_side,
         };
 
-        let text_rec = centre_text_rec(font, text, 50.0, 0.0, text_rec);
-        d.draw_text_rec(font, text, text_rec, 50.0, 0.0, false, Color::BLACK);
+        let text_rec = centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, text_rec);
+        d.draw_text_rec(&state.fonts.regular, text, text_rec, 50.0, 0.0, false, Color::BLACK);
 
         let column_width = (ai.width - 2.0 * padding) / 3.0;
 
@@ -713,7 +710,7 @@ impl UI {
         a1.y += self.scroll_offset_settings;
         d.draw_rectangle_rec(a1, COLOUR_UI_BUTTON);
         let p = button_side * UI_CONTENT_PADDING * 2.0;
-        if self.state.ai_strength == 1 {
+        if self.state.ai_strength == 1 && !self.state.is_ai_modified {
             d.draw_rectangle_rec(
                 Rectangle {
                     x: a1.x + p,
@@ -733,9 +730,9 @@ impl UI {
             height: a1.height,
         };
         d.draw_text_rec(
-            font,
+            &state.fonts.regular,
             text,
-            centre_text_rec(font, text, 50.0, 0.0, trec),
+            centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, trec),
             50.0,
             0.0,
             false,
@@ -746,7 +743,7 @@ impl UI {
         a2.y += self.scroll_offset_settings;
         d.draw_rectangle_rec(a2, COLOUR_UI_BUTTON);
         let p = button_side * UI_CONTENT_PADDING * 2.0;
-        if self.state.ai_strength == 2 {
+        if self.state.ai_strength == 2 && !self.state.is_ai_modified {
             d.draw_rectangle_rec(
                 Rectangle {
                     x: a2.x + p,
@@ -766,9 +763,9 @@ impl UI {
             height: a2.height,
         };
         d.draw_text_rec(
-            font,
+            &state.fonts.regular,
             text,
-            centre_text_rec(font, text, 50.0, 0.0, trec),
+            centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, trec),
             50.0,
             0.0,
             false,
@@ -779,7 +776,7 @@ impl UI {
         a3.y += self.scroll_offset_settings;
         d.draw_rectangle_rec(a3, COLOUR_UI_BUTTON);
         let p = button_side * UI_CONTENT_PADDING * 2.0;
-        if self.state.ai_strength == 3 {
+        if self.state.ai_strength == 3 && !self.state.is_ai_modified {
             d.draw_rectangle_rec(
                 Rectangle {
                     x: a3.x + p,
@@ -799,9 +796,9 @@ impl UI {
             height: a3.height,
         };
         d.draw_text_rec(
-            font,
+            &state.fonts.regular,
             text,
-            centre_text_rec(font, text, 50.0, 0.0, trec),
+            centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, trec),
             50.0,
             0.0,
             false,
@@ -820,7 +817,7 @@ impl UI {
             height: 100.0,
         };
         let text = "Max sims:";
-        d.draw_text_rec(font, text, trec, 50.0, 0.0, false, Color::BLACK);
+        d.draw_text_rec(&state.fonts.regular, text, trec, 50.0, 0.0, false, Color::BLACK);
         let mut tbox = self.settings_elements.ai_max_sims;
         tbox.y += self.scroll_offset_settings;
         d.draw_rectangle_rec(tbox, COLOUR_UI_BUTTON);
@@ -833,6 +830,11 @@ impl UI {
                 ""
             }
         );
+        let font = if state.typing == Textbox::MaxSims {
+            &state.fonts.bold
+        } else {
+            &state.fonts.regular
+        };
 
         d.draw_text_rec(font, &text, tbox, 50.0, 0.0, false, Color::BLACK);
 
@@ -843,7 +845,7 @@ impl UI {
             height: 100.0,
         };
         let text = "Max time:";
-        d.draw_text_rec(font, text, trec, 50.0, 0.0, false, Color::BLACK);
+        d.draw_text_rec(&state.fonts.regular, text, trec, 50.0, 0.0, false, Color::BLACK);
         let mut tbox = self.settings_elements.ai_max_time;
         tbox.y += self.scroll_offset_settings;
         d.draw_rectangle_rec(tbox, COLOUR_UI_BUTTON);
@@ -856,6 +858,12 @@ impl UI {
                 ""
             }
         );
+        let font = if state.typing == Textbox::MaxTime {
+            &state.fonts.bold
+        } else {
+            &state.fonts.regular
+        };
+
         d.draw_text_rec(font, &text, tbox, 50.0, 0.0, false, Color::BLACK);
     }
 }

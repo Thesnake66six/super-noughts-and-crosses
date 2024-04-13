@@ -117,16 +117,19 @@ pub fn handle_input(
             Textbox::MaxSims => {
                 let x = &mut ui.state.max_sims;
                 *x /= 10;
+                ui.state.is_ai_modified = true
             }
             Textbox::MaxTime => {
                 let x = &mut ui.state.max_time;
                 *x /= 10;
+                ui.state.is_ai_modified = true
             }
             Textbox::None => {
                 let _ = g.unplay();
                 state
                     .message_queue
                     .insert(state.message_queue.len(), Message::Interrupt);
+                ui.state.is_ai_modified = true
             }
         }
     }
@@ -181,9 +184,11 @@ pub fn handle_input(
                 };
                 g.update_positions();
                 g.centre_camera(state.game_rect);
+                ui.state.is_ai_modified = true
             }
             Err(_) => {
                 println!("Could not read game from file");
+                ui.state.is_ai_modified = true
             }
         }
         rl.clear_dropped_files();
@@ -197,11 +202,12 @@ fn handle_typing(rl: &mut RaylibHandle, state: &mut State, ui: &mut UI) {
         match state.typing {
             Textbox::MaxSims => {
                 let x = &mut ui.state.max_sims;
-                *x *= 10;
+                *x = x.saturating_mul(10);
+                ui.state.is_ai_modified = true
             }
             Textbox::MaxTime => {
                 let x = &mut ui.state.max_time;
-                *x *= 10;
+                *x = x.saturating_mul(10);
             }
             Textbox::None => {}
         }
@@ -210,13 +216,14 @@ fn handle_typing(rl: &mut RaylibHandle, state: &mut State, ui: &mut UI) {
         match state.typing {
             Textbox::MaxSims => {
                 let x = &mut ui.state.max_sims;
-                *x *= 10;
-                *x += 1;
+                *x = x.saturating_mul(10);
+                *x = x.saturating_add(1);
+                ui.state.is_ai_modified = true
             }
             Textbox::MaxTime => {
                 let x = &mut ui.state.max_time;
-                *x *= 10;
-                *x += 1;
+                *x = x.saturating_mul(10);
+                *x = x.saturating_add(1);
             }
             Textbox::None => {}
         }
@@ -225,13 +232,14 @@ fn handle_typing(rl: &mut RaylibHandle, state: &mut State, ui: &mut UI) {
         match state.typing {
             Textbox::MaxSims => {
                 let x = &mut ui.state.max_sims;
-                *x *= 10;
-                *x += 2;
+                *x = x.saturating_mul(10);
+                *x = x.saturating_add(2);
+                ui.state.is_ai_modified = true
             }
             Textbox::MaxTime => {
                 let x = &mut ui.state.max_time;
-                *x *= 10;
-                *x += 2;
+                *x = x.saturating_mul(10);
+                *x = x.saturating_add(2);
             }
             Textbox::None => {}
         }
@@ -240,13 +248,14 @@ fn handle_typing(rl: &mut RaylibHandle, state: &mut State, ui: &mut UI) {
         match state.typing {
             Textbox::MaxSims => {
                 let x = &mut ui.state.max_sims;
-                *x *= 10;
-                *x += 3;
+                *x = x.saturating_mul(10);
+                *x = x.saturating_add(3);
+                ui.state.is_ai_modified = true
             }
             Textbox::MaxTime => {
                 let x = &mut ui.state.max_time;
-                *x *= 10;
-                *x += 3;
+                *x = x.saturating_mul(10);
+                *x = x.saturating_add(3);
             }
             Textbox::None => {}
         }
@@ -255,13 +264,14 @@ fn handle_typing(rl: &mut RaylibHandle, state: &mut State, ui: &mut UI) {
         match state.typing {
             Textbox::MaxSims => {
                 let x = &mut ui.state.max_sims;
-                *x *= 10;
-                *x += 4;
+                *x = x.saturating_mul(10);
+                *x = x.saturating_add(4);
+                ui.state.is_ai_modified = true
             }
             Textbox::MaxTime => {
                 let x = &mut ui.state.max_time;
-                *x *= 10;
-                *x += 4;
+                *x = x.saturating_mul(10);
+                *x = x.saturating_add(4);
             }
             Textbox::None => {}
         }
@@ -270,13 +280,14 @@ fn handle_typing(rl: &mut RaylibHandle, state: &mut State, ui: &mut UI) {
         match state.typing {
             Textbox::MaxSims => {
                 let x = &mut ui.state.max_sims;
-                *x *= 10;
-                *x += 5;
+                *x = x.saturating_mul(10);
+                *x = x.saturating_add(5);
+                ui.state.is_ai_modified = true
             }
             Textbox::MaxTime => {
                 let x = &mut ui.state.max_time;
-                *x *= 10;
-                *x += 5;
+                *x = x.saturating_mul(10);
+                *x = x.saturating_add(5);
             }
             Textbox::None => {}
         }
@@ -285,13 +296,14 @@ fn handle_typing(rl: &mut RaylibHandle, state: &mut State, ui: &mut UI) {
         match state.typing {
             Textbox::MaxSims => {
                 let x = &mut ui.state.max_sims;
-                *x *= 10;
-                *x += 6;
+                *x = x.saturating_mul(10);
+                *x = x.saturating_add(6);
+                ui.state.is_ai_modified = true
             }
             Textbox::MaxTime => {
                 let x = &mut ui.state.max_time;
-                *x *= 10;
-                *x += 6;
+                *x = x.saturating_mul(10);
+                *x = x.saturating_add(6);
             }
             Textbox::None => {}
         }
@@ -300,13 +312,14 @@ fn handle_typing(rl: &mut RaylibHandle, state: &mut State, ui: &mut UI) {
         match state.typing {
             Textbox::MaxSims => {
                 let x = &mut ui.state.max_sims;
-                *x *= 10;
-                *x += 7;
+                *x = x.saturating_mul(10);
+                *x = x.saturating_add(7);
+                ui.state.is_ai_modified = true
             }
             Textbox::MaxTime => {
                 let x = &mut ui.state.max_time;
-                *x *= 10;
-                *x += 7;
+                *x = x.saturating_mul(10);
+                *x = x.saturating_add(7);
             }
             Textbox::None => {}
         }
@@ -315,13 +328,14 @@ fn handle_typing(rl: &mut RaylibHandle, state: &mut State, ui: &mut UI) {
         match state.typing {
             Textbox::MaxSims => {
                 let x = &mut ui.state.max_sims;
-                *x *= 10;
-                *x += 8;
+                *x = x.saturating_mul(10);
+                *x = x.saturating_add(8);
+                ui.state.is_ai_modified = true
             }
             Textbox::MaxTime => {
                 let x = &mut ui.state.max_time;
-                *x *= 10;
-                *x += 8;
+                *x = x.saturating_mul(10);
+                *x = x.saturating_add(8);
             }
             Textbox::None => {}
         }
@@ -330,15 +344,16 @@ fn handle_typing(rl: &mut RaylibHandle, state: &mut State, ui: &mut UI) {
         match state.typing {
             Textbox::MaxSims => {
                 let x = &mut ui.state.max_sims;
-                *x *= 10;
-                *x += 9;
+                *x = x.saturating_mul(10);
+                *x = x.saturating_add(9);
+                ui.state.is_ai_modified = true
             }
             Textbox::MaxTime => {
                 let x = &mut ui.state.max_time;
-                *x *= 10;
-                *x += 9;
+                *x = x.saturating_mul(10);
+                *x = x.saturating_add(9);
             }
             Textbox::None => {}
         }
     }
-    }
+}

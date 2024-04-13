@@ -9,7 +9,7 @@ use raylib::{core::texture::RaylibTexture2D, prelude::*};
 use styles::{BOARD_DEFAULT_DEPTH, BOARD_DEFAULT_PLAYERS, COMPUTER_RESPONSE_DELAY, DEFAULT_EXPLORATION_FACTOR, DEFAULT_MAX_SIMS, DEFAULT_MAX_TIME, DEFAULT_SHOW_FPS_COUNTER, UI_PANEL_MIN_HEIGHT, UI_PANEL_WIDTH};
 
 use crate::{
-    ai_thread::noughbert, common::{get_board_rect, get_game_rect, get_ui_rect}, game::{
+    ai_thread::noughbert, common::{get_board_rect, get_game_rect, get_ui_rect}, fonts::Fonts, game::{
         game::{Game, Turn},
         value::Value,
     }, handle_input::handle_input, noughbert::{
@@ -27,6 +27,7 @@ mod ui;
 mod ai_thread;
 mod handle_click;
 mod handle_input;
+mod fonts;
 
 fn main() -> Result<()> {
     // Main thread comms with Noughbert
@@ -57,13 +58,21 @@ fn main() -> Result<()> {
     dbg!(width / physical_width, width, physical_width);
 
     let font_path = "./resources/Inter-Regular.ttf";
+    let bold_font_path = "./resources/Inter-Medium.ttf";
 
     // Import the font
     let font_50pt = rl
         .load_font_ex(&thread, font_path, 100, FontLoadEx::Default(0))
         .expect("Couldn't load font oof");
-
     font_50pt
+        .texture()
+        .set_texture_filter(&thread, TextureFilter::TEXTURE_FILTER_BILINEAR);
+
+    // Import the bold font
+    let font_50pt_bold = rl
+        .load_font_ex(&thread, bold_font_path, 100, FontLoadEx::Default(0))
+        .expect("Couldn't load font oof");
+    font_50pt_bold
         .texture()
         .set_texture_filter(&thread, TextureFilter::TEXTURE_FILTER_BILINEAR);
 
@@ -97,6 +106,10 @@ fn main() -> Result<()> {
         can_export: true,
         game_rect: get_game_rect(&rl),
         ui_rect: get_ui_rect(&rl),
+        fonts: Fonts {
+            regular: font_50pt,
+            bold: font_50pt_bold,
+        }
     };
 
     // Get the pixel positions of each cell in the game, and each element in the UI
@@ -176,7 +189,7 @@ fn main() -> Result<()> {
             hovered_cell.as_deref(),
         );
 
-        ui.draw(state.ui_rect, &mut d, &g, &font_50pt, &state);
+        ui.draw(state.ui_rect, &mut d, &g, &state);
 
         if state.show_fps {
             d.draw_fps(10, 10);

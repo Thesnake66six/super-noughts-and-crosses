@@ -1,6 +1,6 @@
 use raylib::math::{Rectangle, Vector2};
 
-use crate::{noughbert::message::Message, ui::textbox::Textbox};
+use crate::{fonts::Fonts, noughbert::message::Message, ui::textbox::Textbox};
 
 pub struct State {
     /// Declares whether, if right-click is held, the game should be panned
@@ -25,4 +25,6 @@ pub struct State {
     pub game_rect: Rectangle,
     /// Stores the rectangle into which the ui should be drawn
     pub ui_rect: Rectangle,
+    /// Stores the loaded fonts
+    pub fonts: Fonts,
 }

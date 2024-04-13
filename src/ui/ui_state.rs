@@ -6,6 +6,7 @@ pub struct UIState {
     pub ai_strength: usize,
     pub max_sims: usize,
     pub max_time: usize,
+    pub is_ai_modified: bool
 }
 
 impl UIState {
@@ -16,6 +17,7 @@ impl UIState {
             ai_strength: 1,
             max_sims: DEFAULT_MAX_SIMS,
             max_time: DEFAULT_MAX_TIME,
+            is_ai_modified: false,
         }
     }
 }
