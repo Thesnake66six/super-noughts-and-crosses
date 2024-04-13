@@ -3,11 +3,10 @@ use raylib::{core::math::Rectangle, prelude::*};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    cell::{Cell, Value},
-    common::*,
-    game::Turn,
-    styles::*,
+    common::*, styles::*, 
 };
+
+use super::{cell::Cell, game::Turn, legal::Legal, value::Value};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Board {

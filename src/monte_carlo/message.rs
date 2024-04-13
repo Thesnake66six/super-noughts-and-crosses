@@ -1,4 +1,4 @@
-use super::monte_carlo::MonteCarloSettings;
+use super::monte_carlo_settings::MonteCarloSettings;
 
 /// Defines the messages that may be passed between the main and Monte Carlo threads
 pub enum Message {

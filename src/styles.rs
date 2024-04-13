@@ -61,6 +61,18 @@ pub const DEFAULT_MAX_TIME: usize = 10;
 /// The default value for `Max Time`
 pub const COMPUTER_RESPONSE_DELAY: f32 = 0.1;
 
+/// The default sims for a level 1 AI
+pub const COMPUTER_LEVEL_1_SIMS: usize = 15;
+
+/// The default sims for a level 2 AI
+pub const COMPUTER_LEVEL_2_SIMS: usize = 30;
+
+/// The default sims for a level 3 AI
+pub const COMPUTER_LEVEL_3_SIMS: usize = 100;
+
+/// The default scale factor for each depth
+pub const COMPUTER_SIM_SCALING: usize = 6;
+
 //----------// Constants determining the properties of the camera //----------//
 
 /// Governs how fast the camera moves when panning.

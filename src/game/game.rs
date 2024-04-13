@@ -11,11 +11,10 @@ use raylib::{
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    board::Board,
-    cell::{Cell, Value},
-    common::*,
-    styles::*,
+    common::*,  styles::*, 
 };
+
+use super::{board::Board, cell::Cell, legal::Legal, value::Value};
 
 pub struct Move(Vec<usize>);
 
@@ -163,7 +162,7 @@ impl Game {
             Legal::Pos(&self.legal)
         };
 
-        /// Draws the board
+        // Draws the board
         self.board
             .draw(irect, &mut c, no_check, alpha, hover, legal, self.turn)
     }

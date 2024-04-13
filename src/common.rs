@@ -8,51 +8,7 @@ use raylib::{
     RaylibHandle,
 };
 
-use crate::{game::Turn, monte_carlo::message::Message, styles::*};
-
-//----------// Miscellaneous structs //----------//
-
-#[derive(PartialEq, Clone, Copy)]
-/// An enum used to represent the legal moves in the `Game` draw function
-pub enum Legal<'a> {
-    /// The relative coordinates of the legal board
-    Pos(&'a [usize]),
-    /// There are no legal moves below this point.
-    None,
-    /// Forces the default board background colour (`COLOUR_BOUARD_BG`).
-    ForceDefaultBg,
-}
-
-pub struct State {
-    /// Declares whether, if right-click is held, the game should be panned
-    pub good_right_click: bool,
-    /// Stores the position of the mouse last frame
-    pub mouse_prev: Vector2,
-    /// Stores whether the main thread is waiting for a move
-    pub waiting_for_move: bool,
-    /// Stores a queue of messages to be sent to the AI thread
-    pub message_queue: Vec<Message>,
-    /// Stores a list of the incoming moves from the AI thread
-    pub move_queue: Vec<Vec<usize>>,
-    /// Stores how long the incoming response should be delayed by
-    pub response_time: f32,
-    /// Stores whether the fps should be displayed
-    pub show_fps: bool,
-    /// Stores the current textbox that text is being entered into
-    pub typing: Textbox,
-    /// Stores whether previous attempts to export a game have been successful
-    pub can_export: bool,
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum Textbox {
-    /// The Max Sims textbox
-    MaxSims,
-    /// The Max Time textbox
-    MaxTime,
-    /// No textbox selected
-    None,
-}
+use crate::{game::game::Turn, styles::*};
 
 //----------// Symbol rendering functions //----------//
 
