@@ -10,9 +10,9 @@ use raylib::{
 
 use serde::{Deserialize, Serialize};
 
-use crate::{styles::{BOARD_CELL_MARGIN, CAMERA_DEFAULT_ZOOM, COLOUR_BOARD_BG, COLOUR_BOARD_BG_GREYED, COLOUR_BOARD_BG_GREYED_P1, COLOUR_BOARD_BG_GREYED_P2}};
+use crate::styles::{BOARD_CELL_MARGIN, CAMERA_DEFAULT_ZOOM, COLOUR_BOARD_BG, COLOUR_BOARD_BG_GREYED, CROSS, NOUGHT, THORN};
 
-use super::{board::Board, cell::Cell, legal::Legal, value::Value};
+use super::{board::Board, cell::Cell, legal::Legal, player::Player, value::Value};
 
 pub struct Move(Vec<usize>);
 
@@ -68,6 +68,10 @@ pub struct Game {
     pub moves: Vec<Vec<Vec<usize>>>,
     /// The current set of legal moves
     pub legal: Vec<usize>,
+    /// Cell renderer for Player 1
+    pub player_1: Player,
+    /// Cell renderer for Player 2
+    pub player_2: Player,
 }
 
 impl Game {
@@ -85,6 +89,8 @@ impl Game {
             players,
             moves: [].into(),
             legal: vec![],
+            player_1: CROSS,
+            player_2: THORN,
         }
     }
 
@@ -134,15 +140,15 @@ impl Game {
                 match self.board.check() {
                     Value::None => panic!("How the fuck did you manage that"),
                     Value::Draw => COLOUR_BOARD_BG_GREYED,
-                    Value::Player1 => COLOUR_BOARD_BG_GREYED_P1,
-                    Value::Player2 => COLOUR_BOARD_BG_GREYED_P2,
+                    Value::Player1 => self.player_1.get_greyed_colour(),
+                    Value::Player2 => self.player_2.get_greyed_colour(),
                 }
             } else if self.legal.is_empty() {
                 COLOUR_BOARD_BG
             } else if self.turn == Turn::Player1 {
-                COLOUR_BOARD_BG_GREYED_P1
+                self.player_1.get_greyed_colour()
             } else {
-                COLOUR_BOARD_BG_GREYED_P2
+                self.player_2.get_greyed_colour()
             },
         );
 
@@ -162,7 +168,7 @@ impl Game {
 
         // Draws the board
         self.board
-            .draw(irect, &mut c, no_check, alpha, hover, legal, self.turn);
+            .draw(irect, &mut c, no_check, alpha, hover, legal, self.turn, &self.player_1, &self.player_2);
     }
 
     /// Makes a move

@@ -1,9 +1,9 @@
 use raylib::{drawing::RaylibDraw, math::Rectangle};
 use serde::{Deserialize, Serialize};
 
-use crate::{common::{draw_cross, draw_nought, get_greyed_colour_cell}, styles::{COLOUR_BOARD_BG, COLOUR_CELL_BG, COLOUR_CELL_HOVER, COLOUR_CROSS_BG, COLOUR_CROSS_BGA, COLOUR_NOUGHT_BG, COLOUR_NOUGHT_BGA, INVERT_GREYS}};
+use crate::{common::get_greyed_colour_cell, styles::{COLOUR_BOARD_BG, COLOUR_CELL_BG, COLOUR_CELL_HOVER, INVERT_GREYS}};
 
-use super::{board::Board, game::Turn, legal::Legal, value::Value};
+use super::{board::Board, game::Turn, legal::Legal, player::{self, Player}, value::Value};
 
 /// An enum used to differentiate the states of a cell.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -65,6 +65,8 @@ impl Cell {
         mut hover: Option<&[usize]>,
         legal: Legal,
         turn: Turn,
+        player_1: &Player,
+        player_2: &Player,
     ) {
         let mut flag = false;
         if let Some(pos) = hover {
@@ -101,52 +103,52 @@ impl Cell {
             if draw_as_alpha {
                 match self {
                     Cell::None => COLOUR_CELL_BG,
-                    Cell::Player1 => COLOUR_CROSS_BGA,
-                    Cell::Player2 => COLOUR_NOUGHT_BGA,
+                    Cell::Player1 => player_1.background_alpha,
+                    Cell::Player2 => player_2.background_alpha,
                     Cell::Board(_) => COLOUR_BOARD_BG,
                 }
             } else if no_grey {
                 match self {
                     Cell::None => COLOUR_CELL_BG,
-                    Cell::Player1 => COLOUR_CROSS_BG,
-                    Cell::Player2 => COLOUR_NOUGHT_BG,
+                    Cell::Player1 => player_1.background,
+                    Cell::Player2 => player_2.background,
                     Cell::Board(_) => COLOUR_BOARD_BG,
                 }
             } else if greyed {
                 if INVERT_GREYS && !board_completed {
-                    get_greyed_colour_cell(turn)
+                    get_greyed_colour_cell(turn, player_1, player_2)
                 } else {
                     match self {
                         Cell::None => COLOUR_CELL_BG,
-                        Cell::Player1 => COLOUR_CROSS_BG,
-                        Cell::Player2 => COLOUR_NOUGHT_BG,
+                        Cell::Player1 => player_1.background,
+                        Cell::Player2 => player_2.background,
                         Cell::Board(_) => COLOUR_BOARD_BG,
                     }
                 }
             } else if INVERT_GREYS || board_completed {
                 match self {
                     Cell::None => COLOUR_CELL_BG,
-                    Cell::Player1 => COLOUR_CROSS_BG,
-                    Cell::Player2 => COLOUR_NOUGHT_BG,
+                    Cell::Player1 => player_1.background,
+                    Cell::Player2 => player_2.background,
                     Cell::Board(_) => COLOUR_BOARD_BG,
                 }
             } else {
-                get_greyed_colour_cell(turn)
+                get_greyed_colour_cell(turn, player_1, player_2)
             },
         );
 
         match self {
             Cell::None => {}
-            Cell::Player1 => draw_cross(rect, d),
-            Cell::Player2 => draw_nought(rect, d),
+            Cell::Player1 => player_1.symbol.draw(player_1, rect, d), 
+            Cell::Player2 => player_2.symbol.draw(player_2, rect, d),
             Cell::Board(b) => {
                 if let Value::None = b.check() {
-                    b.draw(rect, d, no_check, alpha, hover, legal, turn); // Draw the board, if it is still playable...
+                    b.draw(rect, d, no_check, alpha, hover, legal, turn, player_1, player_2); // Draw the board, if it is still playable...
                 } else if no_check {
-                    b.draw(rect, d, no_check, alpha, hover, legal, turn); // ...or if we're told not to check...
+                    b.draw(rect, d, no_check, alpha, hover, legal, turn, player_1, player_2); // ...or if we're told not to check...
                 } else {
-                    b.draw(rect, d, no_check, alpha, hover, legal, turn);
-                    b.check().draw(rect, d, alpha, legal, turn); // ...else draw the corresponding value
+                    b.draw(rect, d, no_check, alpha, hover, legal, turn, player_1, player_2);
+                    b.check().draw(rect, d, alpha, legal, turn, player_1, player_2); // ...else draw the corresponding value
                 }
             }
         }

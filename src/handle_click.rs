@@ -1,18 +1,19 @@
 use std::fs;
 
-use raylib::{ffi::MouseButton, math::Vector2, RaylibHandle};
+use raylib::{ffi::MouseButton, math::Vector2, RaylibHandle, RaylibThread};
 
 use crate::{
-    common::get_board_rect,
+    common::{get_board_rect, get_player_from_symbol, update_window_title},
     game::game::{Game, Turn},
     noughbert::message::Message,
-    state::State,
-    styles::{COMPUTER_LEVEL_1_SIMS, COMPUTER_LEVEL_2_SIMS, COMPUTER_LEVEL_3_SIMS, COMPUTER_RESPONSE_DELAY, COMPUTER_SIM_SCALING},
+    state::{self, State},
+    styles::{COMPUTER_LEVEL_1_SIMS, COMPUTER_LEVEL_2_SIMS, COMPUTER_LEVEL_3_SIMS, COMPUTER_RESPONSE_DELAY, COMPUTER_SIM_SCALING, RULES_URL},
     ui::{textbox::Textbox, ui::UI, ui_tab::UITab},
 };
 
 pub fn handle_click(
-    rl: &RaylibHandle,
+    rl: &mut RaylibHandle,
+    rlthread: &mut RaylibThread,
     g: &mut Game,
     ui: &mut UI,
     state: &mut State,
@@ -49,7 +50,13 @@ pub fn handle_click(
                         handle_game_tab_click(ui, mouse_pos, g, state);
                     }
                     UITab::Settings => {
-                        handle_settings_tab_click(mouse_pos, ui, state, g);
+                        handle_settings_tab_click(mouse_pos, ui, state, g, rl, rlthread);
+                    }
+                    UITab::Keybinds => {
+                        handle_keybinds_tab_click(mouse_pos, ui)
+                    },
+                    UITab::Symbols => {
+                        handle_symbols_tab_click(mouse_pos, ui, g, rl, rlthread)
                     }
                     UITab::None => {}
                 }
@@ -87,7 +94,7 @@ fn handle_game_tab_click(ui: &mut UI, mouse_pos: Vector2, g: &mut Game, state: &
     }
 }
 
-fn handle_settings_tab_click(mouse_pos: Vector2, ui: &mut UI, state: &mut State, g: &mut Game) {
+fn handle_settings_tab_click(mouse_pos: Vector2, ui: &mut UI, state: &mut State, g: &mut Game, rl: &mut RaylibHandle, rlthread: &mut RaylibThread) {
     // Account for scroll offset
     let offset = Vector2 {
         x: mouse_pos.x,
@@ -161,6 +168,21 @@ fn handle_settings_tab_click(mouse_pos: Vector2, ui: &mut UI, state: &mut State,
             x: state.game_rect.width / 2.0f32,
             y: state.game_rect.height,
         };
+        if !ui.state.is_ai_modified {
+            let l = match ui.state.ai_strength {
+                1 => { COMPUTER_LEVEL_1_SIMS },
+                2 => { COMPUTER_LEVEL_2_SIMS },
+                3 => { COMPUTER_LEVEL_3_SIMS },
+                _ => { 0 }
+            };
+            ui.state.max_sims = l * (COMPUTER_SIM_SCALING.pow((g.depth - 1).try_into().unwrap()));
+        }
+        g.player_1 = get_player_from_symbol(&ui.state.player_1);
+        g.player_2 = get_player_from_symbol(&ui.state.player_2);
+        update_window_title(rl, rlthread, g);
+        
+        
+
     } else if ui.settings_elements.ai_1.check_collision_point_rec(offset) {
         ui.state.ai_strength = 1;
         ui.state.max_sims = COMPUTER_LEVEL_1_SIMS * (COMPUTER_SIM_SCALING.pow((g.depth - 1).try_into().unwrap()));
@@ -185,5 +207,47 @@ fn handle_settings_tab_click(mouse_pos: Vector2, ui: &mut UI, state: &mut State,
         .check_collision_point_rec(offset)
     {
         state.typing = Textbox::MaxTime;
+    } else if ui.settings_elements.rules.check_collision_point_rec(offset) {
+        let _ = webbrowser::open(RULES_URL);
+    } else if ui.settings_elements.keybinds.check_collision_point_rec(offset) {
+        ui.tab = UITab::Keybinds;
+    } else if ui.settings_elements.symbols.check_collision_point_rec(offset) {
+        ui.tab = UITab::Symbols;
+    }
+}
+
+fn handle_keybinds_tab_click(mouse_pos: Vector2, ui: &mut UI) {
+    let offset = Vector2 {
+        x: mouse_pos.x,
+        y: mouse_pos.y - ui.scroll_offset_keybinds,
+    };
+
+    if ui.keybinds_elements.back.check_collision_point_rec(offset) {
+        ui.tab = UITab::Settings
+    }
+}
+
+fn handle_symbols_tab_click(mouse_pos: Vector2, ui: &mut UI, g: &mut Game, rl: &mut RaylibHandle, rlthread: &mut RaylibThread) {
+    let mut update = false;
+    if ui.symbols_elements.back.check_collision_point_rec(mouse_pos) {
+        ui.tab = UITab::Settings
+    } else if ui.symbols_elements.player_1_backward.check_collision_point_rec(mouse_pos) {
+        update = true;
+        ui.state.player_1 = ui.state.player_1.prev();
+    } else if ui.symbols_elements.player_1_forward.check_collision_point_rec(mouse_pos) {
+        update = true;
+        ui.state.player_1 = ui.state.player_1.next();
+    } else if ui.symbols_elements.player_2_backward.check_collision_point_rec(mouse_pos) {
+        update = true;
+        ui.state.player_2 = ui.state.player_2.prev();
+    } else if ui.symbols_elements.player_2_forward.check_collision_point_rec(mouse_pos) {
+        update = true;
+        ui.state.player_2 = ui.state.player_2.next();
+    }
+
+    if update {
+        g.player_1 = get_player_from_symbol(&ui.state.player_1);
+        g.player_2 = get_player_from_symbol(&ui.state.player_2);
+        update_window_title(rl, rlthread, g)
     }
 }

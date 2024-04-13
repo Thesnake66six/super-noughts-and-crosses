@@ -13,12 +13,11 @@ use crate::{
         value::Value,
     },
     state::State,
-    styles::{COLOUR_UI_BG, COLOUR_UI_BUTTON, COLOUR_UI_DIVIDER, COLOUR_UI_ELEMENT, COLOUR_UI_HIGHLIGHT_P1, COLOUR_UI_HIGHLIGHT_P2, COLOUR_UI_RADIAL, UI_BUTTON_LINE_THICKNESS, UI_CONTENT_PADDING, UI_DIVIDER_THICKNESS, UI_NAVBAR_HEIGHT, UI_PANEL_WIDTH},
+    styles::{COLOUR_UI_BG, COLOUR_UI_BUTTON, COLOUR_UI_DIVIDER, COLOUR_UI_ELEMENT, COLOUR_UI_RADIAL, UI_BUTTON_LINE_THICKNESS, UI_CONTENT_PADDING, UI_DIVIDER_THICKNESS, UI_NAVBAR_HEIGHT, UI_PANEL_WIDTH},
 };
 
 use super::{
-    constant_elements::ConstantElements, game_elements::GameElements,
-    settings_elements::SettingsElements, textbox::Textbox, ui_state::UIState, ui_tab::UITab,
+    constant_elements::ConstantElements, game_elements::GameElements, keybinds_elements::KeybindsElements, settings_elements::SettingsElements, symbols_elements::SymbolsElements, textbox::Textbox, ui_state::UIState, ui_tab::UITab
 };
 
 pub struct UI {
@@ -28,12 +27,18 @@ pub struct UI {
     pub scroll_offset_game: f32,
     /// The current amount that the settings tab has scrolled
     pub scroll_offset_settings: f32,
+    /// The current amount that the settings tab has scrolled
+    pub scroll_offset_keybinds: f32,
     /// Stores the positions of the constant elements
     pub constant_elements: ConstantElements,
     /// Stores the positions of the elements of the game tab
     pub game_elements: GameElements,
     /// Stores the positions of the elements of the settings tab
     pub settings_elements: SettingsElements,
+    /// Stores the positions of the elements of the keybinds tab
+    pub keybinds_elements: KeybindsElements,
+    /// Stores the positions of the elements of the symbols tab
+    pub symbols_elements: SymbolsElements,
     /// Stores the current UI state
     pub state: UIState,
 }
@@ -42,12 +47,15 @@ impl UI {
     /// Returns a new UI
     pub fn new() -> Self {
         UI {
-            tab: UITab::None,
+            tab: UITab::Game,
             scroll_offset_game: 0.0,
             scroll_offset_settings: 0.0,
+            scroll_offset_keybinds: 0.0,
             constant_elements: ConstantElements::new(),
             game_elements: GameElements::new(),
             settings_elements: SettingsElements::new(),
+            keybinds_elements: KeybindsElements::new(),
+            symbols_elements: SymbolsElements::new(),
             state: UIState::new(),
         }
     }
@@ -186,8 +194,93 @@ impl UI {
             height: r.height,
         };
         self.settings_elements.ai_settings = r;
+        
+        // Calculate the position of the Rules button
+        let r = Rectangle {
+            x: r.x,
+            y: r.y + r.height + padding,
+            width: r.width,
+            height: 100.0,
+        };
+        self.settings_elements.rules = r;
 
-        // Calculate the positions of the clickable content
+        // Calculate the position of the Keybinds button
+        let r = Rectangle {
+            x: r.x,
+            y: r.y + r.height + padding,
+            width: r.width,
+            height: 100.0,
+        };
+        self.settings_elements.keybinds = r;
+
+        // Calculate the position of the Symbols button
+        let r = Rectangle {
+            x: r.x,
+            y: r.y + r.height + padding,
+            width: r.width,
+            height: 100.0,
+        };
+        self.settings_elements.symbols = r;
+
+        // Calculate the keybinds elements positions
+
+        // Calculate the position of the Back button
+        let r = Rectangle {
+            x: rect.x + padding,
+            y: rect.y + padding + UI_NAVBAR_HEIGHT as f32 + UI_DIVIDER_THICKNESS as f32,
+            width: rect.width - 2.0 * padding,
+            height: 100.0,
+        };
+        self.keybinds_elements.back = r;
+        
+        
+        // Calculate the position of the Padding
+        let p = Rectangle {
+            x: r.x,
+            y: r.y + r.height,
+            width: r.width,
+            height: padding,
+        };
+        self.keybinds_elements.padding = p;
+        
+        // Calculate the position of the binds element
+        let r = Rectangle {
+            x: r.x,
+            y: r.y + r.height + padding,
+            width: r.width,
+            height: 700.0,
+        };
+        self.keybinds_elements.binds = r;
+
+        // Calculate the Symbols elements positions
+
+        // Calculate the position of the Back button
+        let r = Rectangle {
+            x: rect.x + padding,
+            y: rect.y + padding + UI_NAVBAR_HEIGHT as f32 + UI_DIVIDER_THICKNESS as f32,
+            width: rect.width - 2.0 * padding,
+            height: 100.0,
+        };
+        self.symbols_elements.back = r;
+
+        let r = Rectangle {
+            x: r.x,
+            y: r.y + r.height + padding,
+            width: r.width,
+            height: 200.0,
+        };
+        self.symbols_elements.player_1 = r;
+
+        let r = Rectangle {
+            x: r.x,
+            y: r.y + r.height + padding,
+            width: r.width,
+            height: 200.0,
+        };
+        self.symbols_elements.player_2 = r;
+
+        // Calculate the positions of the clickable content -------
+
         let padding = UI_CONTENT_PADDING * self.constant_elements.inner_content.width;
 
         let dp = self.settings_elements.depth;
@@ -282,6 +375,38 @@ impl UI {
             height: button_side,
         };
         self.settings_elements.ai_max_time = r;
+
+        let p1 = self.symbols_elements.player_1;
+        let b = Rectangle {
+            x: p1.x + padding,
+            y: p1.y + padding + 100.0,
+            width: button_side,
+            height: button_side,
+        };
+        self.symbols_elements.player_1_backward = b;
+        let f = Rectangle {
+            x: p1.x + p1.width - padding - button_side,
+            y: p1.y + padding + 100.0,
+            width: button_side,
+            height: button_side,
+        };
+        self.symbols_elements.player_1_forward = f;
+
+        let p2 = self.symbols_elements.player_2;
+        let b = Rectangle {
+            x: p2.x + padding,
+            y: p2.y + padding + 100.0,
+            width: button_side,
+            height: button_side,
+        };
+        self.symbols_elements.player_2_backward = b;
+        let f = Rectangle {
+            x: p2.x + p1.width - padding - button_side,
+            y: p2.y + padding + 100.0,
+            width: button_side,
+            height: button_side,
+        };
+        self.symbols_elements.player_2_forward = f;
     }
 
     /// Draws the constant elements onto the screen
@@ -302,6 +427,8 @@ impl UI {
         match self.tab {
             UITab::Game => self.draw_game(content_rec_inner, d, g, state),
             UITab::Settings => self.draw_settings(content_rec_inner, d, g, state),
+            UITab::Keybinds => self.draw_keybinds(rect, d, g, state),
+            UITab::Symbols => self.draw_symbols(rect, d, g, state),
             UITab::None => {}
         }
 
@@ -417,9 +544,9 @@ impl UI {
             d.draw_rectangle_rec(
                 rect,
                 if i % 2 == 1 {
-                    COLOUR_UI_HIGHLIGHT_P2
+                    g.player_2.foreground
                 } else {
-                    COLOUR_UI_HIGHLIGHT_P1
+                    g.player_1.foreground
                 },
             );
             let t = x[0]
@@ -445,8 +572,8 @@ impl UI {
             let text = match r {
                 Value::None => "Hardware error encountered",
                 Value::Draw => "Draw",
-                Value::Player1 => "Crosses Win",
-                Value::Player2 => "Noughts Win",
+                Value::Player1 => &(g.player_1.symbol.name() + " Win"),
+                Value::Player2 => &(g.player_2.symbol.name() + " Win"),
             };
             let rec = centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, tc);
             d.draw_text_rec(
@@ -459,19 +586,19 @@ impl UI {
                 match r {
                     Value::None => Color::RED,
                     Value::Draw => Color::BLACK,
-                    Value::Player1 => COLOUR_UI_HIGHLIGHT_P1,
-                    Value::Player2 => COLOUR_UI_HIGHLIGHT_P2,
+                    Value::Player1 => g.player_1.foreground,
+                    Value::Player2 => g.player_2.foreground,
                 },
             );
         } else if g.turn == Turn::Player1 {
-            let text = "Crosses' Turn";
+            let text = &(g.player_1.symbol.name_apostrophe() + " Turn");
             let rec = centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, tc);
 
-            d.draw_text_rec(&state.fonts.regular, text, rec, 50.0, 0.0, false, COLOUR_UI_HIGHLIGHT_P1);
+            d.draw_text_rec(&state.fonts.regular, text, rec, 50.0, 0.0, false, g.player_1.foreground);
         } else {
-            let text = "Noughts' Turn";
+            let text = &(g.player_2.symbol.name_apostrophe() + " Turn");
             let rec = centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, tc);
-            d.draw_text_rec(&state.fonts.regular, text, rec, 50.0, 0.0, true, COLOUR_UI_HIGHLIGHT_P2);
+            d.draw_text_rec(&state.fonts.regular, text, rec, 50.0, 0.0, true, g.player_2.foreground);
         }
 
         let p = self.game_elements.padding_2;
@@ -865,5 +992,406 @@ impl UI {
         };
 
         d.draw_text_rec(font, &text, tbox, 50.0, 0.0, false, Color::BLACK);
+
+        let mut rs = self.settings_elements.rules;
+        rs.y += self.scroll_offset_settings;
+        d.draw_rectangle_rec(rs, COLOUR_UI_ELEMENT);
+        let text = "Rules";
+        let trec = centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, rs);
+        d.draw_text_rec(&state.fonts.regular, text, trec, 50.0, 0.0, false, Color::BLACK);
+
+        let mut kb = self.settings_elements.keybinds;
+        kb.y += self.scroll_offset_settings;
+        d.draw_rectangle_rec(kb, COLOUR_UI_ELEMENT);
+        let text = "Keybinds";
+        let trec = centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, kb);
+        d.draw_text_rec(&state.fonts.regular, text, trec, 50.0, 0.0, false, Color::BLACK);
+
+        let mut sy = self.settings_elements.symbols;
+        sy.y += self.scroll_offset_settings;
+        d.draw_rectangle_rec(sy, COLOUR_UI_ELEMENT);
+        let text = "Symbols";
+        let trec = centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, sy);
+        d.draw_text_rec(&state.fonts.regular, text, trec, 50.0, 0.0, false, Color::BLACK);
+    }
+
+    pub fn draw_keybinds<T: RaylibDraw>(
+        &self,
+        rect: Rectangle,
+        d: &mut T,
+        g: &Game,
+        state: &State,
+    ) {
+        let mut kb = self.keybinds_elements.binds;       
+
+        kb.y += self.scroll_offset_keybinds;
+
+        d.draw_rectangle_rec(kb, COLOUR_UI_ELEMENT);
+        
+        let a = Rectangle {
+            x: kb.x,
+            y: kb.y,
+            width: kb.width / 2.0,
+            height: 100.0,
+        };
+        let text = "Left Click:";
+        let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, a);
+        d.draw_text_rec(&state.fonts.regular, text, trec, 40.0, 0.0, false, Color::BLACK);
+        let b = Rectangle {
+            x: a.x + a.width,
+            y: a.y,
+            width: a.width,
+            height: a.height,
+        };
+        let text = "Play Move";
+        let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, b);
+        d.draw_text_rec(&state.fonts.regular, text, trec, 40.0, 0.0, false, Color::BLACK);
+
+        let a = Rectangle {
+            x: a.x,
+            y: a.y + a.height,
+            width: a.width,
+            height: a.height,
+        };
+        let text = "Right Click:";
+        let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, a);
+        d.draw_text_rec(&state.fonts.regular, text, trec, 40.0, 0.0, false, Color::BLACK);
+        let b = Rectangle {
+            x: a.x + a.width,
+            y: a.y,
+            width: a.width,
+            height: a.height,
+        };
+        let text = "Pan";
+        let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, b);
+        d.draw_text_rec(&state.fonts.regular, text, trec, 40.0, 0.0, false, Color::BLACK);
+
+        let a = Rectangle {
+            x: a.x,
+            y: a.y + a.height,
+            width: a.width,
+            height: a.height,
+        };
+        let text = "Scroll:";
+        let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, a);
+        d.draw_text_rec(&state.fonts.regular, text, trec, 40.0, 0.0, false, Color::BLACK);
+        let b = Rectangle {
+            x: a.x + a.width,
+            y: a.y,
+            width: a.width,
+            height: a.height,
+        };
+        let text = "Zoom";
+        let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, b);
+        d.draw_text_rec(&state.fonts.regular, text, trec, 40.0, 0.0, false, Color::BLACK);
+
+        let a = Rectangle {
+            x: a.x,
+            y: a.y + a.height,
+            width: a.width,
+            height: a.height,
+        };
+        let text = "Enter:";
+        let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, a);
+        d.draw_text_rec(&state.fonts.regular, text, trec, 40.0, 0.0, false, Color::BLACK);
+        let b = Rectangle {
+            x: a.x + a.width,
+            y: a.y,
+            width: a.width,
+            height: a.height,
+        };
+        let text = "Re-centre";
+        let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, b);
+        d.draw_text_rec(&state.fonts.regular, text, trec, 40.0, 0.0, false, Color::BLACK);
+
+        let a = Rectangle {
+            x: a.x,
+            y: a.y + a.height,
+            width: a.width,
+            height: a.height,
+        };
+        let text = "Slash:";
+        let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, a);
+        d.draw_text_rec(&state.fonts.regular, text, trec, 40.0, 0.0, false, Color::BLACK);
+        let b = Rectangle {
+            x: a.x + a.width,
+            y: a.y,
+            width: a.width,
+            height: a.height,
+        };
+        let text = "Call AI";
+        let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, b);
+        d.draw_text_rec(&state.fonts.regular, text, trec, 40.0, 0.0, false, Color::BLACK);
+
+        let a = Rectangle {
+            x: a.x,
+            y: a.y + a.height,
+            width: a.width,
+            height: a.height,
+        };
+        let text = "Backspace:";
+        let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, a);
+        d.draw_text_rec(&state.fonts.regular, text, trec, 40.0, 0.0, false, Color::BLACK);
+        let b = Rectangle {
+            x: a.x + a.width,
+            y: a.y,
+            width: a.width,
+            height: a.height,
+        };
+        let text = "Undo Move";
+        let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, b);
+        d.draw_text_rec(&state.fonts.regular, text, trec, 40.0, 0.0, false, Color::BLACK);
+
+        let a = Rectangle {
+            x: a.x,
+            y: a.y + a.height,
+            width: a.width,
+            height: a.height,
+        };
+        let text = "Grave:";
+        let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, a);
+        d.draw_text_rec(&state.fonts.regular, text, trec, 40.0, 0.0, false, Color::BLACK);
+        let b = Rectangle {
+            x: a.x + a.width,
+            y: a.y,
+            width: a.width,
+            height: a.height,
+        };
+        let text = "Toggle FPS";
+        let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, b);
+        d.draw_text_rec(&state.fonts.regular, text, trec, 40.0, 0.0, false, Color::BLACK);
+
+        let bk = self.keybinds_elements.back;
+
+        d.draw_rectangle_rec(bk, COLOUR_UI_ELEMENT);
+        let text = "Back";
+        let trec = centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, bk);
+        d.draw_text_rec(&state.fonts.regular, text, trec, 50.0, 0.0, false, Color::BLACK);
+        
+        let pd = self.keybinds_elements.padding;
+        d.draw_rectangle_rec(pd, COLOUR_UI_BG);
+    }
+
+    pub fn draw_symbols<T: RaylibDraw>(
+        &self,
+        rect: Rectangle,
+        d: &mut T,
+        g: &Game,
+        state: &State,
+    ) {
+        let bk = self.symbols_elements.back;
+        d.draw_rectangle_rec(bk, COLOUR_UI_ELEMENT);
+        let text = "Back";
+        let trec = centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, bk);
+        d.draw_text_rec(&state.fonts.regular, text, trec, 50.0, 0.0, false, Color::BLACK);
+
+        // Draw Player 1 Symbol Selection
+        let p1 = self.symbols_elements.player_1;
+        d.draw_rectangle_rec(p1, COLOUR_UI_ELEMENT);
+
+        let trec = Rectangle {
+            x: p1.x,
+            y: p1.y,
+            width: p1.width,
+            height: 100.0,
+        };
+        let text = "Player 1";
+        let trec = centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, trec);
+        d.draw_text_rec(&state.fonts.regular, text, trec, 50.0, 0.0, false, Color::BLACK);
+
+
+        let p1b = self.symbols_elements.player_1_backward;
+        let p1f = self.symbols_elements.player_1_forward;        
+        let text = self.state.player_1.name();
+        let r = Rectangle {
+            x: p1b.x + p1b.width,
+            y: p1b.y,
+            width: p1f.x - p1b.x - p1f.width,
+            height: p1b.height,
+        };
+        let trec = centre_text_rec(&state.fonts.regular, &text, 50.0, 0.0, r);
+        d.draw_text_rec(&state.fonts.regular, &text, trec, 50.0, 0.0, false, Color::BLACK);
+    
+        d.draw_rectangle_rec(p1b, COLOUR_UI_BUTTON);
+        let arrow_padding = p1b.width * UI_CONTENT_PADDING * 3.0;
+        d.draw_line_ex(
+            Vector2 {
+                x: p1b.x + arrow_padding,
+                y: p1b.y + p1b.height / 2.0,
+            }, 
+            Vector2 {
+                x: p1b.x + p1b.width / 2.0,
+                y: p1b.y +  arrow_padding,
+            }, 
+            p1f.width * 0.15, 
+            Color::BLACK
+        );
+        d.draw_line_ex(
+            Vector2 {
+                x: p1b.x + arrow_padding - p1f.width * 0.15 * (1.0 / 3.0),
+                y: p1b.y + p1b.height / 2.0 - p1f.width * 0.15 * (1.0 / 3.0),
+            }, 
+            Vector2 {
+                x: p1b.x + p1b.width / 2.0,
+                y: p1b.y + p1b.height - arrow_padding,
+            }, 
+            p1f.width * 0.15, 
+            Color::BLACK
+        );
+        d.draw_line_ex(
+            Vector2 {
+                x: p1b.x + arrow_padding,
+                y: p1b.y + p1b.height / 2.0,
+            }, 
+            Vector2 {
+                x: p1b.x + p1b.width -  arrow_padding,
+                y: p1b.y + p1b.height / 2.0,
+            }, 
+            p1f.width * 0.15, 
+            Color::BLACK
+        );
+    
+        d.draw_rectangle_rec(p1f, COLOUR_UI_BUTTON);
+        let arrow_padding = p1b.width * UI_CONTENT_PADDING * 3.0;
+        d.draw_line_ex(
+            Vector2 {
+                x: p1f.x + p1f.width - arrow_padding,
+                y: p1f.y + p1f.height / 2.0,
+            }, 
+            Vector2 {
+                x: p1f.x + p1f.width / 2.0,
+                y: p1f.y +  arrow_padding,
+            }, 
+            p1f.width * 0.15, 
+            Color::BLACK
+        );
+        d.draw_line_ex(
+            Vector2 {
+                x: p1f.x + p1f.width - arrow_padding + p1f.width * 0.15 * (1.0 / 3.0),
+                y: p1f.y + p1f.height / 2.0 - p1f.width * 0.15 * (1.0 / 3.0),
+            }, 
+            Vector2 {
+                x: p1f.x + p1f.width / 2.0,
+                y: p1f.y + p1f.height - arrow_padding,
+            }, 
+            p1f.width * 0.15, 
+            Color::BLACK
+        );
+        d.draw_line_ex(
+            Vector2 {
+                x: p1f.x + arrow_padding,
+                y: p1f.y + p1f.height / 2.0,
+            }, 
+            Vector2 {
+                x: p1f.x + p1f.width -  arrow_padding,
+                y: p1f.y + p1f.height / 2.0,
+            }, 
+            p1f.width * 0.15, 
+            Color::BLACK
+        );
+
+        // Draw Player 2 Symbol Selection
+        let p1 = self.symbols_elements.player_2;
+        d.draw_rectangle_rec(p1, COLOUR_UI_ELEMENT);
+
+        let trec = Rectangle {
+            x: p1.x,
+            y: p1.y,
+            width: p1.width,
+            height: 100.0,
+        };
+        let text = "Player 2";
+        let trec = centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, trec);
+        d.draw_text_rec(&state.fonts.regular, text, trec, 50.0, 0.0, false, Color::BLACK);
+
+        let p1b = self.symbols_elements.player_2_backward;
+        let p1f = self.symbols_elements.player_2_forward;        
+        let text = self.state.player_2.name();
+        let r = Rectangle {
+            x: p1b.x + p1b.width,
+            y: p1b.y,
+            width: p1f.x - p1b.x - p1f.width,
+            height: p1b.height,
+        };
+        let trec = centre_text_rec(&state.fonts.regular, &text, 50.0, 0.0, r);
+        d.draw_text_rec(&state.fonts.regular, &text, trec, 50.0, 0.0, false, Color::BLACK);
+    
+        d.draw_rectangle_rec(p1b, COLOUR_UI_BUTTON);
+        let arrow_padding = p1b.width * UI_CONTENT_PADDING * 3.0;
+        d.draw_line_ex(
+            Vector2 {
+                x: p1b.x + arrow_padding,
+                y: p1b.y + p1b.height / 2.0,
+            }, 
+            Vector2 {
+                x: p1b.x + p1b.width / 2.0,
+                y: p1b.y +  arrow_padding,
+            }, 
+            p1f.width * 0.15, 
+            Color::BLACK
+        );
+        d.draw_line_ex(
+            Vector2 {
+                x: p1b.x + arrow_padding - p1f.width * 0.15 * (1.0 / 3.0),
+                y: p1b.y + p1b.height / 2.0 - p1f.width * 0.15 * (1.0 / 3.0),
+            }, 
+            Vector2 {
+                x: p1b.x + p1b.width / 2.0,
+                y: p1b.y + p1b.height - arrow_padding,
+            }, 
+            p1f.width * 0.15, 
+            Color::BLACK
+        );
+        d.draw_line_ex(
+            Vector2 {
+                x: p1b.x + arrow_padding,
+                y: p1b.y + p1b.height / 2.0,
+            }, 
+            Vector2 {
+                x: p1b.x + p1b.width -  arrow_padding,
+                y: p1b.y + p1b.height / 2.0,
+            }, 
+            p1f.width * 0.15, 
+            Color::BLACK
+        );
+    
+        d.draw_rectangle_rec(p1f, COLOUR_UI_BUTTON);
+        let arrow_padding = p1b.width * UI_CONTENT_PADDING * 3.0;
+        d.draw_line_ex(
+            Vector2 {
+                x: p1f.x + p1f.width - arrow_padding,
+                y: p1f.y + p1f.height / 2.0,
+            }, 
+            Vector2 {
+                x: p1f.x + p1f.width / 2.0,
+                y: p1f.y +  arrow_padding,
+            }, 
+            p1f.width * 0.15, 
+            Color::BLACK
+        );
+        d.draw_line_ex(
+            Vector2 {
+                x: p1f.x + p1f.width - arrow_padding + p1f.width * 0.15 * (1.0 / 3.0),
+                y: p1f.y + p1f.height / 2.0 - p1f.width * 0.15 * (1.0 / 3.0),
+            }, 
+            Vector2 {
+                x: p1f.x + p1f.width / 2.0,
+                y: p1f.y + p1f.height - arrow_padding,
+            }, 
+            p1f.width * 0.15, 
+            Color::BLACK
+        );
+        d.draw_line_ex(
+            Vector2 {
+                x: p1f.x + arrow_padding,
+                y: p1f.y + p1f.height / 2.0,
+            }, 
+            Vector2 {
+                x: p1f.x + p1f.width -  arrow_padding,
+                y: p1f.y + p1f.height / 2.0,
+            }, 
+            p1f.width * 0.15, 
+            Color::BLACK
+        );
     }
 }

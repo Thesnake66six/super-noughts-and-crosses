@@ -5,67 +5,10 @@ use raylib::{
     drawing::RaylibDraw,
     math::{Rectangle, Vector2},
     text::{measure_text_ex, Font},
-    RaylibHandle,
+    RaylibHandle, RaylibThread,
 };
 
-use crate::{game::game::Turn, styles::{COLOUR_BOARD_BG_GREYED, COLOUR_BOARD_BG_GREYED_P1, COLOUR_BOARD_BG_GREYED_P2, COLOUR_CELL_BG_GREYED, COLOUR_CELL_BG_GREYED_P1, COLOUR_CELL_BG_GREYED_P2, COLOUR_CROSS_FG, COLOUR_DRAW_FG, COLOUR_NOUGHT_FG, CROSS_THICK, DO_COLOURED_GREYS, NOUGHT_PADDING, NOUGHT_THICK, UI_PANEL_WIDTH}};
-
-//----------// Symbol rendering functions //----------//
-
-/// Draws a cross (`Cell::Player1` or `Value::Player1`) into the given rectangle 'rect' onto `d`.
-pub fn draw_cross<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
-    // Calculating the starting point...
-    let ln_x = rect.x + (CROSS_THICK * rect.width / SQRT_2);
-    let ln_y = rect.y + (CROSS_THICK * rect.height / SQRT_2);
-    // ...and the ending point of the first line...
-    let ln_fx = rect.x + rect.width - (CROSS_THICK * rect.width / SQRT_2);
-    let ln_fy = rect.y + rect.height - (CROSS_THICK * rect.height / SQRT_2);
-
-    // ...and drawing the given line with the correct colour and relative thickness.
-    d.draw_line_ex(
-        Vector2 { x: ln_x, y: ln_y },
-        Vector2 { x: ln_fx, y: ln_fy },
-        rect.width * CROSS_THICK,
-        COLOUR_CROSS_FG,
-    );
-
-    // Calculating the starting point...
-    let ln_x = rect.x + (CROSS_THICK * rect.width / SQRT_2);
-    let ln_y = rect.y + rect.height - (CROSS_THICK * rect.height / SQRT_2);
-    // ...and the ending point of the second line...
-    let ln_fx = rect.x + rect.width - (CROSS_THICK * rect.width / SQRT_2);
-    let ln_fy = rect.y + (CROSS_THICK * rect.height / SQRT_2);
-
-    // ...and drawing the given line with the correct colour and relative thickness.
-    d.draw_line_ex(
-        Vector2 { x: ln_x, y: ln_y },
-        Vector2 { x: ln_fx, y: ln_fy },
-        rect.width * CROSS_THICK,
-        COLOUR_CROSS_FG,
-    );
-}
-
-/// Draws a nought (`Cell::Player2` or `Value::Player2`) into the given rectangle 'rect' onto `d`.
-pub fn draw_nought<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
-    // Calculating the position of the centre of the ring...
-    let cx = rect.x + (rect.width / 2.0);
-    let cy = rect.y + (rect.height / 2.0);
-
-    // ...then the inner and outer radii of the ring based on the relative thickness...
-    let ro = (rect.width / 2.0) - NOUGHT_PADDING * rect.width;
-    let ri = (rect.width / 2.0) - (NOUGHT_THICK + NOUGHT_PADDING) * rect.width;
-
-    // ...then drawing that ring with the correct colour.
-    d.draw_ring(
-        Vector2 { x: cx, y: cy },
-        ri,
-        ro,
-        0.0,
-        360.0,
-        100,
-        COLOUR_NOUGHT_FG,
-    );
-}
+use crate::{game::{game::{Game, Turn}, player::Player, symbol::{self, Symbol}}, styles::{BARBEQUE, COLOUR_BOARD_BG_GREYED, COLOUR_CELL_BG_GREYED, COLOUR_DRAW_FG, CROSS, DO_COLOURED_GREYS, NOUGHT, THORN, UI_PANEL_WIDTH}};
 
 /// Draws a draw (`Value::Draw`) into the given rectangle 'rect' onto `d`.
 pub fn draw_draw<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
@@ -92,11 +35,11 @@ pub fn draw_draw<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
 //----------// Miscellaneous quick procedures //----------//
 
 /// Returns the correct colour for a greyed out cell.
-pub fn get_greyed_colour_cell(turn: Turn) -> Color {
+pub fn get_greyed_colour_cell(turn: Turn, player_1: &Player, player_2: &Player) -> Color {
     if DO_COLOURED_GREYS {
         match turn {
-            Turn::Player1 => COLOUR_CELL_BG_GREYED_P1,
-            Turn::Player2 => COLOUR_CELL_BG_GREYED_P2,
+            Turn::Player1 => player_1.get_greyed_colour(),
+            Turn::Player2 => player_2.get_greyed_colour(),
         }
     } else {
         COLOUR_CELL_BG_GREYED
@@ -104,11 +47,11 @@ pub fn get_greyed_colour_cell(turn: Turn) -> Color {
 }
 
 /// Returns the correct colour for a greyed out board.
-pub fn get_greyed_colour_board(turn: Turn) -> Color {
+pub fn get_greyed_colour_board(turn: Turn, player_1: &Player, player_2: &Player) -> Color {
     if DO_COLOURED_GREYS {
         match turn {
-            Turn::Player1 => COLOUR_BOARD_BG_GREYED_P1,
-            Turn::Player2 => COLOUR_BOARD_BG_GREYED_P2,
+            Turn::Player1 => player_1.get_greyed_colour(),
+            Turn::Player2 => player_2.get_greyed_colour(),
         }
     } else {
         COLOUR_BOARD_BG_GREYED
@@ -161,5 +104,40 @@ pub fn get_board_rect(depth: usize) -> Rectangle {
         y: 0.0,
         width: 60.0 * 3f32.powi(depth as i32),
         height: 60.0 * 3f32.powi(depth as i32),
+    }
+}
+
+pub fn get_rgb_from_rgba(fg: Color, bg: Color) -> Color {
+    let alpha = fg.a as f32 / 255.0;
+    let r = (fg.r as f32 * alpha + bg.r as f32 * (1.0 - alpha)) as u8;
+    let g = (fg.g as f32 * alpha + bg.g as f32 * (1.0 - alpha)) as u8;
+    let b = (fg.b as f32 * alpha + bg.b as f32 * (1.0 - alpha)) as u8;
+
+    Color {
+        r,
+        g,
+        b,
+        a: 255,
+    }
+}
+
+pub fn update_window_title(rl: &mut RaylibHandle, rlthread: &mut RaylibThread, g: &Game) {
+    let mut out = String::new();
+
+    for _ in 0..g.depth - 1 {
+        out += "Super "
+    }
+    
+    out += &(g.player_2.symbol.name() + " and " + &g.player_1.symbol.name());
+
+    rl.set_window_title(&rlthread, &out)
+}
+
+pub fn get_player_from_symbol(symbol: &Symbol) -> Player {
+    match symbol {
+        Symbol::Cross => CROSS,
+        Symbol::Nought => NOUGHT,
+        Symbol::Thorn => THORN,
+        Symbol::Barbeque => BARBEQUE,
     }
 }

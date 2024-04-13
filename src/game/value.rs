@@ -1,8 +1,8 @@
 use raylib::{drawing::RaylibDraw, math::Rectangle};
 
-use crate::{common::{draw_cross, draw_draw, draw_nought, get_greyed_colour_cell}, styles::{COLOUR_CELL_BG, COLOUR_CROSS_BG, COLOUR_CROSS_BGA, COLOUR_DRAW_BG, COLOUR_DRAW_BGA, COLOUR_NOUGHT_BG, COLOUR_NOUGHT_BGA}};
+use crate::{common::{draw_draw, get_greyed_colour_cell}, styles::{COLOUR_CELL_BG,  COLOUR_DRAW_BG, COLOUR_DRAW_BGA}};
 
-use super::{game::Turn, legal::Legal};
+use super::{game::Turn, legal::Legal, player::Player};
 
 /// An enum used to differentiate the states of a board.
 #[derive(Debug, Copy, Clone, PartialEq)]
@@ -26,6 +26,8 @@ impl Value {
         alpha: bool,
         legal: Legal,
         turn: Turn,
+        player_1: &Player,
+        player_2: &Player,
     ) {
         let mut greyed = true;
         if let Legal::Pos(x) = legal {
@@ -40,17 +42,17 @@ impl Value {
             if alpha {
                 match self {
                     Value::None => COLOUR_CELL_BG,
-                    Value::Player1 => COLOUR_CROSS_BGA,
-                    Value::Player2 => COLOUR_NOUGHT_BGA,
+                    Value::Player1 => player_1.background_alpha,
+                    Value::Player2 => player_2.background_alpha,
                     Value::Draw => COLOUR_DRAW_BGA,
                 }
             } else if greyed {
-                get_greyed_colour_cell(turn)
+                get_greyed_colour_cell(turn, player_1, player_2)
             } else {
                 match self {
                     Value::None => COLOUR_CELL_BG,
-                    Value::Player1 => COLOUR_CROSS_BG,
-                    Value::Player2 => COLOUR_NOUGHT_BG,
+                    Value::Player1 => player_1.background,
+                    Value::Player2 => player_2.background,
                     Value::Draw => COLOUR_DRAW_BG,
                 }
             },
@@ -60,8 +62,8 @@ impl Value {
         match self {
             Value::None => {}
             Value::Draw => draw_draw(rect, d),
-            Value::Player1 => draw_cross(rect, d),
-            Value::Player2 => draw_nought(rect, d),
+            Value::Player1 => player_1.symbol.draw(player_1, rect, d),
+            Value::Player2 => player_2.symbol.draw(player_2, rect, d),
         }
     }
 }

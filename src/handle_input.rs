@@ -4,11 +4,11 @@ use raylib::{
     camera::Camera2D,
     ffi::{KeyboardKey, MouseButton},
     math::{Rectangle, Vector2},
-    RaylibHandle,
+    RaylibHandle, RaylibThread,
 };
 
 use crate::{
-    common::{get_game_rect, get_ui_rect},
+    common::{get_game_rect, get_player_from_symbol, get_ui_rect, update_window_title},
     game::{game::Game, value::Value},
     handle_click::handle_click,
     noughbert::{
@@ -22,6 +22,7 @@ use crate::{
 
 pub fn handle_input(
     rl: &mut RaylibHandle,
+    rlthread: &mut RaylibThread,
     g: &mut Game,
     ui: &mut UI,
     state: &mut State,
@@ -75,6 +76,25 @@ pub fn handle_input(
                     }
                 }
             }
+            UITab::Keybinds => {
+                // ... and is over the content...
+                let content_rec = Rectangle {
+                    x: state.ui_rect.x,
+                    y: state.ui_rect.y + (ui.keybinds_elements.binds.y - state.ui_rect.y),
+                    width: state.ui_rect.width,
+                    height: state.ui_rect.height
+                        - UI_NAVBAR_HEIGHT as f32
+                        - UI_DIVIDER_THICKNESS as f32,
+                };
+                if content_rec.check_collision_point_rec(mouse_pos) {
+                    // ...increment the scroll offset.
+                    ui.scroll_offset_keybinds += x * UI_SCROLL_SPEED;
+                    if ui.scroll_offset_keybinds > 0.0 {
+                        ui.scroll_offset_keybinds = 0.0;
+                    }
+                }
+            },
+            UITab::Symbols => {}
             UITab::None => {}
         }
     } else {
@@ -106,7 +126,7 @@ pub fn handle_input(
     let world_coord = rl.get_screen_to_world2D(mouse_pos, g.camera);
     let hovered_cell = g.get_cell_from_pixel(world_coord, false);
 
-    handle_click(rl, g, ui, state, mouse_pos, &hovered_cell);
+    handle_click(rl, rlthread, g, ui, state, mouse_pos, &hovered_cell);
 
     if rl.is_key_pressed(KeyboardKey::KEY_ENTER) {
         g.centre_camera(state.game_rect);
@@ -122,7 +142,6 @@ pub fn handle_input(
             Textbox::MaxTime => {
                 let x = &mut ui.state.max_time;
                 *x /= 10;
-                ui.state.is_ai_modified = true
             }
             Textbox::None => {
                 let _ = g.unplay();
@@ -181,10 +200,17 @@ pub fn handle_input(
                     players: new_game.players,
                     moves: new_game.moves,
                     legal: new_game.legal,
+                    player_1: new_game.player_1,
+                    player_2: new_game.player_2,
                 };
+                
                 g.update_positions();
                 g.centre_camera(state.game_rect);
-                ui.state.is_ai_modified = true
+                ui.state.is_ai_modified = true;
+                ui.state.player_1 = g.player_1.symbol;
+                ui.state.player_2 = g.player_2.symbol;
+                update_window_title(rl, rlthread, g);
+            
             }
             Err(_) => {
                 println!("Could not read game from file");

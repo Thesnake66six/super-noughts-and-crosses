@@ -3,5 +3,7 @@
 pub enum UITab {
     Game,
     Settings,
+    Keybinds,
+    Symbols,
     None,
 }

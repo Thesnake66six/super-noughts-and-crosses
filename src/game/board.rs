@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{common::get_greyed_colour_board, styles::{BOARD_CELL_MARGIN, BOARD_LINE_THICK, COLOUR_BOARD_BG, COLOUR_BOARD_FG, INVERT_GREYS}};
 
-use super::{cell::Cell, game::Turn, legal::Legal, value::Value};
+use super::{cell::Cell, game::Turn, legal::Legal, player::Player, value::Value};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Board {
@@ -216,6 +216,8 @@ impl Board {
         hover: Option<&[usize]>,
         mut legal: Legal,
         turn: Turn,
+        player_1: &Player,
+        player_2: &Player,
     ) {
         let mut t: Option<usize> = None;
         let mut ignore = false;
@@ -245,11 +247,11 @@ impl Board {
                 if t.is_some() {
                     COLOUR_BOARD_BG
                 } else {
-                    get_greyed_colour_board(turn)
+                    get_greyed_colour_board(turn, player_1, player_2)
                 }
             } else if let Some(x) = t {
                 if x == 10 {
-                    get_greyed_colour_board(turn)
+                    get_greyed_colour_board(turn, player_1, player_2)
                 } else {
                     COLOUR_BOARD_BG
                 }
@@ -345,6 +347,8 @@ impl Board {
                     Legal::None
                 },
                 turn,
+                player_1,
+                player_2,
             );
         }
     }

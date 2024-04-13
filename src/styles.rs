@@ -2,6 +2,8 @@ use std::f32::consts::SQRT_2;
 
 use raylib::color::Color;
 
+use crate::game::{player::Player, symbol::Symbol};
+
 //----------// Constants determining debug settings //----------//
 
 /// Sets the default toggle position of the FPS counter
@@ -52,9 +54,6 @@ pub const BOARD_DEFAULT_PLAYERS: usize = 2;
 /// The default exploration factor for the `UCB1` function;
 pub const DEFAULT_EXPLORATION_FACTOR: f32 = SQRT_2 / 2.0;
 
-/// The default value for `Max Sims`
-pub const DEFAULT_MAX_SIMS: usize = 100;
-
 /// The time between the computer making a move
 pub const DEFAULT_MAX_TIME: usize = 10;
 
@@ -72,6 +71,13 @@ pub const COMPUTER_LEVEL_3_SIMS: usize = 100;
 
 /// The default scale factor for each depth
 pub const COMPUTER_SIM_SCALING: usize = 6;
+
+/// The default scale factor for each depth
+pub const COMPUTER_DEFAULT_STRENGTH: usize = 2;
+
+//----------// Constants determining other items //----------//
+
+pub const RULES_URL: &str = "https://thesnake66six.gitlab.io/snvc-rules";
 
 //----------// Constants determining the properties of the camera //----------//
 
@@ -109,15 +115,6 @@ pub const BOARD_CELL_MARGIN: f32 = 0.02;
 /// The fractional thickness of the board lines.
 pub const BOARD_LINE_THICK: f32 = 0.02;
 
-/// The fractional thickness of the lines in a cross symbol
-pub const CROSS_THICK: f32 = 0.15;
-
-/// The fractional thickness of the ring in a nought symbol
-pub const NOUGHT_THICK: f32 = 0.15;
-
-/// The fractional padding between the ring of the nought and the edge of the cell
-pub const NOUGHT_PADDING: f32 = 0.05;
-
 //----------// Constants of colours used in rendering the UI //----------//
 
 /// Background colour for the UI menu
@@ -145,12 +142,6 @@ pub const COLOUR_UI_RADIAL: Color = Color::BLACK;
 /// Colour of the divider between the navbar and the tab content
 pub const COLOUR_UI_DIVIDER: Color = Color::BLACK;
 
-/// Colour for player 1 highlights
-pub const COLOUR_UI_HIGHLIGHT_P1: Color = COLOUR_CROSS_FG;
-
-/// Colour for player 2 highlights
-pub const COLOUR_UI_HIGHLIGHT_P2: Color = COLOUR_NOUGHT_FG;
-
 //----------// Constants of colours used in rendering the board //----------//
 
 /// Line colour of the board.
@@ -166,12 +157,6 @@ pub const COLOUR_BOARD_BG: Color = COLOUR_CELL_BG;
 
 /// Background colour of a greyed board.
 pub const COLOUR_BOARD_BG_GREYED: Color = COLOUR_CELL_BG_GREYED;
-
-/// Colourful background colour of a board on crosses' turn.
-pub const COLOUR_BOARD_BG_GREYED_P1: Color = COLOUR_CELL_BG_GREYED_P1;
-
-/// Colourful background colour of a board on noughts' turn.
-pub const COLOUR_BOARD_BG_GREYED_P2: Color = COLOUR_CELL_BG_GREYED_P2;
 
 //----------// Constants of colours used in rendering cells //----------//
 
@@ -190,60 +175,74 @@ pub const COLOUR_CELL_BG_GREYED: Color = Color {
 
 //-----// Crosses //-----//
 
-/// Foreground colour of the cross symbol.
-pub const COLOUR_CROSS_FG: Color = Color {
-    r: 230,
-    g: 41,
-    b: 55,
-    a: 255,
-};
-
-/// Specific background colour of cross cells.
-pub const COLOUR_CROSS_BG: Color = COLOUR_CELL_BG;
-
-/// Specific transparent background colour of cross cells.
-pub const COLOUR_CROSS_BGA: Color = Color {
-    r: 230,
-    g: 41,
-    b: 55,
-    a: 127,
-};
-
-/// Colourful background colour of a greyed cell on crosses' turn.
-pub const COLOUR_CELL_BG_GREYED_P1: Color = Color {
-    r: 243,
-    g: 148,
-    b: 155,
-    a: 255,
+pub const CROSS: Player = Player {
+    foreground: Color {
+        r: 230,
+        g: 41,
+        b: 55,
+        a: 255,
+    },
+    background: COLOUR_CELL_BG,
+    background_alpha: Color {
+        r: 230,
+        g: 41,
+        b: 55,
+        a: 127,
+    },
+    symbol: Symbol::Cross,
 };
 
 //-----// Noughts //-----//
 
-/// Foreground colour of the nought symbol.
-pub const COLOUR_NOUGHT_FG: Color = Color {
-    r: 49,
-    g: 148,
-    b: 243,
-    a: 255,
+pub const NOUGHT: Player = Player {
+    foreground: Color {
+        r: 49,
+        g: 148,
+        b: 243,
+        a: 255,
+    },
+    background: COLOUR_CELL_BG,
+    background_alpha: Color {
+        r: 49,
+        g: 148,
+        b: 243,
+        a: 127,
+    },
+    symbol: Symbol::Nought,
 };
 
-/// Specific background colour of nought cells.
-pub const COLOUR_NOUGHT_BG: Color = COLOUR_CELL_BG;
-
-/// Specific transparent background colour of nought cells.
-pub const COLOUR_NOUGHT_BGA: Color = Color {
-    r: 49,
-    g: 148,
-    b: 243,
-    a: 127,
+pub const THORN: Player = Player {
+    foreground: Color {
+        r: 88,
+        g: 201,
+        b: 154,
+        a: 255,
+    },
+    background: COLOUR_CELL_BG,
+    background_alpha: Color {
+        r: 88,
+        g: 201,
+        b: 154,
+        a: 127,
+    },
+    symbol: Symbol::Thorn,
 };
 
-/// Colourful background colour of a greyed cell on noughts' turn.
-pub const COLOUR_CELL_BG_GREYED_P2: Color = Color {
-    r: 152,
-    g: 202,
-    b: 249,
-    a: 255,
+pub const BARBEQUE: Player = Player {
+    foreground: Color {
+        r: 75,
+        g: 0,
+        b: 130,
+        a: 255,
+    },
+    background: COLOUR_CELL_BG,
+    background_alpha: Color {
+        r: 75,
+        g: 0,
+        b: 130,
+        a: 127,
+    },
+    symbol: Symbol::Barbeque,
 };
 
 //-----// Drawn cells //-----//

@@ -16,6 +16,9 @@ pub struct SettingsElements {
     pub ai_settings: Rectangle,
     pub ai_max_sims: Rectangle,
     pub ai_max_time: Rectangle,
+    pub rules: Rectangle,
+    pub keybinds: Rectangle,
+    pub symbols: Rectangle,
 }
 
 impl SettingsElements {
@@ -36,6 +39,9 @@ impl SettingsElements {
             ai_settings: Rectangle::EMPTY,
             ai_max_sims: Rectangle::EMPTY,
             ai_max_time: Rectangle::EMPTY,
+            rules: Rectangle::EMPTY,
+            keybinds: Rectangle::EMPTY,
+            symbols: Rectangle::EMPTY,
         }
     }
 }

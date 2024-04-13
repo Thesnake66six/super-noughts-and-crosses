@@ -6,10 +6,10 @@ use std::{
 
 use anyhow::Result;
 use raylib::{core::texture::RaylibTexture2D, prelude::*};
-use styles::{BOARD_DEFAULT_DEPTH, BOARD_DEFAULT_PLAYERS, COMPUTER_RESPONSE_DELAY, DEFAULT_EXPLORATION_FACTOR, DEFAULT_MAX_SIMS, DEFAULT_MAX_TIME, DEFAULT_SHOW_FPS_COUNTER, UI_PANEL_MIN_HEIGHT, UI_PANEL_WIDTH};
+use styles::{BOARD_DEFAULT_DEPTH, BOARD_DEFAULT_PLAYERS, COMPUTER_RESPONSE_DELAY, DEFAULT_EXPLORATION_FACTOR, DEFAULT_MAX_TIME, DEFAULT_SHOW_FPS_COUNTER, UI_PANEL_MIN_HEIGHT, UI_PANEL_WIDTH};
 
 use crate::{
-    ai_thread::noughbert, common::{get_board_rect, get_game_rect, get_ui_rect}, fonts::Fonts, game::{
+    ai_thread::noughbert, common::{get_board_rect, get_game_rect, get_player_from_symbol, get_ui_rect, update_window_title}, fonts::Fonts, game::{
         game::{Game, Turn},
         value::Value,
     }, handle_input::handle_input, noughbert::{
@@ -44,10 +44,9 @@ fn main() -> Result<()> {
     let tx = tx_0;
 
     // Initialise Raylib
-    let (mut rl, thread) = raylib::init()
+    let (mut rl, mut thread) = raylib::init()
         .size(650 * 2, 650 * 2)
         .resizable()
-        .title("Super Noughts and Crosses")
         .msaa_4x()
         .build();
 
@@ -119,6 +118,10 @@ fn main() -> Result<()> {
     // Centre
     g.centre_camera(state.game_rect);
 
+    g.player_1 = get_player_from_symbol(&ui.state.player_1);
+    g.player_2 = get_player_from_symbol(&ui.state.player_2);
+    update_window_title(&mut rl, &mut thread, &g);
+
     println!("//------Look Ma, I'm a hacker now!------//");
 
     while !rl.window_should_close() {
@@ -127,7 +130,7 @@ fn main() -> Result<()> {
 
         //----------// Handle input //----------//
 
-        let hovered_cell = handle_input(&mut rl, &mut g, &mut ui, &mut state);
+        let hovered_cell = handle_input(&mut rl, &mut thread, &mut g, &mut ui, &mut state);
 
         if (g.players == 0 || (g.players == 1 && g.turn == Turn::Player2))
             && g.board.check() == Value::None
