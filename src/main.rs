@@ -12,7 +12,7 @@ use crate::{
     ai_thread::noughbert, common::*, game::{
         game::{Game, Turn},
         value::Value,
-    }, handle_input::handle_input, monte_carlo::{
+    }, handle_input::handle_input, noughbert::{
         message::Message,  monte_carlo_policy::MonteCarloPolicy,
         monte_carlo_settings::MonteCarloSettings,
     }, state::State, ui::{textbox::Textbox, ui::UI}
@@ -20,7 +20,7 @@ use crate::{
 
 mod common;
 mod game;
-mod monte_carlo;
+mod noughbert;
 mod state;
 mod styles;
 mod ui;
@@ -109,6 +109,7 @@ fn main() -> Result<()> {
     println!("//------Look Ma, I'm a hacker now!------//");
 
     while !rl.window_should_close() {
+        // Get the time it took to render the last frame
         let delta = rl.get_frame_time();
 
         //----------// Handle input //----------//

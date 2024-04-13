@@ -1,6 +1,6 @@
 use std::{fs, path::Path, process::Command, sync::mpsc::{self, Receiver, SyncSender}, time};
 
-use crate::{game::{game::Turn, value::Value}, monte_carlo::{message::Message, monte_carlo::MonteCarloManager}, styles::*};
+use crate::{game::{game::Turn, value::Value}, noughbert::{message::Message, monte_carlo::MonteCarloManager}, styles::*};
 
 pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
     let mut runs = 0;

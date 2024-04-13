@@ -11,7 +11,7 @@ use crate::{
     common::*,
     game::{game::Game, value::Value},
     handle_click::handle_click,
-    monte_carlo::{
+    noughbert::{
         message::Message, monte_carlo_policy::MonteCarloPolicy,
         monte_carlo_settings::MonteCarloSettings,
     },

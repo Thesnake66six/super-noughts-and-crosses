@@ -5,7 +5,7 @@ use raylib::{ffi::MouseButton, math::Vector2, RaylibHandle};
 use crate::{
     common::*,
     game::game::{Game, Turn},
-    monte_carlo::message::Message,
+    noughbert::message::Message,
     state::State,
     styles::*,
     ui::{textbox::Textbox, ui::UI, ui_tab::UITab},

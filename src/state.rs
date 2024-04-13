@@ -1,6 +1,6 @@
 use raylib::math::{Rectangle, Vector2};
 
-use crate::{monte_carlo::message::Message, ui::textbox::Textbox};
+use crate::{noughbert::message::Message, ui::textbox::Textbox};
 
 pub struct State {
     /// Declares whether, if right-click is held, the game should be panned
