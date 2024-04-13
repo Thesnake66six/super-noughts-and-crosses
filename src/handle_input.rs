@@ -158,6 +158,41 @@ pub fn handle_input(
         }
     }
 
+    handle_typing(rl, state, ui);
+
+    if rl.is_file_dropped() {
+        let paths = rl.get_dropped_files();
+        let path = paths.last().unwrap();
+        let json = fs::read(path).unwrap();
+        match serde_json::from_slice::<Game>(&json) {
+            Ok(new_game) => {
+                *g = Game {
+                    rect: new_game.rect,
+                    camera: Camera2D {
+                        zoom: 1.0,
+                        ..Default::default()
+                    },
+                    board: new_game.board,
+                    depth: new_game.depth,
+                    turn: new_game.turn,
+                    players: new_game.players,
+                    moves: new_game.moves,
+                    legal: new_game.legal,
+                };
+                g.update_positions();
+                g.centre_camera(state.game_rect);
+            }
+            Err(_) => {
+                println!("Could not read game from file");
+            }
+        }
+        rl.clear_dropped_files();
+    }
+
+    hovered_cell    
+}
+
+fn handle_typing(rl: &mut RaylibHandle, state: &mut State, ui: &mut UI) {
     if rl.is_key_pressed(KeyboardKey::KEY_ZERO) || rl.is_key_pressed(KeyboardKey::KEY_KP_0) {
         match state.typing {
             Textbox::MaxSims => {
@@ -306,35 +341,4 @@ pub fn handle_input(
             Textbox::None => {}
         }
     }
-
-    if rl.is_file_dropped() {
-        let paths = rl.get_dropped_files();
-        let path = paths.last().unwrap();
-        let json = fs::read(path).unwrap();
-        match serde_json::from_slice::<Game>(&json) {
-            Ok(new_game) => {
-                *g = Game {
-                    rect: new_game.rect,
-                    camera: Camera2D {
-                        zoom: 1.0,
-                        ..Default::default()
-                    },
-                    board: new_game.board,
-                    depth: new_game.depth,
-                    turn: new_game.turn,
-                    players: new_game.players,
-                    moves: new_game.moves,
-                    legal: new_game.legal,
-                };
-                g.update_positions();
-                g.centre_camera(state.game_rect);
-            }
-            Err(_) => {
-                println!("Could not read game from file");
-            }
-        }
-        rl.clear_dropped_files();
     }
-
-    hovered_cell
-}
