@@ -1,6 +1,6 @@
 use std::{fs, path::Path, process::Command, sync::mpsc::{self, Receiver, SyncSender}, time};
 
-use crate::{game::{game::Turn, value::Value}, noughbert::{message::Message, monte_carlo::MonteCarloManager}, styles::*};
+use crate::{game::{game::Turn, value::Value}, noughbert::{message::Message, monte_carlo::MonteCarloManager}, styles::{AUTOCOMPILE_GRAPHVIS_FILES, OUTPUT_GRAPHVIS_FILES}};
 
 pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
     let mut runs = 0;
@@ -30,7 +30,7 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
         assert_eq!(noughbert.g.board.check(), Value::None);
 
         if noughbert.g.board.check() != Value::None {
-            interrupt = true
+            interrupt = true;
         }
 
         while start_time.elapsed() < mc_options.timeout
@@ -70,11 +70,11 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
             println!("Exited due to interrupt request");
             continue;
         } else if interrupt_return {
-            println!("Exited due to return request")
+            println!("Exited due to return request");
         } else if noughbert.sims >= mc_options.max_sims {
-            println!("Exited due to simulation cap")
+            println!("Exited due to simulation cap");
         } else if start_time.elapsed() >= mc_options.timeout {
-            println!("Exited due to timeout")
+            println!("Exited due to timeout");
         } else {
             println!("Exited due to complete game tree");
         }
@@ -95,7 +95,7 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
         runs += 1;
 
         if OUTPUT_GRAPHVIS_FILES {
-            let _ = fs::write(Path::new(&format!("./outs/{}.dot", runs)), {
+            let _ = fs::write(Path::new(&format!("./outs/{runs}.dot")), {
                 let s = format!(
                     "{}",
                     graphvis_ego_tree::TreeWrapper::new(
@@ -153,7 +153,7 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
                                         node.value().score(!mc_options.opt_for),
                                         node.value().playouts,
                                         if node.id() == noughbert.tree.root().id() {
-                                            "".to_owned()
+                                            String::new()
                                         } else {
                                             (node.value().score(!mc_options.opt_for)
                                                 / node.value().playouts)
@@ -166,7 +166,7 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
                                         node.value().score(mc_options.opt_for),
                                         node.value().playouts,
                                         if node.id() == noughbert.tree.root().id() {
-                                            "".to_owned()
+                                            String::new()
                                         } else {
                                             (node.value().score(mc_options.opt_for)
                                                 / node.value().playouts)
@@ -178,7 +178,7 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
 
                             let ucb1 = {
                                 if node.id() == noughbert.tree.root().id() {
-                                    "".to_owned()
+                                    String::new()
                                 } else {
                                     format!(
                                         "{}",
@@ -195,8 +195,7 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
                             };
 
                             format!(
-                                "{}\n{}\n{}\n{}\n{}\nucb1 = {}",
-                                id, play, repr, done, score, ucb1
+                                "{id}\n{play}\n{repr}\n{done}\n{score}\nucb1 = {ucb1}"
                             )
                         }
                     )
@@ -205,7 +204,7 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
             });
             if AUTOCOMPILE_GRAPHVIS_FILES {
                 let _ = Command::new("dot")
-                    .args(["-T", "svg", "-O", &format!("./outs/{}.dot", runs)])
+                    .args(["-T", "svg", "-O", &format!("./outs/{runs}.dot")])
                     .spawn();
             }
         }

@@ -8,7 +8,7 @@ use raylib::{
     RaylibHandle,
 };
 
-use crate::{game::game::Turn, styles::*};
+use crate::{game::game::Turn, styles::{COLOUR_BOARD_BG_GREYED, COLOUR_BOARD_BG_GREYED_P1, COLOUR_BOARD_BG_GREYED_P2, COLOUR_CELL_BG_GREYED, COLOUR_CELL_BG_GREYED_P1, COLOUR_CELL_BG_GREYED_P2, COLOUR_CROSS_FG, COLOUR_DRAW_FG, COLOUR_NOUGHT_FG, CROSS_THICK, DO_COLOURED_GREYS, NOUGHT_PADDING, NOUGHT_THICK, UI_PANEL_WIDTH}};
 
 //----------// Symbol rendering functions //----------//
 
@@ -64,7 +64,7 @@ pub fn draw_nought<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
         360.0,
         100,
         COLOUR_NOUGHT_FG,
-    )
+    );
 }
 
 /// Draws a draw (`Value::Draw`) into the given rectangle 'rect' onto `d`.

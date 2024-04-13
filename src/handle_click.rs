@@ -3,11 +3,11 @@ use std::fs;
 use raylib::{ffi::MouseButton, math::Vector2, RaylibHandle};
 
 use crate::{
-    common::*,
+    common::get_board_rect,
     game::game::{Game, Turn},
     noughbert::message::Message,
     state::State,
-    styles::*,
+    styles::COMPUTER_RESPONSE_DELAY,
     ui::{textbox::Textbox, ui::UI, ui_tab::UITab},
 };
 
@@ -52,9 +52,9 @@ pub fn handle_click(
                             let _ = fs::create_dir("./exports");
                             let filename =
                                 &format!("{:x}", md5::compute(game_serial.clone()))[..16];
-                            match fs::write(format!("./exports/{}.xo", filename), game_serial) {
-                                Ok(_) => {
-                                    println!("Game exported as file \"./exports/{}.xo\"", filename)
+                            match fs::write(format!("./exports/{filename}.xo"), game_serial) {
+                                Ok(()) => {
+                                    println!("Game exported as file \"./exports/{filename}.xo\"");
                                 }
                                 Err(_) => {
                                     eprintln!("Game export failed");
@@ -85,7 +85,7 @@ pub fn handle_click(
                         {
                             ui.state.depth -= 1;
                             if ui.state.depth < 1 {
-                                ui.state.depth = 1
+                                ui.state.depth = 1;
                             };
 
                         // Set the player to 1 if Player 1 is clicked
@@ -148,13 +148,13 @@ pub fn handle_click(
                             .ai_max_sims
                             .check_collision_point_rec(offset)
                         {
-                            state.typing = Textbox::MaxSims
+                            state.typing = Textbox::MaxSims;
                         } else if ui
                             .settings_elements
                             .ai_max_time
                             .check_collision_point_rec(offset)
                         {
-                            state.typing = Textbox::MaxTime
+                            state.typing = Textbox::MaxTime;
                         }
                     }
                     UITab::None => {}

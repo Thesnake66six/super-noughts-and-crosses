@@ -59,7 +59,7 @@ impl MonteCarloManager {
                 let ucb1 = val.ucb1(exploration_factor, current_node.value().playouts, opt_for);
                 if ucb1 > best_score {
                     best_node_ids = vec![node.id()];
-                    best_score = ucb1
+                    best_score = ucb1;
                 } else if ucb1 == best_score {
                     best_node_ids.insert(best_node_ids.len(), node.id());
                 }
@@ -70,7 +70,7 @@ impl MonteCarloManager {
             current_node = self.tree.get(current_node_id).unwrap();
 
             match self.g.play(&current_node.value().play) {
-                Ok(_) => plays += 1,
+                Ok(()) => plays += 1,
                 Err(_) => panic!(),
             }
         }
@@ -78,7 +78,7 @@ impl MonteCarloManager {
         // Unplay each move made
         for _ in 0..plays {
             match self.g.unplay() {
-                Ok(_) => {}
+                Ok(()) => {}
                 Err(_) => panic!(),
             }
         }
@@ -96,7 +96,7 @@ impl MonteCarloManager {
         // Play each move preceding the selected node
         for x in node.ancestors().collect::<Vec<_>>().iter().rev().skip(1) {
             match self.g.play(&x.value().play) {
-                Ok(_) => count += 1,
+                Ok(()) => count += 1,
                 Err(_) => panic!(),
             }
         }
@@ -104,7 +104,7 @@ impl MonteCarloManager {
         // Play the move of the selected node
         if !node.value().play.is_empty() {
             match self.g.play(&node.value().play) {
-                Ok(_) => count += 1,
+                Ok(()) => count += 1,
                 Err(_) => panic!(),
             }
         }
@@ -117,7 +117,7 @@ impl MonteCarloManager {
         if moves.is_empty() || self.g.board.check() != Value::None {
             for _ in 0..count {
                 match self.g.unplay() {
-                    Ok(_) => {}
+                    Ok(()) => {}
                     Err(_) => panic!(),
                 }
             }
@@ -132,7 +132,7 @@ impl MonteCarloManager {
         let moves_count = self.g.legal_moves().len();
 
         for _ in 0..count {
-            self.g.unplay().unwrap()
+            self.g.unplay().unwrap();
         }
 
         let new_turn = !self.tree.get(node_id).unwrap().value().turn;
@@ -162,7 +162,7 @@ impl MonteCarloManager {
             if !x.value().play.is_empty() {
                 let x = &x.value();
                 match self.g.play(&x.play) {
-                    Ok(_) => count += 1,
+                    Ok(()) => count += 1,
                     Err(_) => panic!(),
                 }
             }
@@ -170,7 +170,7 @@ impl MonteCarloManager {
 
         // Play the move of the selected node
         match self.g.play(&node.value().play) {
-            Ok(_) => count += 1,
+            Ok(()) => count += 1,
             Err(_) => panic!(),
         }
 
@@ -198,7 +198,7 @@ impl MonteCarloManager {
 
         // Unplay all moves made
         for _ in 0..count {
-            self.g.unplay().unwrap()
+            self.g.unplay().unwrap();
         }
 
         // Return the node, and the simulation result

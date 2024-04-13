@@ -6,10 +6,10 @@ use std::{
 
 use anyhow::Result;
 use raylib::{core::texture::RaylibTexture2D, prelude::*};
-use styles::*;
+use styles::{BOARD_DEFAULT_DEPTH, BOARD_DEFAULT_PLAYERS, COMPUTER_RESPONSE_DELAY, DEFAULT_EXPLORATION_FACTOR, DEFAULT_MAX_SIMS, DEFAULT_MAX_TIME, DEFAULT_SHOW_FPS_COUNTER, UI_PANEL_MIN_HEIGHT, UI_PANEL_WIDTH};
 
 use crate::{
-    ai_thread::noughbert, common::*, game::{
+    ai_thread::noughbert, common::{get_board_rect, get_game_rect, get_ui_rect}, game::{
         game::{Game, Turn},
         value::Value,
     }, handle_input::handle_input, noughbert::{
@@ -36,7 +36,7 @@ fn main() -> Result<()> {
     let (tx_1, rx_1) = mpsc::sync_channel::<Message>(1);
 
     let _thread = thread::spawn(move || {
-        noughbert(rx_0, tx_1)
+        noughbert(rx_0, tx_1);
     });
 
     let rx = rx_1;
@@ -145,7 +145,7 @@ fn main() -> Result<()> {
                 if state.waiting_for_move {
                     if let Message::Move(Some(y)) = mv {
                         state.move_queue.insert(0, y);
-                        println!("{:?}", state.move_queue)
+                        println!("{:?}", state.move_queue);
                     }
                 }
             }
@@ -184,7 +184,7 @@ fn main() -> Result<()> {
 
         state.response_time -= delta;
         if state.response_time < 0.0 {
-            state.response_time = 0.0
+            state.response_time = 0.0;
         }
     }
 

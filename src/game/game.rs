@@ -10,7 +10,7 @@ use raylib::{
 
 use serde::{Deserialize, Serialize};
 
-use crate::{common::*, styles::*};
+use crate::{styles::{BOARD_CELL_MARGIN, CAMERA_DEFAULT_ZOOM, COLOUR_BOARD_BG, COLOUR_BOARD_BG_GREYED, COLOUR_BOARD_BG_GREYED_P1, COLOUR_BOARD_BG_GREYED_P2}};
 
 use super::{board::Board, cell::Cell, legal::Legal, value::Value};
 
@@ -99,7 +99,7 @@ impl Game {
             height: self.rect.height - 2.0 * m,
         };
 
-        self.board.update_positions(irect)
+        self.board.update_positions(irect);
     }
 
     /// Centres the game camera
@@ -162,7 +162,7 @@ impl Game {
 
         // Draws the board
         self.board
-            .draw(irect, &mut c, no_check, alpha, hover, legal, self.turn)
+            .draw(irect, &mut c, no_check, alpha, hover, legal, self.turn);
     }
 
     /// Makes a move
@@ -187,7 +187,7 @@ impl Game {
             self.board.set(pos, val)?;
             self.moves.insert(
                 self.moves.len(),
-                [pos.to_vec(), self.legal.to_vec()].to_vec(),
+                [pos.to_vec(), self.legal.clone()].to_vec(),
             );
             self.legal = self.get_legal(pos);
             self.turn = !self.turn;
@@ -208,7 +208,7 @@ impl Game {
         let mv = self.moves.pop().unwrap();
         let x = &mv[1];
         let _ = self.board.set(&mv[0], Cell::None);
-        self.legal = x.to_vec();
+        self.legal = x.clone();
         self.turn = !self.turn;
         Ok(())
     }

@@ -1,4 +1,3 @@
-use std::collections::HashMap;
 
 use raylib::{
     color::Color,
@@ -8,13 +7,13 @@ use raylib::{
 };
 
 use crate::{
-    common::*,
+    common::centre_text_rec,
     game::{
         game::{Game, Turn},
         value::Value,
     },
     state::State,
-    styles::*,
+    styles::{COLOUR_UI_BG, COLOUR_UI_BUTTON, COLOUR_UI_DIVIDER, COLOUR_UI_ELEMENT, COLOUR_UI_HIGHLIGHT_P1, COLOUR_UI_HIGHLIGHT_P2, COLOUR_UI_RADIAL, UI_BUTTON_LINE_THICKNESS, UI_CONTENT_PADDING, UI_DIVIDER_THICKNESS, UI_NAVBAR_HEIGHT, UI_PANEL_WIDTH},
 };
 
 use super::{
@@ -55,7 +54,7 @@ impl UI {
 
     /// A function that updates the elements hashmaps' values.
     ///
-    /// Called every frame before rendering, so as to save on rl.get_screen_size() calls
+    /// Called every frame before rendering, so as to save on `rl.get_screen_size()` calls
     pub fn update_positions(&mut self, rect: Rectangle) {
         // Calculate the size of the padding in pixels
         let padding = UI_CONTENT_PADDING * rect.width;
@@ -431,7 +430,7 @@ impl UI {
                 .collect::<Vec<String>>()
                 .join(", ");
             let r = centre_text_rec(font, &t, 50.0, 0.0, rect);
-            d.draw_text_rec(font, &t, r, 50.0, 0.0, false, Color::BLACK)
+            d.draw_text_rec(font, &t, r, 50.0, 0.0, false, Color::BLACK);
         }
 
         // Redraw the blank padding
@@ -496,7 +495,7 @@ impl UI {
             } else {
                 Color::RED
             },
-        )
+        );
     }
 
     /// Draw the settings tab
@@ -607,7 +606,7 @@ impl UI {
                     height: brec.height - 2.0 * p,
                 },
                 COLOUR_UI_RADIAL,
-            )
+            );
         }
 
         let trec = Rectangle {
@@ -640,7 +639,7 @@ impl UI {
                     height: brec.height - 2.0 * p,
                 },
                 COLOUR_UI_RADIAL,
-            )
+            );
         }
         let trec = Rectangle {
             x: p1.x,
@@ -672,7 +671,7 @@ impl UI {
                     height: brec.height - 2.0 * inner_button_padding,
                 },
                 COLOUR_UI_RADIAL,
-            )
+            );
         }
         let trec = Rectangle {
             x: p2.x,
@@ -723,7 +722,7 @@ impl UI {
                     height: a1.height - 2.0 * p,
                 },
                 COLOUR_UI_RADIAL,
-            )
+            );
         }
 
         let text = "1";
@@ -756,7 +755,7 @@ impl UI {
                     height: a2.height - 2.0 * p,
                 },
                 COLOUR_UI_RADIAL,
-            )
+            );
         }
 
         let text = "2";
@@ -789,7 +788,7 @@ impl UI {
                     height: a3.height - 2.0 * p,
                 },
                 COLOUR_UI_RADIAL,
-            )
+            );
         }
 
         let text = "3";

@@ -2,7 +2,7 @@ use anyhow::{bail, Ok, Result};
 use raylib::{core::math::Rectangle, prelude::*};
 use serde::{Deserialize, Serialize};
 
-use crate::{common::*, styles::*};
+use crate::{common::get_greyed_colour_board, styles::{BOARD_CELL_MARGIN, BOARD_LINE_THICK, COLOUR_BOARD_BG, COLOUR_BOARD_FG, INVERT_GREYS}};
 
 use super::{cell::Cell, game::Turn, legal::Legal, value::Value};
 
@@ -93,7 +93,7 @@ impl Board {
         let vals = self
             .cells
             .iter()
-            .map(|cell| cell.value())
+            .map(super::cell::Cell::value)
             .collect::<Vec<Value>>();
         let sets = [
             [0, 1, 2],
@@ -129,7 +129,7 @@ impl Board {
             let mut v = Vec::with_capacity(pos.len() + 1);
             v.extend_from_slice(pos);
             v.push(i);
-            l.append(&mut x.moves(&v))
+            l.append(&mut x.moves(&v));
         }
         l
     }
@@ -145,7 +145,7 @@ impl Board {
             let mut v = Vec::with_capacity(pos.len() + 1);
             v.extend_from_slice(pos);
             v.push(i);
-            l.append(&mut x.legal_moves(&v))
+            l.append(&mut x.legal_moves(&v));
         }
         l
     }
@@ -170,7 +170,7 @@ impl Board {
 
         for i in 0..9 {
             if let Cell::Board(b) = &mut self.cells[i] {
-                b.update_positions(self.cell_positions[i])
+                b.update_positions(self.cell_positions[i]);
             }
         }
     }
@@ -221,17 +221,17 @@ impl Board {
         let mut ignore = false;
         if legal == Legal::ForceDefaultBg {
             t = Some(13);
-            ignore = true
+            ignore = true;
         } else if let Legal::Pos(x) = legal {
             if !x.is_empty() {
                 t = Some(x[0]);
                 if x.len() == 1 {
                     legal = Legal::Pos(&[]);
                 } else {
-                    legal = Legal::Pos(&x[1..])
+                    legal = Legal::Pos(&x[1..]);
                 }
             } else {
-                t = Some(10)
+                t = Some(10);
             }
         };
 
@@ -323,7 +323,7 @@ impl Board {
 
         let mut x = 10;
         if let Some(pos) = hover {
-            x = pos[0]
+            x = pos[0];
         }
 
         for i in 0..9 {
@@ -345,13 +345,13 @@ impl Board {
                     Legal::None
                 },
                 turn,
-            )
+            );
         }
     }
 
     pub fn dbg_repr(&self) -> String {
         let mut out = String::new();
-        for (i, cell) in self.cells.iter().map(|x| x.value()).enumerate() {
+        for (i, cell) in self.cells.iter().map(super::cell::Cell::value).enumerate() {
             out += match cell {
                 Value::None => ".",
                 Value::Draw => "=",
@@ -359,7 +359,7 @@ impl Board {
                 Value::Player2 => "O",
             };
             if i % 3 == 2 {
-                out += "\n"
+                out += "\n";
             }
         }
         out

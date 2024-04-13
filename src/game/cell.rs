@@ -1,7 +1,7 @@
 use raylib::{drawing::RaylibDraw, math::Rectangle};
 use serde::{Deserialize, Serialize};
 
-use crate::{common::*, styles::*};
+use crate::{common::{draw_cross, draw_nought, get_greyed_colour_cell}, styles::{COLOUR_BOARD_BG, COLOUR_CELL_BG, COLOUR_CELL_HOVER, COLOUR_CROSS_BG, COLOUR_CROSS_BGA, COLOUR_NOUGHT_BG, COLOUR_NOUGHT_BGA, INVERT_GREYS}};
 
 use super::{board::Board, game::Turn, legal::Legal, value::Value};
 
@@ -70,14 +70,14 @@ impl Cell {
         if let Some(pos) = hover {
             if pos.is_empty() {
                 flag = true;
-                hover = None
+                hover = None;
             }
         }
 
         let mut greyed = true;
         if let Legal::Pos(x) = legal {
             if x.is_empty() {
-                greyed = false
+                greyed = false;
             }
         }
 
@@ -141,18 +141,18 @@ impl Cell {
             Cell::Player2 => draw_nought(rect, d),
             Cell::Board(b) => {
                 if let Value::None = b.check() {
-                    b.draw(rect, d, no_check, alpha, hover, legal, turn) // Draw the board, if it is still playable...
+                    b.draw(rect, d, no_check, alpha, hover, legal, turn); // Draw the board, if it is still playable...
                 } else if no_check {
-                    b.draw(rect, d, no_check, alpha, hover, legal, turn) // ...or if we're told not to check...
+                    b.draw(rect, d, no_check, alpha, hover, legal, turn); // ...or if we're told not to check...
                 } else {
                     b.draw(rect, d, no_check, alpha, hover, legal, turn);
-                    b.check().draw(rect, d, alpha, legal, turn) // ...else draw the corresponding value
+                    b.check().draw(rect, d, alpha, legal, turn); // ...else draw the corresponding value
                 }
             }
         }
 
         if flag {
-            d.draw_rectangle_rec(rect, COLOUR_CELL_HOVER)
+            d.draw_rectangle_rec(rect, COLOUR_CELL_HOVER);
         }
     }
 }

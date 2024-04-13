@@ -8,7 +8,7 @@ use raylib::{
 };
 
 use crate::{
-    common::*,
+    common::{get_game_rect, get_ui_rect},
     game::{game::Game, value::Value},
     handle_click::handle_click,
     noughbert::{
@@ -16,7 +16,7 @@ use crate::{
         monte_carlo_settings::MonteCarloSettings,
     },
     state::State,
-    styles::*,
+    styles::{ALLOW_FPS_COUNTER, CAMERA_MOVE_SPEED, CAMERA_SCROLL_SPEED, DEFAULT_EXPLORATION_FACTOR, UI_DIVIDER_THICKNESS, UI_NAVBAR_HEIGHT, UI_SCROLL_SPEED},
     ui::{textbox::Textbox, ui::UI, ui_tab::UITab},
 };
 
@@ -52,7 +52,7 @@ pub fn handle_input(
                     // ...increment the scroll offset.
                     ui.scroll_offset_game += x * UI_SCROLL_SPEED;
                     if ui.scroll_offset_game > 0.0 {
-                        ui.scroll_offset_game = 0.0
+                        ui.scroll_offset_game = 0.0;
                     }
                 }
             }
@@ -71,7 +71,7 @@ pub fn handle_input(
                     // ...increment the scroll offset.
                     ui.scroll_offset_settings += x * UI_SCROLL_SPEED;
                     if ui.scroll_offset_settings > 0.0 {
-                        ui.scroll_offset_settings = 0.0
+                        ui.scroll_offset_settings = 0.0;
                     }
                 }
             }
@@ -81,7 +81,7 @@ pub fn handle_input(
         // If the mouse is over the Game, increment the Camera zoom
         g.camera.zoom += x * CAMERA_SCROLL_SPEED * g.camera.zoom;
         if g.camera.zoom < 0.0 {
-            g.camera.zoom *= -1.0
+            g.camera.zoom *= -1.0;
         }
     }
 
@@ -126,7 +126,7 @@ pub fn handle_input(
                 let _ = g.unplay();
                 state
                     .message_queue
-                    .insert(state.message_queue.len(), Message::Interrupt)
+                    .insert(state.message_queue.len(), Message::Interrupt);
             }
         }
     }
@@ -176,12 +176,12 @@ pub fn handle_input(
             Textbox::MaxSims => {
                 let x = &mut ui.state.max_sims;
                 *x *= 10;
-                *x += 1
+                *x += 1;
             }
             Textbox::MaxTime => {
                 let x = &mut ui.state.max_time;
                 *x *= 10;
-                *x += 1
+                *x += 1;
             }
             Textbox::None => {}
         }
@@ -191,12 +191,12 @@ pub fn handle_input(
             Textbox::MaxSims => {
                 let x = &mut ui.state.max_sims;
                 *x *= 10;
-                *x += 2
+                *x += 2;
             }
             Textbox::MaxTime => {
                 let x = &mut ui.state.max_time;
                 *x *= 10;
-                *x += 2
+                *x += 2;
             }
             Textbox::None => {}
         }
@@ -206,12 +206,12 @@ pub fn handle_input(
             Textbox::MaxSims => {
                 let x = &mut ui.state.max_sims;
                 *x *= 10;
-                *x += 3
+                *x += 3;
             }
             Textbox::MaxTime => {
                 let x = &mut ui.state.max_time;
                 *x *= 10;
-                *x += 3
+                *x += 3;
             }
             Textbox::None => {}
         }
@@ -221,12 +221,12 @@ pub fn handle_input(
             Textbox::MaxSims => {
                 let x = &mut ui.state.max_sims;
                 *x *= 10;
-                *x += 4
+                *x += 4;
             }
             Textbox::MaxTime => {
                 let x = &mut ui.state.max_time;
                 *x *= 10;
-                *x += 4
+                *x += 4;
             }
             Textbox::None => {}
         }
@@ -236,12 +236,12 @@ pub fn handle_input(
             Textbox::MaxSims => {
                 let x = &mut ui.state.max_sims;
                 *x *= 10;
-                *x += 5
+                *x += 5;
             }
             Textbox::MaxTime => {
                 let x = &mut ui.state.max_time;
                 *x *= 10;
-                *x += 5
+                *x += 5;
             }
             Textbox::None => {}
         }
@@ -251,12 +251,12 @@ pub fn handle_input(
             Textbox::MaxSims => {
                 let x = &mut ui.state.max_sims;
                 *x *= 10;
-                *x += 6
+                *x += 6;
             }
             Textbox::MaxTime => {
                 let x = &mut ui.state.max_time;
                 *x *= 10;
-                *x += 6
+                *x += 6;
             }
             Textbox::None => {}
         }
@@ -266,12 +266,12 @@ pub fn handle_input(
             Textbox::MaxSims => {
                 let x = &mut ui.state.max_sims;
                 *x *= 10;
-                *x += 7
+                *x += 7;
             }
             Textbox::MaxTime => {
                 let x = &mut ui.state.max_time;
                 *x *= 10;
-                *x += 7
+                *x += 7;
             }
             Textbox::None => {}
         }
@@ -281,12 +281,12 @@ pub fn handle_input(
             Textbox::MaxSims => {
                 let x = &mut ui.state.max_sims;
                 *x *= 10;
-                *x += 8
+                *x += 8;
             }
             Textbox::MaxTime => {
                 let x = &mut ui.state.max_time;
                 *x *= 10;
-                *x += 8
+                *x += 8;
             }
             Textbox::None => {}
         }
@@ -296,12 +296,12 @@ pub fn handle_input(
             Textbox::MaxSims => {
                 let x = &mut ui.state.max_sims;
                 *x *= 10;
-                *x += 9
+                *x += 9;
             }
             Textbox::MaxTime => {
                 let x = &mut ui.state.max_time;
                 *x *= 10;
-                *x += 9
+                *x += 9;
             }
             Textbox::None => {}
         }
@@ -330,7 +330,7 @@ pub fn handle_input(
                 g.centre_camera(state.game_rect);
             }
             Err(_) => {
-                println!("Could not read game from file")
+                println!("Could not read game from file");
             }
         }
         rl.clear_dropped_files();

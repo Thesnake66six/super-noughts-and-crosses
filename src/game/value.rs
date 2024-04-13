@@ -1,6 +1,6 @@
 use raylib::{drawing::RaylibDraw, math::Rectangle};
 
-use crate::{common::*, styles::*};
+use crate::{common::{draw_cross, draw_draw, draw_nought, get_greyed_colour_cell}, styles::{COLOUR_CELL_BG, COLOUR_CROSS_BG, COLOUR_CROSS_BGA, COLOUR_DRAW_BG, COLOUR_DRAW_BGA, COLOUR_NOUGHT_BG, COLOUR_NOUGHT_BGA}};
 
 use super::{game::Turn, legal::Legal};
 
@@ -30,7 +30,7 @@ impl Value {
         let mut greyed = true;
         if let Legal::Pos(x) = legal {
             if x.is_empty() {
-                greyed = false
+                greyed = false;
             }
         }
 
