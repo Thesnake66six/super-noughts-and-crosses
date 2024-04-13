@@ -1,6 +1,5 @@
 use crate::game::game::Turn;
 
-
 #[derive(Debug)]
 pub struct MonteCarloNode {
     /// The move that the node represents

@@ -10,9 +10,7 @@ use raylib::{
 
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    common::*,  styles::*, 
-};
+use crate::{common::*, styles::*};
 
 use super::{board::Board, cell::Cell, legal::Legal, value::Value};
 

@@ -1,6 +1,6 @@
 use raylib::{drawing::RaylibDraw, math::Rectangle};
 
-use crate::{ styles::*, common::*};
+use crate::{common::*, styles::*};
 
 use super::{game::Turn, legal::Legal};
 

@@ -8,12 +8,19 @@ use raylib::{
 };
 
 use crate::{
-    common::*, game::{game::{Game, Turn}, value::Value}, state::State, styles::* 
+    common::*,
+    game::{
+        game::{Game, Turn},
+        value::Value,
+    },
+    state::State,
+    styles::*,
 };
 
-use super::{constant_elements::ConstantElements, game_elements::GameElements, settings_elements::SettingsElements, textbox::Textbox, ui_state::UIState, ui_tab::UITab};
-
-
+use super::{
+    constant_elements::ConstantElements, game_elements::GameElements,
+    settings_elements::SettingsElements, textbox::Textbox, ui_state::UIState, ui_tab::UITab,
+};
 
 pub struct UI {
     /// The current selected `UITab`
@@ -521,7 +528,9 @@ impl UI {
         // Change the colour of the text based on the current depth
         let colour = if self.state.depth >= 6 {
             Color::RED
-        } else { Color::BLACK };
+        } else {
+            Color::BLACK
+        };
         // Draw the current depth text
         d.draw_text_rec(font, &text, text_rec, 50.0, 0.0, false, colour);
 

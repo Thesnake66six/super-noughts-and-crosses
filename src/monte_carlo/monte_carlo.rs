@@ -3,13 +3,12 @@ use std::{fmt::Debug, time::Duration};
 
 use ego_tree::{NodeId, Tree};
 
-use crate::game::{game::{Game, Turn}, value::Value};
+use crate::game::{
+    game::{Game, Turn},
+    value::Value,
+};
 
 use super::{monte_carlo_policy::MonteCarloPolicy, node::MonteCarloNode};
-
-
-
-
 
 #[derive(Debug)]
 /// The Monte Carlo manager struct
@@ -256,7 +255,7 @@ impl MonteCarloManager {
                 let node = self.tree.root();
                 let mut best_score = 0.0;
                 let mut best_id = None;
-                
+
                 for child in node.children().map(|x| x.id()) {
                     let cnode = self.tree.get(child).unwrap();
                     if cnode.value().score(opt_for) >= best_score {
@@ -264,7 +263,7 @@ impl MonteCarloManager {
                         best_id = Some(cnode.id());
                     }
                 }
-                
+
                 if let Some(id) = best_id {
                     Some(self.tree.get(id).unwrap().value().play.clone())
                 } else {

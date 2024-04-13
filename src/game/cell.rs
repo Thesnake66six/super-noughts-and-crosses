@@ -1,7 +1,7 @@
 use raylib::{drawing::RaylibDraw, math::Rectangle};
 use serde::{Deserialize, Serialize};
 
-use crate::{ common::*, styles::*, };
+use crate::{common::*, styles::*};
 
 use super::{board::Board, game::Turn, legal::Legal, value::Value};
 

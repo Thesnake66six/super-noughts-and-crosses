@@ -2,9 +2,7 @@ use anyhow::{bail, Ok, Result};
 use raylib::{core::math::Rectangle, prelude::*};
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    common::*, styles::*, 
-};
+use crate::{common::*, styles::*};
 
 use super::{cell::Cell, game::Turn, legal::Legal, value::Value};
 
