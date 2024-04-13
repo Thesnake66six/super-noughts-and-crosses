@@ -1,6 +1,8 @@
-pub static THREAD: Box<dyn Fn(i32) -> i32 + Send> = move || {
-    let rx = rx_0;
-    let tx = tx_1;
+use std::{fs, path::Path, process::Command, sync::mpsc::{self, Receiver, SyncSender}, time};
+
+use crate::{game::{game::Turn, value::Value}, monte_carlo::{message::Message, monte_carlo::MonteCarloManager}, styles::*};
+
+pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
     let mut runs = 0;
 
     if OUTPUT_GRAPHVIS_FILES {
@@ -208,4 +210,4 @@ pub static THREAD: Box<dyn Fn(i32) -> i32 + Send> = move || {
             }
         }
     }
-};
+}

@@ -32,8 +32,7 @@ mod monte_carlo;
 mod state;
 mod styles;
 mod ui;
-// Re-mod once it works lol
-// mod ai_thread;
+mod ai_thread;
 mod handle_click;
 mod handle_input;
 
