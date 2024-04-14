@@ -1,14 +1,13 @@
-use std::f32::consts::SQRT_2;
 
 use raylib::{
     color::Color,
     drawing::RaylibDraw,
-    math::{Rectangle, Vector2},
+    math::{Rectangle},
     text::{measure_text_ex, Font},
     RaylibHandle, RaylibThread,
 };
 
-use crate::{game::{game::{Game, Turn}, player::Player, symbol::{self, Symbol}}, styles::{BARBEQUE, COLOUR_BOARD_BG_GREYED, COLOUR_CELL_BG_GREYED, COLOUR_DRAW_FG, CROSS, DO_COLOURED_GREYS, FISH, IRELAND, NOUGHT, THORN, UI_PANEL_WIDTH}};
+use crate::{game::{game::{Game, Turn}, player::Player, symbol::{Symbol}}, styles::{BARBEQUE, COLOUR_BOARD_BG_GREYED, COLOUR_CELL_BG_GREYED, COLOUR_DRAW_FG, CROSS, DO_COLOURED_GREYS, FISH, IRELAND, NOUGHT, THORN, UI_PANEL_WIDTH}};
 
 /// Draws a draw (`Value::Draw`) into the given rectangle 'rect' onto `d`.
 pub fn draw_draw<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
@@ -130,7 +129,7 @@ pub fn update_window_title(rl: &mut RaylibHandle, rlthread: &mut RaylibThread, g
     
     out += &(g.player_2.symbol.name() + " and " + &g.player_1.symbol.name());
 
-    rl.set_window_title(&rlthread, &out)
+    rl.set_window_title(rlthread, &out)
 }
 
 pub fn get_player_from_symbol(symbol: &Symbol) -> Player {

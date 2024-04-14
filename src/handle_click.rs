@@ -6,7 +6,7 @@ use crate::{
     common::{get_board_rect, get_player_from_symbol, update_window_title},
     game::game::{Game, Turn},
     noughbert::message::Message,
-    state::{self, State},
+    state::{State},
     styles::{COMPUTER_LEVEL_1_SIMS, COMPUTER_LEVEL_2_SIMS, COMPUTER_LEVEL_3_SIMS, COMPUTER_RESPONSE_DELAY, COMPUTER_SIM_SCALING, RULES_URL},
     ui::{textbox::Textbox, ui::UI, ui_tab::UITab},
 };

@@ -3,7 +3,6 @@ use raylib::{
     color::Color,
     drawing::RaylibDraw,
     math::{Rectangle, Vector2},
-    text::Font,
 };
 
 use crate::{

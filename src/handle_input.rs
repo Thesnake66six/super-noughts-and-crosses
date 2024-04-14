@@ -8,7 +8,7 @@ use raylib::{
 };
 
 use crate::{
-    common::{get_game_rect, get_player_from_symbol, get_ui_rect, update_window_title},
+    common::{get_game_rect, get_ui_rect, update_window_title},
     game::{game::Game, value::Value},
     handle_click::handle_click,
     noughbert::{

@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{common::get_greyed_colour_cell, styles::{COLOUR_BOARD_BG, COLOUR_CELL_BG, COLOUR_CELL_HOVER, INVERT_GREYS}};
 
-use super::{board::Board, game::Turn, legal::Legal, player::{self, Player}, value::Value};
+use super::{board::Board, game::Turn, legal::Legal, player::{Player}, value::Value};
 
 /// An enum used to differentiate the states of a cell.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
