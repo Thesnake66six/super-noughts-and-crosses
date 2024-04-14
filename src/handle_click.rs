@@ -217,12 +217,7 @@ fn handle_settings_tab_click(mouse_pos: Vector2, ui: &mut UI, state: &mut State,
 }
 
 fn handle_keybinds_tab_click(mouse_pos: Vector2, ui: &mut UI) {
-    let offset = Vector2 {
-        x: mouse_pos.x,
-        y: mouse_pos.y - ui.scroll_offset_keybinds,
-    };
-
-    if ui.keybinds_elements.back.check_collision_point_rec(offset) {
+    if ui.keybinds_elements.back.check_collision_point_rec(mouse_pos) {
         ui.tab = UITab::Settings
     }
 }

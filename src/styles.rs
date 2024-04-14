@@ -262,6 +262,23 @@ pub const FISH: Player = Player {
     symbol: Symbol::Fish,
 };
 
+pub const IRELAND: Player = Player {
+    foreground: Color {
+        r: 22,
+        g: 155,
+        b: 98,
+        a: 255,
+    },
+    background: COLOUR_CELL_BG,
+    background_alpha: Color {
+        r: 22,
+        g: 155,
+        b: 98,
+        a: 127,
+    },
+    symbol: Symbol::Ireland,
+};
+
 //-----// Drawn cells //-----//
 
 /// Foreground colour of the draw symbol.

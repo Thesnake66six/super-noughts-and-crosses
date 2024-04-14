@@ -12,6 +12,7 @@ pub enum Symbol {
     Thorn,
     Barbeque,
     Fish,
+    Ireland
 }
 
 impl Symbol {
@@ -207,7 +208,44 @@ impl Symbol {
                 d.draw_line_ex(tail_downstroke, top_tail, fish_thick, player.foreground);
                 d.draw_line_ex(tail_upstroke, bottom_tail, fish_thick, player.foreground);
             }
+            Symbol::Ireland => {
+                let padding = 0.1 * rect.width;
+                let flag_width = rect.width - 2.0 * padding;
+                let flag_height = flag_width / 2.0;
+                let pale_width = flag_width / 3.0;
+                let pale_offset = (rect.height - 2.0 * padding - flag_height) / 2.0;
 
+                let orange = Color {
+                    r: 255,
+                    g: 136,
+                    b: 62,
+                    a: 255,
+                };
+
+                let green_pale = Rectangle {
+                    x: rect.x + padding,
+                    y: rect.y + padding + pale_offset,
+                    width: pale_width,
+                    height: flag_height
+                };
+                let white_pale = Rectangle {
+                    x: rect.x + padding + pale_width,
+                    y: rect.y + padding + pale_offset,
+                    width: pale_width,
+                    height: flag_height
+                };
+                let orange_pale = Rectangle {
+                    x: rect.x + padding + pale_width * 2.0,
+                    y: rect.y + padding + pale_offset,
+                    width: pale_width,
+                    height: flag_height
+                };
+
+                d.draw_rectangle_rec(green_pale, player.foreground);
+                d.draw_rectangle_rec(white_pale, Color::WHITE);
+                d.draw_rectangle_rec(orange_pale, orange);
+
+            }
         }
     }
     pub fn name(&self) -> String {
@@ -217,6 +255,7 @@ impl Symbol {
             Symbol::Thorn => "Thorns".to_owned(),
             Symbol::Barbeque => "Barbeques".to_owned(),
             Symbol::Fish => "Fish".to_owned(),
+            Symbol::Ireland => "Ireland".to_owned(),
     
         }
     }
@@ -227,6 +266,7 @@ impl Symbol {
             Symbol::Thorn => "Thorns'".to_owned(),
             Symbol::Barbeque => "Barbeques'".to_owned(),
             Symbol::Fish => "Fish's".to_owned(),
+            Symbol::Ireland => "Ireland's".to_owned(),
         }
     }
     pub fn next(self) -> Symbol {
@@ -235,16 +275,18 @@ impl Symbol {
             Symbol::Nought => Self::Thorn,
             Symbol::Thorn => Self::Barbeque,
             Symbol::Barbeque => Self::Fish,
-            Symbol::Fish => Self::Cross,
+            Symbol::Fish => Self::Ireland,
+            Symbol::Ireland => Self::Cross,
         }
     }
     pub fn prev(self) -> Symbol {
         match self {
-            Symbol::Cross => Self::Fish,
+            Symbol::Cross => Self::Ireland,
             Symbol::Nought => Self::Cross,
             Symbol::Thorn => Self::Nought,
             Symbol::Barbeque => Self::Thorn,
             Symbol::Fish => Self::Barbeque,
+            Symbol::Ireland => Self::Fish,
         }
     }
 }
