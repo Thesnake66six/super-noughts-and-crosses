@@ -8,7 +8,7 @@ use raylib::{
     RaylibHandle, RaylibThread,
 };
 
-use crate::{game::{game::{Game, Turn}, player::Player, symbol::{self, Symbol}}, styles::{BARBEQUE, COLOUR_BOARD_BG_GREYED, COLOUR_CELL_BG_GREYED, COLOUR_DRAW_FG, CROSS, DO_COLOURED_GREYS, NOUGHT, THORN, UI_PANEL_WIDTH}};
+use crate::{game::{game::{Game, Turn}, player::Player, symbol::{self, Symbol}}, styles::{BARBEQUE, COLOUR_BOARD_BG_GREYED, COLOUR_CELL_BG_GREYED, COLOUR_DRAW_FG, CROSS, DO_COLOURED_GREYS, FISH, NOUGHT, THORN, UI_PANEL_WIDTH}};
 
 /// Draws a draw (`Value::Draw`) into the given rectangle 'rect' onto `d`.
 pub fn draw_draw<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
@@ -139,5 +139,6 @@ pub fn get_player_from_symbol(symbol: &Symbol) -> Player {
         Symbol::Nought => NOUGHT,
         Symbol::Thorn => THORN,
         Symbol::Barbeque => BARBEQUE,
+        Symbol::Fish => FISH,
     }
 }

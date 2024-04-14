@@ -245,6 +245,23 @@ pub const BARBEQUE: Player = Player {
     symbol: Symbol::Barbeque,
 };
 
+pub const FISH: Player = Player {
+    foreground: Color {
+        r: 124,
+        g: 210,
+        b: 213,
+        a: 255,
+    },
+    background: COLOUR_CELL_BG,
+    background_alpha: Color {
+        r: 124,
+        g: 210,
+        b: 213,
+        a: 127,
+    },
+    symbol: Symbol::Fish,
+};
+
 //-----// Drawn cells //-----//
 
 /// Foreground colour of the draw symbol.

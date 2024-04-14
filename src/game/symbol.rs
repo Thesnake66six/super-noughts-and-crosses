@@ -1,6 +1,6 @@
 use std::f32::consts::SQRT_2;
 
-use raylib::{drawing::RaylibDraw, math::{Rectangle, Vector2}};
+use raylib::{color::Color, drawing::RaylibDraw, math::{Rectangle, Vector2}};
 use serde::{Deserialize, Serialize};
 
 use super::player::Player;
@@ -11,6 +11,7 @@ pub enum Symbol {
     Nought,
     Thorn,
     Barbeque,
+    Fish,
 }
 
 impl Symbol {
@@ -104,7 +105,7 @@ impl Symbol {
                 );
             },
             Symbol::Barbeque => {
-                let barbeque_thick = 0.15f32;
+                let barbeque_thick = 0.15;
                 let offset_dist = ((barbeque_thick * 0.5 * rect.width).powi(2) * 0.5).sqrt();
                 // Calculating the starting point...
                 let ln_x = rect.x + (barbeque_thick * rect.width / SQRT_2);
@@ -146,6 +147,67 @@ impl Symbol {
 
 
             },
+            Symbol::Fish => {
+                let fish_thick = 0.15 * rect.width;
+                let fish_padding = 0.05 * rect.width;
+                let sect_width = (rect.width - 3.0 * fish_padding) / 3.0;
+
+                let offsetting = ((fish_thick * 0.5).powi(2) * 0.5).sqrt();
+                
+                // d.draw_line_ex(nose, top, fish_thick, player.foreground);
+                // d.draw_line_ex(nose, bottom, fish_thick, player.foreground);
+                // d.draw_line_ex(top, tbottom, fish_thick, player.foreground);
+                // d.draw_line_ex(bottom, ttop, fish_thick, player.foreground);
+
+                // From nose going up
+                let nose_upstroke = Vector2 {
+                    x: rect.x + fish_padding + offsetting,
+                    y: rect.y + rect.height / 2.0 + offsetting,
+                };
+                // From nose going down
+                let nose_downstroke = Vector2 {
+                    x: rect.x + fish_padding + offsetting,
+                    y: rect.y + rect.height / 2.0 - offsetting,
+                };
+                // From nose going up
+                let tip_nose = Vector2 {
+                    x: rect.x + fish_padding + sect_width + offsetting,
+                    y: rect.y + fish_padding + ((rect.height - 2.0 * fish_padding ) / 2.0) - sect_width + offsetting,
+                };
+                // From nose going down
+                let bottom_nose = Vector2 {
+                    x: rect.x + fish_padding + sect_width + offsetting,
+                    y: rect.y + fish_padding + ((rect.height - 2.0 * fish_padding) / 2.0) + sect_width - offsetting,
+                };
+                
+                
+                d.draw_line_ex(nose_upstroke, tip_nose, fish_thick, player.foreground);
+                d.draw_line_ex(nose_downstroke, bottom_nose, fish_thick, player.foreground);
+                
+                let tail_downstroke = Vector2 {
+                    x: rect.x + fish_padding + sect_width - offsetting,
+                    y: rect.y + fish_padding + ((rect.height - 2.0 * fish_padding ) / 2.0) - sect_width + offsetting,
+                };
+                // From bottom going up
+                let tail_upstroke = Vector2 {
+                    x: rect.x + fish_padding + sect_width - offsetting,
+                    y: rect.y + fish_padding + ((rect.height - 2.0 * fish_padding) / 2.0) + sect_width - offsetting,
+                };
+                // From top going down
+                let bottom_tail = Vector2 {
+                    x: rect.x + rect.width - fish_padding - offsetting,
+                    y: rect.y + fish_padding + ((rect.height - 2.0 * fish_padding ) / 2.0) - sect_width - offsetting,
+                };
+                // From bottom going up
+                let top_tail = Vector2 {
+                    x: rect.x + rect.width - fish_padding - offsetting,
+                    y: rect.y + fish_padding + ((rect.height - 2.0 * fish_padding ) / 2.0) + sect_width + offsetting,
+                };
+                
+                d.draw_line_ex(tail_downstroke, top_tail, fish_thick, player.foreground);
+                d.draw_line_ex(tail_upstroke, bottom_tail, fish_thick, player.foreground);
+            }
+
         }
     }
     pub fn name(&self) -> String {
@@ -154,6 +216,7 @@ impl Symbol {
             Symbol::Nought => "Noughts".to_owned(),
             Symbol::Thorn => "Thorns".to_owned(),
             Symbol::Barbeque => "Barbeques".to_owned(),
+            Symbol::Fish => "Fish".to_owned(),
     
         }
     }
@@ -163,6 +226,7 @@ impl Symbol {
             Symbol::Nought => "Noughts'".to_owned(),
             Symbol::Thorn => "Thorns'".to_owned(),
             Symbol::Barbeque => "Barbeques'".to_owned(),
+            Symbol::Fish => "Fish's".to_owned(),
         }
     }
     pub fn next(self) -> Symbol {
@@ -170,15 +234,17 @@ impl Symbol {
             Symbol::Cross => Self::Nought,
             Symbol::Nought => Self::Thorn,
             Symbol::Thorn => Self::Barbeque,
-            Symbol::Barbeque => Self::Cross
+            Symbol::Barbeque => Self::Fish,
+            Symbol::Fish => Self::Cross,
         }
     }
     pub fn prev(self) -> Symbol {
         match self {
-            Symbol::Cross => Self::Barbeque,
+            Symbol::Cross => Self::Fish,
             Symbol::Nought => Self::Cross,
             Symbol::Thorn => Self::Nought,
-            Symbol::Barbeque => Self::Thorn
+            Symbol::Barbeque => Self::Thorn,
+            Symbol::Fish => Self::Barbeque,
         }
     }
 }
