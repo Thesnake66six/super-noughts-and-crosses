@@ -1,6 +1,6 @@
 use std::f32::consts::SQRT_2;
 
-use raylib::{drawing::{RaylibDraw, RaylibDrawHandle}, math::{Rectangle, Vector2}};
+use raylib::{drawing::RaylibDraw, math::{Rectangle, Vector2}};
 use serde::{Deserialize, Serialize};
 
 use super::player::Player;
@@ -105,6 +105,7 @@ impl Symbol {
             },
             Symbol::Barbeque => {
                 let barbeque_thick = 0.15f32;
+                let offset_dist = ((barbeque_thick * 0.5 * rect.width).powi(2) * 0.5).sqrt();
                 // Calculating the starting point...
                 let ln_x = rect.x + (barbeque_thick * rect.width / SQRT_2);
                 let ln_y = rect.y + (barbeque_thick * rect.height / SQRT_2);
@@ -114,8 +115,8 @@ impl Symbol {
 
                 // ...and drawing the given line with the correct colour and relative thickness.
                 d.draw_line_ex(
-                    Vector2 { x: ln_x, y: ln_y },
-                    Vector2 { x: ln_fx, y: ln_fy },
+                    Vector2 { x: ln_x, y: ln_y + (SQRT_2 - 1.0) * offset_dist},
+                    Vector2 { x: ln_fx, y: ln_fy + (SQRT_2 - 1.0) * offset_dist},
                     rect.width * barbeque_thick,
                     player.foreground,
                 );
@@ -129,16 +130,16 @@ impl Symbol {
 
                 // ...and drawing the given line with the correct colour and relative thickness.
                 d.draw_line_ex(
-                    Vector2 { x: ln2_x, y: ln2_y },
-                    Vector2 { x: ln2_fx, y: ln2_fy },
+                    Vector2 { x: ln2_x, y: ln2_y + (SQRT_2 - 1.0) * offset_dist },
+                    Vector2 { x: ln2_fx, y: ln2_fy + (SQRT_2 - 1.0) * offset_dist },
                     rect.width * barbeque_thick,
                     player.foreground,
                 );
 
 
                 d.draw_line_ex(
-                    Vector2 { x: ln_x - barbeque_thick * rect.height / SQRT_2, y: ln_y },
-                    Vector2 { x: ln2_fx + barbeque_thick * rect.height / SQRT_2, y: ln2_fy },
+                    Vector2 { x: ln_x - offset_dist, y: ln_y },
+                    Vector2 { x: ln2_fx + offset_dist, y: ln2_fy },
                     rect.width * barbeque_thick,
                     player.foreground,
                 );
