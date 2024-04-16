@@ -2,6 +2,7 @@ use raylib::math::{Rectangle, Vector2};
 
 use crate::{fonts::Fonts, noughbert::message::Message, ui::textbox::Textbox};
 
+/// Struct holding the main application state
 pub struct State {
     /// Declares whether, if right-click is held, the game should be panned
     pub good_right_click: bool,

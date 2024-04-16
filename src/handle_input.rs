@@ -27,8 +27,10 @@ pub fn handle_input(
     ui: &mut UI,
     state: &mut State,
 ) -> Option<Vec<usize>> {
+    // Get the mouse position
     let mouse_pos = rl.get_mouse_position();
 
+    // Check if the window has been resized and update
     if rl.is_window_resized() {
         state.game_rect = get_game_rect(rl);
         state.ui_rect = get_ui_rect(rl);
@@ -113,25 +115,31 @@ pub fn handle_input(
         state.good_right_click = true;
     }
 
+    // Stop the drag when the right-click is released
     if rl.is_mouse_button_released(MouseButton::MOUSE_RIGHT_BUTTON) {
         state.good_right_click = false;
     }
 
+    // Pan when a good right-click is held
     if rl.is_mouse_button_down(MouseButton::MOUSE_RIGHT_BUTTON) && state.good_right_click {
         g.camera.target.x += (mouse_pos.x - state.mouse_prev.x) * CAMERA_MOVE_SPEED / g.camera.zoom;
         g.camera.target.y += (mouse_pos.y - state.mouse_prev.y) * CAMERA_MOVE_SPEED / g.camera.zoom;
     }
     state.mouse_prev = mouse_pos;
 
+    // Get the vurrently hovered-over cell
     let world_coord = rl.get_screen_to_world2D(mouse_pos, g.camera);
     let hovered_cell = g.get_cell_from_pixel(world_coord, false);
 
+    // Handle left-click inputs
     handle_click(rl, rlthread, g, ui, state, mouse_pos, &hovered_cell);
 
+    // Re-centre the camera when enter is pressed
     if rl.is_key_pressed(KeyboardKey::KEY_ENTER) {
         g.centre_camera(state.game_rect);
     }
-
+    
+    // When the backspace key is pressed, either delete the last character, or unplay the last move
     if rl.is_key_pressed(KeyboardKey::KEY_BACKSPACE) {
         match state.typing {
             Textbox::MaxSims => {
@@ -153,6 +161,7 @@ pub fn handle_input(
         }
     }
 
+    // Queue a computer move when slash is pressed
     if rl.is_key_pressed(KeyboardKey::KEY_SLASH)
         && g.board.check() == Value::None
         && !state.waiting_for_move
@@ -172,6 +181,7 @@ pub fn handle_input(
         state.waiting_for_move = true;
     }
 
+    // Toggle the FPS counter when the grave key is pressed
     if rl.is_key_pressed(KeyboardKey::KEY_GRAVE) {
         if ALLOW_FPS_COUNTER {
             state.show_fps ^= true;
@@ -180,8 +190,10 @@ pub fn handle_input(
         }
     }
 
+    // Handle all typing inputs
     handle_typing(rl, state, ui);
 
+    // Handle the deserialisation of a dropped file 
     if rl.is_file_dropped() {
         let paths = rl.get_dropped_files();
         let path = paths.last().unwrap();
@@ -204,6 +216,7 @@ pub fn handle_input(
                     player_2: new_game.player_2,
                 };
                 
+                // Update the state to reflect the new game
                 g.update_positions();
                 g.centre_camera(state.game_rect);
                 ui.state.is_ai_modified = true;
@@ -223,7 +236,9 @@ pub fn handle_input(
     hovered_cell    
 }
 
+/// Handle typing inputs
 fn handle_typing(rl: &mut RaylibHandle, state: &mut State, ui: &mut UI) {
+    // Handle the 0 key
     if rl.is_key_pressed(KeyboardKey::KEY_ZERO) || rl.is_key_pressed(KeyboardKey::KEY_KP_0) {
         match state.typing {
             Textbox::MaxSims => {
@@ -238,6 +253,8 @@ fn handle_typing(rl: &mut RaylibHandle, state: &mut State, ui: &mut UI) {
             Textbox::None => {}
         }
     }
+
+    // Handle the 1 key
     if rl.is_key_pressed(KeyboardKey::KEY_ONE) || rl.is_key_pressed(KeyboardKey::KEY_KP_1) {
         match state.typing {
             Textbox::MaxSims => {
@@ -254,6 +271,8 @@ fn handle_typing(rl: &mut RaylibHandle, state: &mut State, ui: &mut UI) {
             Textbox::None => {}
         }
     }
+    
+    // Handle the 2 key
     if rl.is_key_pressed(KeyboardKey::KEY_TWO) || rl.is_key_pressed(KeyboardKey::KEY_KP_2) {
         match state.typing {
             Textbox::MaxSims => {
@@ -270,6 +289,8 @@ fn handle_typing(rl: &mut RaylibHandle, state: &mut State, ui: &mut UI) {
             Textbox::None => {}
         }
     }
+
+    // Handle the 3 key
     if rl.is_key_pressed(KeyboardKey::KEY_THREE) || rl.is_key_pressed(KeyboardKey::KEY_KP_3) {
         match state.typing {
             Textbox::MaxSims => {
@@ -286,6 +307,7 @@ fn handle_typing(rl: &mut RaylibHandle, state: &mut State, ui: &mut UI) {
             Textbox::None => {}
         }
     }
+    // Handle the 4 key
     if rl.is_key_pressed(KeyboardKey::KEY_FOUR) || rl.is_key_pressed(KeyboardKey::KEY_KP_4) {
         match state.typing {
             Textbox::MaxSims => {
@@ -302,6 +324,8 @@ fn handle_typing(rl: &mut RaylibHandle, state: &mut State, ui: &mut UI) {
             Textbox::None => {}
         }
     }
+
+    // Handle the 5 key
     if rl.is_key_pressed(KeyboardKey::KEY_FIVE) || rl.is_key_pressed(KeyboardKey::KEY_KP_5) {
         match state.typing {
             Textbox::MaxSims => {
@@ -318,6 +342,8 @@ fn handle_typing(rl: &mut RaylibHandle, state: &mut State, ui: &mut UI) {
             Textbox::None => {}
         }
     }
+
+    // Handle the 6 key
     if rl.is_key_pressed(KeyboardKey::KEY_SIX) || rl.is_key_pressed(KeyboardKey::KEY_KP_6) {
         match state.typing {
             Textbox::MaxSims => {
@@ -334,6 +360,8 @@ fn handle_typing(rl: &mut RaylibHandle, state: &mut State, ui: &mut UI) {
             Textbox::None => {}
         }
     }
+
+    // Handle the 7 key
     if rl.is_key_pressed(KeyboardKey::KEY_SEVEN) || rl.is_key_pressed(KeyboardKey::KEY_KP_7) {
         match state.typing {
             Textbox::MaxSims => {
@@ -350,6 +378,8 @@ fn handle_typing(rl: &mut RaylibHandle, state: &mut State, ui: &mut UI) {
             Textbox::None => {}
         }
     }
+
+    // Handle the 8 key
     if rl.is_key_pressed(KeyboardKey::KEY_EIGHT) || rl.is_key_pressed(KeyboardKey::KEY_KP_8) {
         match state.typing {
             Textbox::MaxSims => {
@@ -366,6 +396,8 @@ fn handle_typing(rl: &mut RaylibHandle, state: &mut State, ui: &mut UI) {
             Textbox::None => {}
         }
     }
+
+    // Handle the 9 key
     if rl.is_key_pressed(KeyboardKey::KEY_NINE) || rl.is_key_pressed(KeyboardKey::KEY_KP_9) {
         match state.typing {
             Textbox::MaxSims => {

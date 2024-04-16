@@ -59,7 +59,7 @@ fn main() -> Result<()> {
     let font_path = "./resources/Inter-Regular.ttf";
     let bold_font_path = "./resources/Inter-Medium.ttf";
 
-    // Import the font
+    // Import the regular font
     let font_50pt = rl
         .load_font_ex(&thread, font_path, 100, FontLoadEx::Default(0))
         .expect("Couldn't load font oof");
@@ -115,9 +115,10 @@ fn main() -> Result<()> {
     g.update_positions();
     ui.update_positions(state.ui_rect);
 
-    // Centre
+    // Centre the camera
     g.centre_camera(state.game_rect);
 
+    // Load the symbols
     g.player_1 = get_player_from_symbol(&ui.state.player_1);
     g.player_2 = get_player_from_symbol(&ui.state.player_2);
     update_window_title(&mut rl, &mut thread, &g);
@@ -130,8 +131,10 @@ fn main() -> Result<()> {
 
         //----------// Handle input //----------//
 
+        // Handle all input, returning the currently hovered cell
         let hovered_cell = handle_input(&mut rl, &mut thread, &mut g, &mut ui, &mut state);
-
+        
+        // If needed, call the AI
         if (g.players == 0 || (g.players == 1 && g.turn == Turn::Player2))
             && g.board.check() == Value::None
             && !state.waiting_for_move
@@ -151,10 +154,12 @@ fn main() -> Result<()> {
             state.waiting_for_move = true;
         }
 
+        // Send all queued messages
         for message in state.message_queue.drain(0..state.message_queue.len()) {
             tx.send(message).unwrap();
         }
 
+        // Recieve any sent messages, and queue all moves
         let mv = rx.try_recv();
         match mv {
             Ok(mv) => {
@@ -171,6 +176,7 @@ fn main() -> Result<()> {
             },
         }
 
+        // If the delay between moves is 0, play the next queued move
         if state.response_time <= 0.0 {
             if let Some(mv) = state.move_queue.pop() {
                 println!("Some move");
@@ -182,8 +188,10 @@ fn main() -> Result<()> {
 
         let mut d = rl.begin_drawing(&thread);
 
+        // Set the background
         d.clear_background(Color::BLACK);
-
+        
+        // Draw the game
         g.draw(
             get_board_rect(g.depth),
             &mut d,
@@ -192,12 +200,15 @@ fn main() -> Result<()> {
             hovered_cell.as_deref(),
         );
 
+        // Draw the UI
         ui.draw(state.ui_rect, &mut d, &g, &state);
 
+        // Draw the FPS counter
         if state.show_fps {
             d.draw_fps(10, 10);
         }
 
+        // Decrement the response delay by the frame time
         state.response_time -= delta;
         if state.response_time < 0.0 {
             state.response_time = 0.0;

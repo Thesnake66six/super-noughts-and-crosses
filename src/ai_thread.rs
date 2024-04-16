@@ -3,14 +3,17 @@ use std::{fs, path::Path, process::Command, sync::mpsc::{self, Receiver, SyncSen
 use crate::{game::{game::Turn, value::Value}, noughbert::{message::Message, monte_carlo::MonteCarloManager}, styles::{AUTOCOMPILE_GRAPHVIS_FILES, OUTPUT_GRAPHVIS_FILES}};
 
 pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
+    // Count the number of AI calls
     let mut runs = 0;
 
+    // Clear and re-create the `./outs` folder
     if OUTPUT_GRAPHVIS_FILES {
         let _ = fs::remove_dir_all("./outs");
         let _ = fs::create_dir("./outs");
     }
 
     loop {
+        // Recieve all messages, if a `Message::Start()` is recieved, begin simulation
         let message = rx.recv().unwrap();
         let mc_options = match message {
             Message::Start(x) => x,
@@ -27,16 +30,19 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
         let mut interrupt = false;
         let mut interrupt_return = true;
 
+        // Make sure a move is never requested on a completed board state
         assert_eq!(noughbert.g.board.check(), Value::None);
 
         if noughbert.g.board.check() != Value::None {
             interrupt = true;
         }
 
+        // Start new iteration within current bounds
         while start_time.elapsed() < mc_options.timeout
             && noughbert.sims < mc_options.max_sims
             && !interrupt
         {
+            // Recieve all messages; Break if interrupted
             let message = rx.try_recv();
             match message {
                 Ok(m) => match m {
@@ -57,6 +63,7 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
                     mpsc::TryRecvError::Disconnected => panic!("Thread disconnected"),
                 },
             }
+            // Run the MCTS algorithm once
             let x = noughbert.select(mc_options.exploration_factor, mc_options.opt_for);
             if x.is_none() {
                 break;
@@ -64,8 +71,10 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
             let x = noughbert.expand(x.unwrap());
             let (x, val) = noughbert.simulate(x, mc_options.opt_for);
             noughbert.backpropogate(x, val);
+            // Increment the number of simulations run
             noughbert.sims += 1;
         }
+        // Print the reason for the cycle ending
         if interrupt {
             println!("Exited due to interrupt request");
             continue;
@@ -80,20 +89,18 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
         }
         println!("Move selected after {} sims and {} seconds.", noughbert.sims, start_time.elapsed().as_secs_f32());
 
-        // Assertions true
-        // assert_eq!(noughbert.g.board, sgame.board);
-        // assert_eq!(noughbert.g.turn, sgame.turn);
-        // assert_eq!(noughbert.g.moves, sgame.moves);
-
+        // Calculate the best play
         let best_play = noughbert.best(
             mc_options.policy,
             mc_options.opt_for,
             mc_options.exploration_factor,
         );
 
+        // Send the best move calculated and increment the runs counter
         tx.send(Message::Move(best_play)).unwrap();
         runs += 1;
 
+        // If needed, output the node `.svg` files
         if OUTPUT_GRAPHVIS_FILES {
             let _ = fs::write(Path::new(&format!("./outs/{runs}.dot")), {
                 let s = format!(
@@ -202,6 +209,8 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
                 );
                 s.replace("\"]", "\" fontname = \"Consolas\"]")
             });
+            
+            // If needed, automatically compile the `.dot` files to `.svg` files
             if AUTOCOMPILE_GRAPHVIS_FILES {
                 let _ = Command::new("dot")
                     .args(["-T", "svg", "-O", &format!("./outs/{runs}.dot")])
