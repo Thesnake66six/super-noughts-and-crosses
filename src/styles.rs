@@ -230,16 +230,16 @@ pub const THORN: Player = Player {
 
 pub const BARBEQUE: Player = Player {
     foreground: Color {
-        r: 75,
+        r: 70,
         g: 0,
-        b: 130,
+        b: 175,
         a: 255,
     },
     background: COLOUR_CELL_BG,
     background_alpha: Color {
-        r: 75,
+        r: 70,
         g: 0,
-        b: 130,
+        b: 175,
         a: 127,
     },
     symbol: Symbol::Barbeque,

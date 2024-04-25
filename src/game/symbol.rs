@@ -86,15 +86,20 @@ impl Symbol {
                     y: rect.y + rect.height - (rect.height * thorn_padding),
                 };
 
+                // Draw the downstroke
                 d.draw_line_ex(ln, ln_f, rect.width * thorn_thick ,player.foreground);
-
+                
+                // Centre
                 let c = Vector2 {
                     x: rect.x + (rect.width / 3.0),
                     y: rect.y + (rect.height * 0.5),
                 };
+                // Outer radius
                 let ro = (rect.width / 2.5) - thorn_padding * rect.width;
+                // Inner radius
                 let ri = (rect.width / 2.5) - (thorn_thick + thorn_padding) * rect.width;
 
+                // Draw the half-ring
                 d.draw_ring(
                     c,
                     ri,
@@ -207,7 +212,7 @@ impl Symbol {
                 
                 d.draw_line_ex(tail_downstroke, top_tail, fish_thick, player.foreground);
                 d.draw_line_ex(tail_upstroke, bottom_tail, fish_thick, player.foreground);
-            }
+            },
             Symbol::Ireland => {
                 let padding = 0.1 * rect.width;
                 let flag_width = rect.width - 2.0 * padding;
@@ -244,8 +249,7 @@ impl Symbol {
                 d.draw_rectangle_rec(green_pale, player.foreground);
                 d.draw_rectangle_rec(white_pale, Color::WHITE);
                 d.draw_rectangle_rec(orange_pale, orange);
-
-            }
+            },
         }
     }
     pub fn name(&self) -> String {
@@ -259,6 +263,7 @@ impl Symbol {
     
         }
     }
+    
     pub fn name_apostrophe(&self) -> String {
         match self {
             Symbol::Cross => "Crosses'".to_owned(),
@@ -269,6 +274,7 @@ impl Symbol {
             Symbol::Ireland => "Ireland's".to_owned(),
         }
     }
+
     pub fn next(self) -> Symbol {
         match self {
             Symbol::Cross => Self::Nought,
@@ -279,6 +285,7 @@ impl Symbol {
             Symbol::Ireland => Self::Cross,
         }
     }
+
     pub fn prev(self) -> Symbol {
         match self {
             Symbol::Cross => Self::Ireland,
