@@ -106,6 +106,7 @@ pub fn get_board_rect(depth: usize) -> Rectangle {
     }
 }
 
+/// Function to return the colour that would be seen when layering a foregroudn colour with transparrency over a solid background colour
 pub fn get_rgb_from_rgba(fg: Color, bg: Color) -> Color {
     let alpha = fg.a as f32 / 255.0;
     let r = (fg.r as f32 * alpha + bg.r as f32 * (1.0 - alpha)) as u8;
@@ -120,6 +121,7 @@ pub fn get_rgb_from_rgba(fg: Color, bg: Color) -> Color {
     }
 }
 
+/// Dynamically change the window title based on the current game depth and selected symbols
 pub fn update_window_title(rl: &mut RaylibHandle, rlthread: &mut RaylibThread, g: &Game) {
     let mut out = String::new();
 
@@ -132,6 +134,7 @@ pub fn update_window_title(rl: &mut RaylibHandle, rlthread: &mut RaylibThread, g
     rl.set_window_title(rlthread, &out)
 }
 
+/// Match each symbol to the respective player
 pub fn get_player_from_symbol(symbol: &Symbol) -> Player {
     match symbol {
         Symbol::Cross => CROSS,

@@ -211,6 +211,8 @@ pub const NOUGHT: Player = Player {
     symbol: Symbol::Nought,
 };
 
+//-----// Thorns //-----//
+
 pub const THORN: Player = Player {
     foreground: Color {
         r: 88,
@@ -227,6 +229,8 @@ pub const THORN: Player = Player {
     },
     symbol: Symbol::Thorn,
 };
+
+//-----// Barbeques //-----//
 
 pub const BARBEQUE: Player = Player {
     foreground: Color {
@@ -245,6 +249,8 @@ pub const BARBEQUE: Player = Player {
     symbol: Symbol::Barbeque,
 };
 
+//-----// Fish //-----//
+
 pub const FISH: Player = Player {
     foreground: Color {
         r: 124,
@@ -261,6 +267,9 @@ pub const FISH: Player = Player {
     },
     symbol: Symbol::Fish,
 };
+
+//-----// Ireland //-----//
+
 
 pub const IRELAND: Player = Player {
     foreground: Color {

@@ -44,7 +44,7 @@ pub fn handle_click(
                 .inner_content
                 .check_collision_point_rec(mouse_pos)
             {
-                // If the tab content was clicked...
+                // If the tab content was clicked, handle the respective tab
                 match ui.tab {
                     UITab::Game => {
                         handle_game_tab_click(ui, mouse_pos, g, state);
@@ -168,6 +168,7 @@ fn handle_settings_tab_click(mouse_pos: Vector2, ui: &mut UI, state: &mut State,
             x: state.game_rect.width / 2.0f32,
             y: state.game_rect.height,
         };
+        // Update the computer difficulty
         if !ui.state.is_ai_modified {
             let l = match ui.state.ai_strength {
                 1 => { COMPUTER_LEVEL_1_SIMS },
@@ -177,12 +178,13 @@ fn handle_settings_tab_click(mouse_pos: Vector2, ui: &mut UI, state: &mut State,
             };
             ui.state.max_sims = l * (COMPUTER_SIM_SCALING.pow((g.depth - 1).try_into().unwrap()));
         }
+        // Update the symbols and window title
         g.player_1 = get_player_from_symbol(&ui.state.player_1);
         g.player_2 = get_player_from_symbol(&ui.state.player_2);
         update_window_title(rl, rlthread, g);
         
         
-
+    // If the AI strength buttons are ckicle
     } else if ui.settings_elements.ai_1.check_collision_point_rec(offset) {
         ui.state.ai_strength = 1;
         ui.state.max_sims = COMPUTER_LEVEL_1_SIMS * (COMPUTER_SIM_SCALING.pow((g.depth - 1).try_into().unwrap()));
