@@ -59,6 +59,7 @@ impl Cell {
     pub fn draw<T: RaylibDraw>(
         &self,
         rect: Rectangle,
+        on_screen_rect: &Rectangle,
         d: &mut T,
         no_check: bool,
         alpha: bool,
@@ -68,6 +69,19 @@ impl Cell {
         player_1: &Player,
         player_2: &Player,
     ) {
+        let minsize_x = 100.0 / on_screen_rect.width;
+        dbg!(minsize_x);
+        let minsize_y = 100.0 / on_screen_rect.height;
+        dbg!(minsize_y);
+        if rect.width < minsize_x || rect.height < minsize_y {
+            dbg!("Too small!");
+            return;
+        }
+        
+        if !on_screen_rect.check_collision_recs(&rect) || rect.width < minsize_x || rect.height < minsize_y {
+            dbg!("Occluded!");
+            return;
+        }
         let mut flag = false;
         if let Some(pos) = hover {
             if pos.is_empty() {
@@ -143,11 +157,11 @@ impl Cell {
             Cell::Player2 => player_2.symbol.draw(player_2, rect, d),
             Cell::Board(b) => {
                 if let Value::None = b.check() {
-                    b.draw(rect, d, no_check, alpha, hover, legal, turn, player_1, player_2); // Draw the board, if it is still playable...
+                    b.draw(rect, on_screen_rect, d, no_check, alpha, hover, legal, turn, player_1, player_2); // Draw the board, if it is still playable...
                 } else if no_check {
-                    b.draw(rect, d, no_check, alpha, hover, legal, turn, player_1, player_2); // ...or if we're told not to check...
+                    b.draw(rect, on_screen_rect, d, no_check, alpha, hover, legal, turn, player_1, player_2); // ...or if we're told not to check...
                 } else {
-                    b.draw(rect, d, no_check, alpha, hover, legal, turn, player_1, player_2);
+                    b.draw(rect, on_screen_rect, d, no_check, alpha, hover, legal, turn, player_1, player_2);
                     b.check().draw(rect, d, alpha, legal, turn, player_1, player_2); // ...else draw the corresponding value
                 }
             }

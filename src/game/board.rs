@@ -210,6 +210,7 @@ impl Board {
     pub fn draw<T: RaylibDraw>(
         &self,
         rect: Rectangle,
+        on_screen_rect: &Rectangle,
         d: &mut T,
         no_check: bool,
         alpha: bool,
@@ -218,7 +219,21 @@ impl Board {
         turn: Turn,
         player_1: &Player,
         player_2: &Player,
+        
     ) {
+        let minsize_x = 100.0 / on_screen_rect.width;
+        dbg!(minsize_x);
+        let minsize_y = 100.0 / on_screen_rect.height;
+        dbg!(minsize_y);
+        if rect.width < minsize_x || rect.height < minsize_y {
+            dbg!("Occluded!");
+            return;
+        }
+        
+        if !on_screen_rect.check_collision_recs(&rect) || rect.width < minsize_x || rect.height < minsize_y {
+            dbg!("Occluded!");
+            return;
+        }
         let mut t: Option<usize> = None;
         let mut ignore = false;
         if legal == Legal::ForceDefaultBg {
@@ -331,6 +346,7 @@ impl Board {
         for i in 0..9 {
             self.cells[i].draw(
                 self.cell_positions[i],
+                on_screen_rect,
                 d,
                 no_check,
                 alpha,

@@ -124,6 +124,8 @@ impl Game {
     pub fn draw<T: RaylibDraw>(
         &self,
         rect: Rectangle,
+        on_screen_rect: &Rectangle,
+        game_rect: &Rectangle,
         d: &mut T,
         no_check: bool,
         alpha: bool,
@@ -168,7 +170,7 @@ impl Game {
 
         // Draws the board
         self.board
-            .draw(irect, &mut c, no_check, alpha, hover, legal, self.turn, &self.player_1, &self.player_2);
+            .draw(irect, on_screen_rect, &mut c, no_check, alpha, hover, legal, self.turn, &self.player_1, &self.player_2);
     }
 
     /// Makes a move

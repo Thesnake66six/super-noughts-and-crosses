@@ -2,12 +2,12 @@
 use raylib::{
     color::Color,
     drawing::RaylibDraw,
-    math::{Rectangle},
-    text::{measure_text_ex, Font},
+    math::Rectangle,
+    text::{Font, RaylibFont},
     RaylibHandle, RaylibThread,
 };
 
-use crate::{game::{game::{Game, Turn}, player::Player, symbol::{Symbol}}, styles::{BARBEQUE, COLOUR_BOARD_BG_GREYED, COLOUR_CELL_BG_GREYED, COLOUR_DRAW_FG, CROSS, DO_COLOURED_GREYS, FISH, IRELAND, NOUGHT, THORN, UI_PANEL_WIDTH}};
+use crate::{game::{game::{Game, Turn}, player::Player, symbol::Symbol}, styles::{BARBEQUE, COLOUR_BOARD_BG_GREYED, COLOUR_CELL_BG_GREYED, COLOUR_DRAW_FG, CROSS, DO_COLOURED_GREYS, FISH, IRELAND, NOUGHT, THORN, UI_PANEL_WIDTH}};
 
 /// Draws a draw (`Value::Draw`) into the given rectangle 'rect' onto `d`.
 pub fn draw_draw<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
@@ -66,7 +66,7 @@ pub fn centre_text_rec(
     spacing: f32,
     rect: Rectangle,
 ) -> Rectangle {
-    let text_size = measure_text_ex(font, text, size, spacing);
+    let text_size = font.measure_text(text, size, spacing);
     Rectangle {
         x: rect.x + 0.5 * (rect.width - text_size.x) - 2.0,
         y: rect.y + 0.5 * (rect.height - text_size.y),
