@@ -61,7 +61,7 @@ fn main() -> Result<()> {
 
     // Import the regular font
     let font_50pt = rl
-        .load_font_ex(&thread, font_path, 100, FontLoadEx::Default(0))
+        .load_font_ex(&thread, font_path, 100, None)
         .expect("Couldn't load font oof");
     font_50pt
         .texture()
@@ -69,7 +69,7 @@ fn main() -> Result<()> {
 
     // Import the bold font
     let font_50pt_bold = rl
-        .load_font_ex(&thread, bold_font_path, 100, FontLoadEx::Default(0))
+        .load_font_ex(&thread, bold_font_path, 100, None)
         .expect("Couldn't load font oof");
     font_50pt_bold
         .texture()
@@ -186,14 +186,29 @@ fn main() -> Result<()> {
             }
         }
 
+        let gr = get_game_rect(&rl);
+        let real_origin = rl.get_screen_to_world2D(Vector2 {x: gr.x, y: gr.y}, g.camera);
+        let real_maximum = rl.get_screen_to_world2D(Vector2 {x: gr.x + gr.width, y: gr.y + gr.height}, g.camera);
+        let on_screen_rect = Rectangle {
+            x: real_origin.x,
+            y: real_origin.y,
+            width: real_maximum.x - real_origin.x,
+            height: real_maximum.y - real_origin.y,
+        };
+
         let mut d = rl.begin_drawing(&thread);
 
         // Set the background
         d.clear_background(Color::BLACK);
+
+        // let world_coord = rl.get_screen_to_world2D(mouse_pos, g.camera);
+
         
         // Draw the game
         g.draw(
             get_board_rect(g.depth),
+            &on_screen_rect,
+            &gr,
             &mut d,
             false,
             true,

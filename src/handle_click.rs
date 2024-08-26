@@ -1,12 +1,12 @@
 use std::fs;
 
-use raylib::{ffi::MouseButton, math::Vector2, RaylibHandle, RaylibThread};
+use raylib::{ffi::MouseButton, math::Vector2, open_url, RaylibHandle, RaylibThread};
 
 use crate::{
     common::{get_board_rect, get_player_from_symbol, update_window_title},
     game::game::{Game, Turn},
     noughbert::message::Message,
-    state::{State},
+    state::State,
     styles::{COMPUTER_LEVEL_1_SIMS, COMPUTER_LEVEL_2_SIMS, COMPUTER_LEVEL_3_SIMS, COMPUTER_RESPONSE_DELAY, COMPUTER_SIM_SCALING, RULES_URL},
     ui::{textbox::Textbox, ui::UI, ui_tab::UITab},
 };
@@ -20,7 +20,7 @@ pub fn handle_click(
     mouse_pos: Vector2,
     hovered_cell: &Option<Vec<usize>>,
 ) {
-    if rl.is_mouse_button_pressed(MouseButton::MOUSE_LEFT_BUTTON) {
+    if rl.is_mouse_button_pressed(MouseButton::MOUSE_BUTTON_LEFT) {
         state.typing = Textbox::None;
         if state.ui_rect.check_collision_point_rec(mouse_pos) {
             // This means that the mouse click was in the UI.
@@ -210,7 +210,7 @@ fn handle_settings_tab_click(mouse_pos: Vector2, ui: &mut UI, state: &mut State,
     {
         state.typing = Textbox::MaxTime;
     } else if ui.settings_elements.rules.check_collision_point_rec(offset) {
-        let _ = webbrowser::open(RULES_URL);
+        let _ = open_url(RULES_URL);
     } else if ui.settings_elements.keybinds.check_collision_point_rec(offset) {
         ui.tab = UITab::Keybinds;
     } else if ui.settings_elements.symbols.check_collision_point_rec(offset) {

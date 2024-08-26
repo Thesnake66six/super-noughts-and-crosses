@@ -109,19 +109,19 @@ pub fn handle_input(
 
     // Small check to see whether the right-click was on the Game, if so, as long as it's held, pan the camera.
     // Stops a bug where if the cursor was over the UI window or outside the window, the camera wouldn't pan
-    if rl.is_mouse_button_pressed(MouseButton::MOUSE_RIGHT_BUTTON)
+    if rl.is_mouse_button_pressed(MouseButton::MOUSE_BUTTON_RIGHT)
         && state.game_rect.check_collision_point_rec(mouse_pos)
     {
         state.good_right_click = true;
     }
 
     // Stop the drag when the right-click is released
-    if rl.is_mouse_button_released(MouseButton::MOUSE_RIGHT_BUTTON) {
+    if rl.is_mouse_button_released(MouseButton::MOUSE_BUTTON_RIGHT) {
         state.good_right_click = false;
     }
 
     // Pan when a good right-click is held
-    if rl.is_mouse_button_down(MouseButton::MOUSE_RIGHT_BUTTON) && state.good_right_click {
+    if rl.is_mouse_button_down(MouseButton::MOUSE_BUTTON_RIGHT) && state.good_right_click {
         g.camera.target.x += (mouse_pos.x - state.mouse_prev.x) * CAMERA_MOVE_SPEED / g.camera.zoom;
         g.camera.target.y += (mouse_pos.y - state.mouse_prev.y) * CAMERA_MOVE_SPEED / g.camera.zoom;
     }
@@ -195,7 +195,8 @@ pub fn handle_input(
 
     // Handle the deserialisation of a dropped file 
     if rl.is_file_dropped() {
-        let paths = rl.get_dropped_files();
+        let paths = rl.load_dropped_files();
+        let paths = paths.paths();
         let path = paths.last().unwrap();
         let json = fs::read(path).unwrap();
         match serde_json::from_slice::<Game>(&json) {
@@ -230,7 +231,7 @@ pub fn handle_input(
                 ui.state.is_ai_modified = true
             }
         }
-        rl.clear_dropped_files();
+    
     }
 
     hovered_cell    
