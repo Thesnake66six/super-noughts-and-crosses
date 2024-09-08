@@ -77,7 +77,11 @@ pub const COMPUTER_DEFAULT_STRENGTH: usize = 2;
 
 //----------// Constants determining other items //----------//
 
+/// The URL that is opened when the rules button is pressed
 pub const RULES_URL: &str = "https://thesnake66six.gitlab.io/snvc-rules";
+
+/// The default frequency for calling `Message::GetThoughts()`
+pub const DEFAULT_THOUGHTS_DELAY: f32 = 0.1;
 
 //----------// Constants determining the properties of the camera //----------//
 
@@ -269,7 +273,6 @@ pub const FISH: Player = Player {
 };
 
 //-----// Ireland //-----//
-
 
 pub const IRELAND: Player = Player {
     foreground: Color {

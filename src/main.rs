@@ -1,33 +1,42 @@
-use std::{
-    sync::mpsc,
-    thread,
-    time::Duration,
-};
+use std::{sync::mpsc, thread, time::Duration};
 
 use anyhow::Result;
 use raylib::{core::texture::RaylibTexture2D, prelude::*};
-use styles::{BOARD_DEFAULT_DEPTH, BOARD_DEFAULT_PLAYERS, COMPUTER_RESPONSE_DELAY, DEFAULT_EXPLORATION_FACTOR, DEFAULT_MAX_TIME, DEFAULT_SHOW_FPS_COUNTER, UI_PANEL_MIN_HEIGHT, UI_PANEL_WIDTH};
-
-use crate::{
-    ai_thread::noughbert, common::{get_board_rect, get_game_rect, get_player_from_symbol, get_ui_rect, update_window_title}, fonts::Fonts, game::{
-        game::{Game, Turn},
-        value::Value,
-    }, handle_input::handle_input, noughbert::{
-        message::Message,  monte_carlo_policy::MonteCarloPolicy,
-        monte_carlo_settings::MonteCarloSettings,
-    }, state::State, ui::{textbox::Textbox, ui::UI}
+use styles::{
+    BOARD_DEFAULT_DEPTH, BOARD_DEFAULT_PLAYERS, COLOUR_DRAW_FG, COLOUR_UI_BG,
+    COMPUTER_RESPONSE_DELAY, DEFAULT_EXPLORATION_FACTOR, DEFAULT_MAX_TIME,
+    DEFAULT_SHOW_FPS_COUNTER, DEFAULT_THOUGHTS_DELAY, UI_PANEL_MIN_HEIGHT, UI_PANEL_WIDTH,
 };
 
+use crate::{
+    ai_thread::noughbert,
+    common::{
+        get_board_rect, get_game_rect, get_player_from_symbol, get_ui_rect, update_window_title,
+    },
+    fonts::Fonts,
+    game::{
+        game::{Game, Turn},
+        value::Value,
+    },
+    handle_input::handle_input,
+    noughbert::{
+        message::Message, monte_carlo_policy::MonteCarloPolicy,
+        monte_carlo_settings::MonteCarloSettings,
+    },
+    state::State,
+    ui::{textbox::Textbox, ui::UI},
+};
+
+mod ai_thread;
 mod common;
+mod fonts;
 mod game;
+mod handle_click;
+mod handle_input;
 mod noughbert;
 mod state;
 mod styles;
 mod ui;
-mod ai_thread;
-mod handle_click;
-mod handle_input;
-mod fonts;
 
 fn main() -> Result<()> {
     // Main thread comms with Noughbert
@@ -98,9 +107,12 @@ fn main() -> Result<()> {
         good_right_click: false,
         show_fps: DEFAULT_SHOW_FPS_COUNTER,
         waiting_for_move: false,
-        response_time: COMPUTER_RESPONSE_DELAY,
+        waiting_for_thoughts: false,
+        move_delay: 0.0,
+        thoughts_timer: 0.0,
         message_queue: vec![],
         move_queue: vec![],
+        currrent_thoughts: None,
         typing: Textbox::None,
         can_export: true,
         game_rect: get_game_rect(&rl),
@@ -108,7 +120,7 @@ fn main() -> Result<()> {
         fonts: Fonts {
             regular: font_50pt,
             bold: font_50pt_bold,
-        }
+        },
     };
 
     // Get the pixel positions of each cell in the game, and each element in the UI
@@ -133,7 +145,7 @@ fn main() -> Result<()> {
 
         // Handle all input, returning the currently hovered cell
         let hovered_cell = handle_input(&mut rl, &mut thread, &mut g, &mut ui, &mut state);
-        
+
         // If needed, call the AI
         if (g.players == 0 || (g.players == 1 && g.turn == Turn::Player2))
             && g.board.check() == Value::None
@@ -160,24 +172,38 @@ fn main() -> Result<()> {
         }
 
         // Recieve any sent messages, and queue all moves
-        let mv = rx.try_recv();
-        match mv {
-            Ok(mv) => {
-                if state.waiting_for_move {
-                    if let Message::Move(Some(y)) = mv {
-                        state.move_queue.insert(0, y);
-                        println!("{:?}", state.move_queue);
+        loop {
+            let msg = rx.try_recv();
+            match msg {
+                Ok(msg) => match msg {
+                    Message::Start(_) => {}
+                    Message::Return() => {}
+                    Message::GetThoughts(_) => {}
+                    Message::Thoughts(th) => {
+                        if state.waiting_for_thoughts {
+                            state.currrent_thoughts = Some(th);
+                            println!("{:?}", state.currrent_thoughts);
+                        }
                     }
-                }
+                    Message::Move(mv) => {
+                        if state.waiting_for_move {
+                            if let Some(y) = mv {
+                                state.move_queue.insert(0, y);
+                                println!("{:?}", state.move_queue);
+                            }
+                        }
+                    }
+                    Message::Interrupt => {}
+                },
+                Err(e) => match e {
+                    mpsc::TryRecvError::Empty => break,
+                    mpsc::TryRecvError::Disconnected => panic!("Thread disconnected"),
+                },
             }
-            Err(e) => match e {
-                mpsc::TryRecvError::Empty => {}
-                mpsc::TryRecvError::Disconnected => panic!("Thread disconnected"),
-            },
         }
 
         // If the delay between moves is 0, play the next queued move
-        if state.response_time <= 0.0 {
+        if state.move_delay <= 0.0 {
             if let Some(mv) = state.move_queue.pop() {
                 println!("Some move");
                 dbg!(&state.move_queue);
@@ -187,8 +213,14 @@ fn main() -> Result<()> {
         }
 
         let gr = get_game_rect(&rl);
-        let real_origin = rl.get_screen_to_world2D(Vector2 {x: gr.x, y: gr.y}, g.camera);
-        let real_maximum = rl.get_screen_to_world2D(Vector2 {x: gr.x + gr.width, y: gr.y + gr.height}, g.camera);
+        let real_origin = rl.get_screen_to_world2D(Vector2 { x: gr.x, y: gr.y }, g.camera);
+        let real_maximum = rl.get_screen_to_world2D(
+            Vector2 {
+                x: gr.x + gr.width,
+                y: gr.y + gr.height,
+            },
+            g.camera,
+        );
         let on_screen_rect = Rectangle {
             x: real_origin.x,
             y: real_origin.y,
@@ -203,7 +235,6 @@ fn main() -> Result<()> {
 
         // let world_coord = rl.get_screen_to_world2D(mouse_pos, g.camera);
 
-        
         // Draw the game
         g.draw(
             get_board_rect(g.depth),
@@ -223,10 +254,48 @@ fn main() -> Result<()> {
             d.draw_fps(10, 10);
         }
 
+        match state.currrent_thoughts {
+            Some(t) => {
+                d.draw_text(&format!("{}", t.sims), 50, 50, 20, Color::RAYWHITE);
+                if t.score > 0.0 {
+                    d.draw_text(
+                        &format!("{}", t.score / t.sims as f32),
+                        10,
+                        80,
+                        20,
+                        g.player_1.foreground,
+                    );
+                } else if t.score < 0.0 {
+                    d.draw_text(
+                        &format!("{}", t.score / t.sims as f32),
+                        10,
+                        80,
+                        20,
+                        g.player_2.foreground,
+                    );
+                } else {
+                    d.draw_text(
+                        &format!("{}", t.score / t.sims as f32),
+                        10,
+                        80,
+                        20,
+                        COLOUR_UI_BG,
+                    );
+                }
+            }
+            None => d.draw_text("None", 10, 50, 20, Color::RED),
+        }
+
         // Decrement the response delay by the frame time
-        state.response_time -= delta;
-        if state.response_time < 0.0 {
-            state.response_time = 0.0;
+        state.move_delay -= delta;
+        if state.move_delay < 0.0 {
+            state.move_delay = 0.0;
+        }
+
+        state.thoughts_timer -= delta;
+        if state.thoughts_timer < 0.0 {
+            state.thoughts_timer = DEFAULT_THOUGHTS_DELAY;
+            tx.send(Message::GetThoughts(Turn::Player2)).unwrap()
         }
     }
 

@@ -1,6 +1,19 @@
-use std::{fs, path::Path, process::Command, sync::mpsc::{self, Receiver, SyncSender}, time};
+use std::{
+    fs,
+    path::Path,
+    process::Command,
+    sync::mpsc::{self, Receiver, SyncSender},
+    time,
+};
 
-use crate::{game::{game::Turn, value::Value}, noughbert::{message::Message, monte_carlo::MonteCarloManager}, styles::{AUTOCOMPILE_GRAPHVIS_FILES, OUTPUT_GRAPHVIS_FILES}};
+use crate::{
+    game::{game::Turn, value::Value},
+    noughbert::{
+        message::{Message, Thoughts},
+        monte_carlo::MonteCarloManager,
+    },
+    styles::{AUTOCOMPILE_GRAPHVIS_FILES, OUTPUT_GRAPHVIS_FILES},
+};
 
 pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
     // Count the number of AI calls
@@ -18,7 +31,8 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
         let mc_options = match message {
             Message::Start(x) => x,
             Message::Interrupt => continue,
-            Message::GetThoughts() => continue,
+            Message::GetThoughts(_) => continue,
+            Message::Thoughts(_) => continue,
             Message::Move(_) => continue,
             Message::Return() => continue,
         };
@@ -51,12 +65,21 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
                         interrupt = true;
                         break;
                     }
-                    Message::GetThoughts() => unimplemented!(),
+                    Message::GetThoughts(t) => {
+                        dbg!("Thoughts requested");
+                        let root = noughbert.tree.root().value();
+                        tx.send(Message::Thoughts(Thoughts {
+                            sims: noughbert.sims,
+                            score: root.score(t),
+                        }))
+                        .unwrap();
+                    }
+                    Message::Thoughts(_) => {}
                     Message::Move(_) => {}
                     Message::Return() => {
                         interrupt_return = true;
-                        break
-                    },
+                        break;
+                    }
                 },
                 Err(e) => match e {
                     mpsc::TryRecvError::Empty => {}
@@ -87,7 +110,11 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
         } else {
             println!("Exited due to complete game tree");
         }
-        println!("Move selected after {} sims and {} seconds.", noughbert.sims, start_time.elapsed().as_secs_f32());
+        println!(
+            "Move selected after {} sims and {} seconds.",
+            noughbert.sims,
+            start_time.elapsed().as_secs_f32()
+        );
 
         // Calculate the best play
         let best_play = noughbert.best(
@@ -201,15 +228,13 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
                                 }
                             };
 
-                            format!(
-                                "{id}\n{play}\n{repr}\n{done}\n{score}\nucb1 = {ucb1}"
-                            )
+                            format!("{id}\n{play}\n{repr}\n{done}\n{score}\nucb1 = {ucb1}")
                         }
                     )
                 );
                 s.replace("\"]", "\" fontname = \"Consolas\"]")
             });
-            
+
             // If needed, automatically compile the `.dot` files to `.svg` files
             if AUTOCOMPILE_GRAPHVIS_FILES {
                 let _ = Command::new("dot")

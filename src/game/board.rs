@@ -2,7 +2,10 @@ use anyhow::{bail, Ok, Result};
 use raylib::{core::math::Rectangle, prelude::*};
 use serde::{Deserialize, Serialize};
 
-use crate::{common::get_greyed_colour_board, styles::{BOARD_CELL_MARGIN, BOARD_LINE_THICK, COLOUR_BOARD_BG, COLOUR_BOARD_FG, INVERT_GREYS}};
+use crate::{
+    common::get_greyed_colour_board,
+    styles::{BOARD_CELL_MARGIN, BOARD_LINE_THICK, COLOUR_BOARD_BG, COLOUR_BOARD_FG, INVERT_GREYS},
+};
 
 use super::{cell::Cell, game::Turn, legal::Legal, player::Player, value::Value};
 
@@ -219,7 +222,6 @@ impl Board {
         turn: Turn,
         player_1: &Player,
         player_2: &Player,
-        
     ) {
         let minsize_x = 100.0 / on_screen_rect.width;
         dbg!(minsize_x);
@@ -229,8 +231,11 @@ impl Board {
             dbg!("Occluded!");
             return;
         }
-        
-        if !on_screen_rect.check_collision_recs(&rect) || rect.width < minsize_x || rect.height < minsize_y {
+
+        if !on_screen_rect.check_collision_recs(&rect)
+            || rect.width < minsize_x
+            || rect.height < minsize_y
+        {
             dbg!("Occluded!");
             return;
         }

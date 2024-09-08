@@ -1,8 +1,8 @@
-
 use raylib::{
     color::Color,
     drawing::RaylibDraw,
-    math::{Rectangle, Vector2}, text,
+    math::{Rectangle, Vector2},
+    text,
 };
 
 use crate::{
@@ -12,11 +12,17 @@ use crate::{
         value::Value,
     },
     state::State,
-    styles::{COLOUR_UI_BG, COLOUR_UI_BUTTON, COLOUR_UI_DIVIDER, COLOUR_UI_ELEMENT, COLOUR_UI_RADIAL, UI_BUTTON_LINE_THICKNESS, UI_CONTENT_PADDING, UI_DIVIDER_THICKNESS, UI_NAVBAR_HEIGHT, UI_PANEL_WIDTH},
+    styles::{
+        COLOUR_UI_BG, COLOUR_UI_BUTTON, COLOUR_UI_DIVIDER, COLOUR_UI_ELEMENT, COLOUR_UI_RADIAL,
+        UI_BUTTON_LINE_THICKNESS, UI_CONTENT_PADDING, UI_DIVIDER_THICKNESS, UI_NAVBAR_HEIGHT,
+        UI_PANEL_WIDTH,
+    },
 };
 
 use super::{
-    constant_elements::ConstantElements, game_elements::GameElements, keybinds_elements::KeybindsElements, settings_elements::SettingsElements, symbols_elements::SymbolsElements, textbox::Textbox, ui_state::UIState, ui_tab::UITab
+    constant_elements::ConstantElements, game_elements::GameElements,
+    keybinds_elements::KeybindsElements, settings_elements::SettingsElements,
+    symbols_elements::SymbolsElements, textbox::Textbox, ui_state::UIState, ui_tab::UITab,
 };
 
 pub struct UI {
@@ -193,7 +199,7 @@ impl UI {
             height: r.height,
         };
         self.settings_elements.ai_settings = r;
-        
+
         // Calculate the position of the Rules button
         let r = Rectangle {
             x: r.x,
@@ -231,8 +237,7 @@ impl UI {
             height: 100.0,
         };
         self.keybinds_elements.back = r;
-        
-        
+
         // Calculate the position of the Padding
         let p = Rectangle {
             x: r.x,
@@ -241,7 +246,7 @@ impl UI {
             height: padding,
         };
         self.keybinds_elements.padding = p;
-        
+
         // Calculate the position of the binds element
         let r = Rectangle {
             x: r.x,
@@ -409,13 +414,7 @@ impl UI {
     }
 
     /// Draws the constant elements onto the screen
-    pub fn draw<T: RaylibDraw>(
-        &self,
-        rect: Rectangle,
-        d: &mut T,
-        g: &Game,
-        state: &State,
-    ) {
+    pub fn draw<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, g: &Game, state: &State) {
         // Draw the background for the UI
         d.draw_rectangle_rec(rect, COLOUR_UI_BG);
 
@@ -460,7 +459,17 @@ impl UI {
         let text_rec = centre_text_rec(&state.fonts.regular, "Game", 50.0, 0.0, tab_rect);
 
         // d.draw_text_ex(&state.fonts.regular, "Game", Vector2 { x: text_rec.x, y: text_rec.y }, 50.0, 0.0, Color::BLACK);
-        d.draw_text_ex(&state.fonts.regular, "Game", Vector2 { x: text_rec.x, y: text_rec.y }, 50.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            "Game",
+            Vector2 {
+                x: text_rec.x,
+                y: text_rec.y,
+            },
+            50.0,
+            0.0,
+            Color::BLACK,
+        );
 
         // Draw the Settings tab button
         let tab_rect = self.constant_elements.settings;
@@ -475,7 +484,17 @@ impl UI {
 
         let text_rec = centre_text_rec(&state.fonts.regular, "Settings", 50.0, 0.0, tab_rect);
 
-        d.draw_text_ex(&state.fonts.regular, "Settings", Vector2 { x: text_rec.x, y: text_rec.y }, 50.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            "Settings",
+            Vector2 {
+                x: text_rec.x,
+                y: text_rec.y,
+            },
+            50.0,
+            0.0,
+            Color::BLACK,
+        );
 
         // Draw the lower divider based on the selected tab
         if self.tab != UITab::Game {
@@ -516,13 +535,7 @@ impl UI {
     }
 
     /// Draws the game tab
-    pub fn draw_game<T: RaylibDraw>(
-        &self,
-        rect: Rectangle,
-        d: &mut T,
-        g: &Game,
-        state: &State,
-    ) {
+    pub fn draw_game<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, g: &Game, state: &State) {
         // Draw the move history
         let mv = self.game_elements.moves;
 
@@ -555,7 +568,14 @@ impl UI {
                 .collect::<Vec<String>>()
                 .join(", ");
             let r = centre_text_rec(&state.fonts.regular, &t, 50.0, 0.0, rect);
-            d.draw_text_ex(&state.fonts.regular, &t, Vector2 { x: r.x, y: r.y }, 50.0, 0.0, Color::BLACK);
+            d.draw_text_ex(
+                &state.fonts.regular,
+                &t,
+                Vector2 { x: r.x, y: r.y },
+                50.0,
+                0.0,
+                Color::BLACK,
+            );
         }
 
         // Redraw the blank padding
@@ -595,11 +615,25 @@ impl UI {
             let text = &(g.player_1.symbol.name_apostrophe() + " Turn");
             let rec = centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, tc);
 
-            d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: rec.x, y: rec.y }, 50.0, 0.0, g.player_1.foreground);
+            d.draw_text_ex(
+                &state.fonts.regular,
+                text,
+                Vector2 { x: rec.x, y: rec.y },
+                50.0,
+                0.0,
+                g.player_1.foreground,
+            );
         } else {
             let text = &(g.player_2.symbol.name_apostrophe() + " Turn");
             let rec = centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, tc);
-            d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: rec.x, y: rec.y }, 50.0, 0.0, g.player_2.foreground);
+            d.draw_text_ex(
+                &state.fonts.regular,
+                text,
+                Vector2 { x: rec.x, y: rec.y },
+                50.0,
+                0.0,
+                g.player_2.foreground,
+            );
         }
 
         let p = self.game_elements.padding_2;
@@ -612,7 +646,10 @@ impl UI {
         d.draw_text_ex(
             &state.fonts.regular,
             text,
-            Vector2 { x: trec.x, y: trec.y },
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
             50.0,
             0.0,
             if state.can_export {
@@ -655,7 +692,17 @@ impl UI {
             Color::BLACK
         };
         // Draw the current depth text
-        d.draw_text_ex(&state.fonts.regular, &text, Vector2 { x: text_rec.x, y: text_rec.y }, 50.0, 0.0, colour);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            &text,
+            Vector2 {
+                x: text_rec.x,
+                y: text_rec.y,
+            },
+            50.0,
+            0.0,
+            colour,
+        );
 
         // Draw the buttons
         let mut brec = self.settings_elements.depth_plus;
@@ -740,7 +787,17 @@ impl UI {
             height: button_side,
         };
         let trec = centre_text_rec(&state.fonts.regular, "0 Players", 50.0, 0.0, trec);
-        d.draw_text_ex(&state.fonts.regular, "0 Players", Vector2 { x: trec.x, y: trec.y }, 50.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            "0 Players",
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            50.0,
+            0.0,
+            Color::BLACK,
+        );
 
         let p1 = Rectangle {
             x: pl.x + padding,
@@ -772,7 +829,17 @@ impl UI {
             height: button_side,
         };
         let trec = centre_text_rec(&state.fonts.regular, "1 Player", 50.0, 0.0, trec);
-        d.draw_text_ex(&state.fonts.regular, "1 Player", Vector2 { x: trec.x, y: trec.y }, 50.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            "1 Player",
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            50.0,
+            0.0,
+            Color::BLACK,
+        );
 
         let p2 = Rectangle {
             x: pl.x + padding,
@@ -804,7 +871,17 @@ impl UI {
             height: button_side,
         };
         let trec = centre_text_rec(&state.fonts.regular, "2 Players", 50.0, 0.0, trec);
-        d.draw_text_ex(&state.fonts.regular, "2 Players", Vector2 { x: trec.x, y: trec.y }, 50.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            "2 Players",
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            50.0,
+            0.0,
+            Color::BLACK,
+        );
 
         // Draw New Game button
         let mut ng = self.settings_elements.new_game;
@@ -813,7 +890,17 @@ impl UI {
         d.draw_rectangle_rec(ng, COLOUR_UI_ELEMENT);
 
         let trec = centre_text_rec(&state.fonts.regular, "New game", 50.0, 0.0, ng);
-        d.draw_text_ex(&state.fonts.regular, "New game", Vector2 { x: trec.x, y: trec.y }, 50.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            "New game",
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            50.0,
+            0.0,
+            Color::BLACK,
+        );
 
         // Draw AI strength buttons
         let mut ai = self.settings_elements.ai_strength;
@@ -829,7 +916,17 @@ impl UI {
         };
 
         let text_rec = centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, text_rec);
-        d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: text_rec.x, y: text_rec.y }, 50.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            text,
+            Vector2 {
+                x: text_rec.x,
+                y: text_rec.y,
+            },
+            50.0,
+            0.0,
+            Color::BLACK,
+        );
 
         let column_width = (ai.width - 2.0 * padding) / 3.0;
 
@@ -860,7 +957,10 @@ impl UI {
         d.draw_text_ex(
             &state.fonts.regular,
             text,
-            Vector2 { x: ntrec.x, y: ntrec.y },
+            Vector2 {
+                x: ntrec.x,
+                y: ntrec.y,
+            },
             50.0,
             0.0,
             Color::BLACK,
@@ -893,12 +993,15 @@ impl UI {
         d.draw_text_ex(
             &state.fonts.regular,
             text,
-            Vector2 { x: ntrec.x, y: ntrec.y },
+            Vector2 {
+                x: ntrec.x,
+                y: ntrec.y,
+            },
             50.0,
             0.0,
             Color::BLACK,
         );
-        
+
         let mut a3 = self.settings_elements.ai_3;
         a3.y += self.scroll_offset_settings;
         d.draw_rectangle_rec(a3, COLOUR_UI_BUTTON);
@@ -914,7 +1017,7 @@ impl UI {
                 COLOUR_UI_RADIAL,
             );
         }
-        
+
         let text = "3";
         let trec = Rectangle {
             x: a3.x - column_width + button_side,
@@ -926,7 +1029,10 @@ impl UI {
         d.draw_text_ex(
             &state.fonts.regular,
             text,
-            Vector2 { x: ntrec.x, y: ntrec.y },
+            Vector2 {
+                x: ntrec.x,
+                y: ntrec.y,
+            },
             50.0,
             0.0,
             Color::BLACK,
@@ -944,7 +1050,17 @@ impl UI {
             height: 100.0,
         };
         let text = "Max sims:";
-        d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: trec.x, y: trec.y }, 50.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            text,
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            50.0,
+            0.0,
+            Color::BLACK,
+        );
         let mut tbox = self.settings_elements.ai_max_sims;
         tbox.y += self.scroll_offset_settings;
         d.draw_rectangle_rec(tbox, COLOUR_UI_BUTTON);
@@ -963,7 +1079,17 @@ impl UI {
             &state.fonts.regular
         };
 
-        d.draw_text_ex(font, &text, Vector2 { x: tbox.x, y: tbox.y }, 50.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            font,
+            &text,
+            Vector2 {
+                x: tbox.x,
+                y: tbox.y,
+            },
+            50.0,
+            0.0,
+            Color::BLACK,
+        );
 
         let trec = Rectangle {
             x: trec.x,
@@ -972,7 +1098,17 @@ impl UI {
             height: 100.0,
         };
         let text = "Max time:";
-        d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: trec.x, y: trec.y }, 50.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            text,
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            50.0,
+            0.0,
+            Color::BLACK,
+        );
         let mut tbox = self.settings_elements.ai_max_time;
         tbox.y += self.scroll_offset_settings;
         d.draw_rectangle_rec(tbox, COLOUR_UI_BUTTON);
@@ -991,28 +1127,68 @@ impl UI {
             &state.fonts.regular
         };
 
-        d.draw_text_ex(font, &text, Vector2 { x: tbox.x, y: tbox.y }, 50.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            font,
+            &text,
+            Vector2 {
+                x: tbox.x,
+                y: tbox.y,
+            },
+            50.0,
+            0.0,
+            Color::BLACK,
+        );
 
         let mut rs = self.settings_elements.rules;
         rs.y += self.scroll_offset_settings;
         d.draw_rectangle_rec(rs, COLOUR_UI_ELEMENT);
         let text = "Rules";
         let trec = centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, rs);
-        d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: trec.x, y: trec.y }, 50.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            text,
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            50.0,
+            0.0,
+            Color::BLACK,
+        );
 
         let mut kb = self.settings_elements.keybinds;
         kb.y += self.scroll_offset_settings;
         d.draw_rectangle_rec(kb, COLOUR_UI_ELEMENT);
         let text = "Keybinds";
         let trec = centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, kb);
-        d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: trec.x, y: trec.y }, 50.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            text,
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            50.0,
+            0.0,
+            Color::BLACK,
+        );
 
         let mut sy = self.settings_elements.symbols;
         sy.y += self.scroll_offset_settings;
         d.draw_rectangle_rec(sy, COLOUR_UI_ELEMENT);
         let text = "Symbols";
         let trec = centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, sy);
-        d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: trec.x, y: trec.y }, 50.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            text,
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            50.0,
+            0.0,
+            Color::BLACK,
+        );
     }
 
     pub fn draw_keybinds<T: RaylibDraw>(
@@ -1022,12 +1198,12 @@ impl UI {
         g: &Game,
         state: &State,
     ) {
-        let mut kb = self.keybinds_elements.binds;       
+        let mut kb = self.keybinds_elements.binds;
 
         kb.y += self.scroll_offset_keybinds;
 
         d.draw_rectangle_rec(kb, COLOUR_UI_ELEMENT);
-        
+
         let a = Rectangle {
             x: kb.x,
             y: kb.y,
@@ -1036,7 +1212,17 @@ impl UI {
         };
         let text = "Left Click:";
         let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, a);
-        d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: trec.x, y: trec.y }, 40.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            text,
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            40.0,
+            0.0,
+            Color::BLACK,
+        );
         let b = Rectangle {
             x: a.x + a.width,
             y: a.y,
@@ -1045,7 +1231,17 @@ impl UI {
         };
         let text = "Play Move";
         let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, b);
-        d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: trec.x, y: trec.y }, 40.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            text,
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            40.0,
+            0.0,
+            Color::BLACK,
+        );
 
         let a = Rectangle {
             x: a.x,
@@ -1055,7 +1251,17 @@ impl UI {
         };
         let text = "Right Click:";
         let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, a);
-        d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: trec.x, y: trec.y }, 40.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            text,
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            40.0,
+            0.0,
+            Color::BLACK,
+        );
         let b = Rectangle {
             x: a.x + a.width,
             y: a.y,
@@ -1064,7 +1270,17 @@ impl UI {
         };
         let text = "Pan";
         let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, b);
-        d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: trec.x, y: trec.y }, 40.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            text,
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            40.0,
+            0.0,
+            Color::BLACK,
+        );
 
         let a = Rectangle {
             x: a.x,
@@ -1074,7 +1290,17 @@ impl UI {
         };
         let text = "Scroll:";
         let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, a);
-        d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: trec.x, y: trec.y }, 40.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            text,
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            40.0,
+            0.0,
+            Color::BLACK,
+        );
         let b = Rectangle {
             x: a.x + a.width,
             y: a.y,
@@ -1083,7 +1309,17 @@ impl UI {
         };
         let text = "Zoom";
         let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, b);
-        d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: trec.x, y: trec.y }, 40.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            text,
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            40.0,
+            0.0,
+            Color::BLACK,
+        );
 
         let a = Rectangle {
             x: a.x,
@@ -1093,7 +1329,17 @@ impl UI {
         };
         let text = "Enter:";
         let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, a);
-        d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: trec.x, y: trec.y }, 40.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            text,
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            40.0,
+            0.0,
+            Color::BLACK,
+        );
         let b = Rectangle {
             x: a.x + a.width,
             y: a.y,
@@ -1102,7 +1348,17 @@ impl UI {
         };
         let text = "Re-centre";
         let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, b);
-        d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: trec.x, y: trec.y }, 40.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            text,
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            40.0,
+            0.0,
+            Color::BLACK,
+        );
 
         let a = Rectangle {
             x: a.x,
@@ -1112,7 +1368,17 @@ impl UI {
         };
         let text = "Slash:";
         let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, a);
-        d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: trec.x, y: trec.y }, 40.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            text,
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            40.0,
+            0.0,
+            Color::BLACK,
+        );
         let b = Rectangle {
             x: a.x + a.width,
             y: a.y,
@@ -1121,7 +1387,17 @@ impl UI {
         };
         let text = "Call AI";
         let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, b);
-        d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: trec.x, y: trec.y }, 40.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            text,
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            40.0,
+            0.0,
+            Color::BLACK,
+        );
 
         let a = Rectangle {
             x: a.x,
@@ -1131,7 +1407,17 @@ impl UI {
         };
         let text = "Backspace:";
         let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, a);
-        d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: trec.x, y: trec.y }, 40.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            text,
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            40.0,
+            0.0,
+            Color::BLACK,
+        );
         let b = Rectangle {
             x: a.x + a.width,
             y: a.y,
@@ -1140,7 +1426,17 @@ impl UI {
         };
         let text = "Undo Move";
         let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, b);
-        d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: trec.x, y: trec.y }, 40.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            text,
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            40.0,
+            0.0,
+            Color::BLACK,
+        );
 
         let a = Rectangle {
             x: a.x,
@@ -1150,7 +1446,17 @@ impl UI {
         };
         let text = "Grave:";
         let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, a);
-        d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: trec.x, y: trec.y }, 40.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            text,
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            40.0,
+            0.0,
+            Color::BLACK,
+        );
         let b = Rectangle {
             x: a.x + a.width,
             y: a.y,
@@ -1159,31 +1465,55 @@ impl UI {
         };
         let text = "Toggle FPS";
         let trec = centre_text_rec(&state.fonts.regular, text, 40.0, 0.0, b);
-        d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: trec.x, y: trec.y }, 40.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            text,
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            40.0,
+            0.0,
+            Color::BLACK,
+        );
 
         let bk = self.keybinds_elements.back;
 
         d.draw_rectangle_rec(bk, COLOUR_UI_ELEMENT);
         let text = "Back";
         let trec = centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, bk);
-        d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: trec.x, y: trec.y }, 50.0, 0.0, Color::BLACK);
-        
+        d.draw_text_ex(
+            &state.fonts.regular,
+            text,
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            50.0,
+            0.0,
+            Color::BLACK,
+        );
+
         let pd = self.keybinds_elements.padding;
         d.draw_rectangle_rec(pd, COLOUR_UI_BG);
     }
 
-    pub fn draw_symbols<T: RaylibDraw>(
-        &self,
-        rect: Rectangle,
-        d: &mut T,
-        g: &Game,
-        state: &State,
-    ) {
+    pub fn draw_symbols<T: RaylibDraw>(&self, rect: Rectangle, d: &mut T, g: &Game, state: &State) {
         let bk = self.symbols_elements.back;
         d.draw_rectangle_rec(bk, COLOUR_UI_ELEMENT);
         let text = "Back";
         let trec = centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, bk);
-        d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: trec.x, y: trec.y }, 50.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            text,
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            50.0,
+            0.0,
+            Color::BLACK,
+        );
 
         // Draw Player 1 Symbol Selection
         let p1 = self.symbols_elements.player_1;
@@ -1197,11 +1527,20 @@ impl UI {
         };
         let text = "Player 1";
         let trec = centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, trec);
-        d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: trec.x, y: trec.y }, 50.0, 0.0, Color::BLACK);
-
+        d.draw_text_ex(
+            &state.fonts.regular,
+            text,
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            50.0,
+            0.0,
+            Color::BLACK,
+        );
 
         let p1b = self.symbols_elements.player_1_backward;
-        let p1f = self.symbols_elements.player_1_forward;        
+        let p1f = self.symbols_elements.player_1_forward;
         let text = self.state.player_1.name();
         let r = Rectangle {
             x: p1b.x + p1b.width,
@@ -1210,84 +1549,94 @@ impl UI {
             height: p1b.height,
         };
         let trec = centre_text_rec(&state.fonts.regular, &text, 50.0, 0.0, r);
-        d.draw_text_ex(&state.fonts.regular, &text, Vector2 { x: trec.x, y: trec.y }, 50.0, 0.0, Color::BLACK);
-    
+        d.draw_text_ex(
+            &state.fonts.regular,
+            &text,
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            50.0,
+            0.0,
+            Color::BLACK,
+        );
+
         d.draw_rectangle_rec(p1b, COLOUR_UI_BUTTON);
         let arrow_padding = p1b.width * UI_CONTENT_PADDING * 3.0;
         d.draw_line_ex(
             Vector2 {
                 x: p1b.x + arrow_padding,
                 y: p1b.y + p1b.height / 2.0,
-            }, 
+            },
             Vector2 {
                 x: p1b.x + p1b.width / 2.0,
-                y: p1b.y +  arrow_padding,
-            }, 
-            p1f.width * 0.15, 
-            Color::BLACK
+                y: p1b.y + arrow_padding,
+            },
+            p1f.width * 0.15,
+            Color::BLACK,
         );
         d.draw_line_ex(
             Vector2 {
                 x: p1b.x + arrow_padding - p1f.width * 0.15 * (1.0 / 3.0),
                 y: p1b.y + p1b.height / 2.0 - p1f.width * 0.15 * (1.0 / 3.0),
-            }, 
+            },
             Vector2 {
                 x: p1b.x + p1b.width / 2.0,
                 y: p1b.y + p1b.height - arrow_padding,
-            }, 
-            p1f.width * 0.15, 
-            Color::BLACK
+            },
+            p1f.width * 0.15,
+            Color::BLACK,
         );
         d.draw_line_ex(
             Vector2 {
                 x: p1b.x + arrow_padding,
                 y: p1b.y + p1b.height / 2.0,
-            }, 
+            },
             Vector2 {
-                x: p1b.x + p1b.width -  arrow_padding,
+                x: p1b.x + p1b.width - arrow_padding,
                 y: p1b.y + p1b.height / 2.0,
-            }, 
-            p1f.width * 0.15, 
-            Color::BLACK
+            },
+            p1f.width * 0.15,
+            Color::BLACK,
         );
-    
+
         d.draw_rectangle_rec(p1f, COLOUR_UI_BUTTON);
         let arrow_padding = p1b.width * UI_CONTENT_PADDING * 3.0;
         d.draw_line_ex(
             Vector2 {
                 x: p1f.x + p1f.width - arrow_padding,
                 y: p1f.y + p1f.height / 2.0,
-            }, 
+            },
             Vector2 {
                 x: p1f.x + p1f.width / 2.0,
-                y: p1f.y +  arrow_padding,
-            }, 
-            p1f.width * 0.15, 
-            Color::BLACK
+                y: p1f.y + arrow_padding,
+            },
+            p1f.width * 0.15,
+            Color::BLACK,
         );
         d.draw_line_ex(
             Vector2 {
                 x: p1f.x + p1f.width - arrow_padding + p1f.width * 0.15 * (1.0 / 3.0),
                 y: p1f.y + p1f.height / 2.0 - p1f.width * 0.15 * (1.0 / 3.0),
-            }, 
+            },
             Vector2 {
                 x: p1f.x + p1f.width / 2.0,
                 y: p1f.y + p1f.height - arrow_padding,
-            }, 
-            p1f.width * 0.15, 
-            Color::BLACK
+            },
+            p1f.width * 0.15,
+            Color::BLACK,
         );
         d.draw_line_ex(
             Vector2 {
                 x: p1f.x + arrow_padding,
                 y: p1f.y + p1f.height / 2.0,
-            }, 
+            },
             Vector2 {
-                x: p1f.x + p1f.width -  arrow_padding,
+                x: p1f.x + p1f.width - arrow_padding,
                 y: p1f.y + p1f.height / 2.0,
-            }, 
-            p1f.width * 0.15, 
-            Color::BLACK
+            },
+            p1f.width * 0.15,
+            Color::BLACK,
         );
 
         // Draw Player 2 Symbol Selection
@@ -1302,10 +1651,20 @@ impl UI {
         };
         let text = "Player 2";
         let trec = centre_text_rec(&state.fonts.regular, text, 50.0, 0.0, trec);
-        d.draw_text_ex(&state.fonts.regular, text, Vector2 { x: trec.x, y: trec.y }, 50.0, 0.0, Color::BLACK);
+        d.draw_text_ex(
+            &state.fonts.regular,
+            text,
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            50.0,
+            0.0,
+            Color::BLACK,
+        );
 
         let p1b = self.symbols_elements.player_2_backward;
-        let p1f = self.symbols_elements.player_2_forward;        
+        let p1f = self.symbols_elements.player_2_forward;
         let text = self.state.player_2.name();
         let r = Rectangle {
             x: p1b.x + p1b.width,
@@ -1314,84 +1673,94 @@ impl UI {
             height: p1b.height,
         };
         let trec = centre_text_rec(&state.fonts.regular, &text, 50.0, 0.0, r);
-        d.draw_text_ex(&state.fonts.regular, &text, Vector2 { x: trec.x, y: trec.y }, 50.0, 0.0, Color::BLACK);
-    
+        d.draw_text_ex(
+            &state.fonts.regular,
+            &text,
+            Vector2 {
+                x: trec.x,
+                y: trec.y,
+            },
+            50.0,
+            0.0,
+            Color::BLACK,
+        );
+
         d.draw_rectangle_rec(p1b, COLOUR_UI_BUTTON);
         let arrow_padding = p1b.width * UI_CONTENT_PADDING * 3.0;
         d.draw_line_ex(
             Vector2 {
                 x: p1b.x + arrow_padding,
                 y: p1b.y + p1b.height / 2.0,
-            }, 
+            },
             Vector2 {
                 x: p1b.x + p1b.width / 2.0,
-                y: p1b.y +  arrow_padding,
-            }, 
-            p1f.width * 0.15, 
-            Color::BLACK
+                y: p1b.y + arrow_padding,
+            },
+            p1f.width * 0.15,
+            Color::BLACK,
         );
         d.draw_line_ex(
             Vector2 {
                 x: p1b.x + arrow_padding - p1f.width * 0.15 * (1.0 / 3.0),
                 y: p1b.y + p1b.height / 2.0 - p1f.width * 0.15 * (1.0 / 3.0),
-            }, 
+            },
             Vector2 {
                 x: p1b.x + p1b.width / 2.0,
                 y: p1b.y + p1b.height - arrow_padding,
-            }, 
-            p1f.width * 0.15, 
-            Color::BLACK
+            },
+            p1f.width * 0.15,
+            Color::BLACK,
         );
         d.draw_line_ex(
             Vector2 {
                 x: p1b.x + arrow_padding,
                 y: p1b.y + p1b.height / 2.0,
-            }, 
+            },
             Vector2 {
-                x: p1b.x + p1b.width -  arrow_padding,
+                x: p1b.x + p1b.width - arrow_padding,
                 y: p1b.y + p1b.height / 2.0,
-            }, 
-            p1f.width * 0.15, 
-            Color::BLACK
+            },
+            p1f.width * 0.15,
+            Color::BLACK,
         );
-    
+
         d.draw_rectangle_rec(p1f, COLOUR_UI_BUTTON);
         let arrow_padding = p1b.width * UI_CONTENT_PADDING * 3.0;
         d.draw_line_ex(
             Vector2 {
                 x: p1f.x + p1f.width - arrow_padding,
                 y: p1f.y + p1f.height / 2.0,
-            }, 
+            },
             Vector2 {
                 x: p1f.x + p1f.width / 2.0,
-                y: p1f.y +  arrow_padding,
-            }, 
-            p1f.width * 0.15, 
-            Color::BLACK
+                y: p1f.y + arrow_padding,
+            },
+            p1f.width * 0.15,
+            Color::BLACK,
         );
         d.draw_line_ex(
             Vector2 {
                 x: p1f.x + p1f.width - arrow_padding + p1f.width * 0.15 * (1.0 / 3.0),
                 y: p1f.y + p1f.height / 2.0 - p1f.width * 0.15 * (1.0 / 3.0),
-            }, 
+            },
             Vector2 {
                 x: p1f.x + p1f.width / 2.0,
                 y: p1f.y + p1f.height - arrow_padding,
-            }, 
-            p1f.width * 0.15, 
-            Color::BLACK
+            },
+            p1f.width * 0.15,
+            Color::BLACK,
         );
         d.draw_line_ex(
             Vector2 {
                 x: p1f.x + arrow_padding,
                 y: p1f.y + p1f.height / 2.0,
-            }, 
+            },
             Vector2 {
-                x: p1f.x + p1f.width -  arrow_padding,
+                x: p1f.x + p1f.width - arrow_padding,
                 y: p1f.y + p1f.height / 2.0,
-            }, 
-            p1f.width * 0.15, 
-            Color::BLACK
+            },
+            p1f.width * 0.15,
+            Color::BLACK,
         );
     }
 }

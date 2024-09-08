@@ -1,4 +1,4 @@
-use raylib::{color::Color};
+use raylib::color::Color;
 use serde::{Deserialize, Serialize};
 
 use crate::common::get_rgb_from_rgba;
@@ -6,7 +6,7 @@ use crate::common::get_rgb_from_rgba;
 use super::symbol::Symbol;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct Player<> {
+pub struct Player {
     /// Foreground colour of the symbol
     pub foreground: Color,
     /// Background colour of the cell

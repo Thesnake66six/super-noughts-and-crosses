@@ -10,7 +10,9 @@ use raylib::{
 
 use serde::{Deserialize, Serialize};
 
-use crate::styles::{BOARD_CELL_MARGIN, CAMERA_DEFAULT_ZOOM, COLOUR_BOARD_BG, COLOUR_BOARD_BG_GREYED, CROSS, THORN};
+use crate::styles::{
+    BOARD_CELL_MARGIN, CAMERA_DEFAULT_ZOOM, COLOUR_BOARD_BG, COLOUR_BOARD_BG_GREYED, CROSS, THORN,
+};
 
 use super::{board::Board, cell::Cell, legal::Legal, player::Player, value::Value};
 
@@ -169,8 +171,18 @@ impl Game {
         };
 
         // Draws the board
-        self.board
-            .draw(irect, on_screen_rect, &mut c, no_check, alpha, hover, legal, self.turn, &self.player_1, &self.player_2);
+        self.board.draw(
+            irect,
+            on_screen_rect,
+            &mut c,
+            no_check,
+            alpha,
+            hover,
+            legal,
+            self.turn,
+            &self.player_1,
+            &self.player_2,
+        );
     }
 
     /// Makes a move

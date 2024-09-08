@@ -16,7 +16,10 @@ use crate::{
         monte_carlo_settings::MonteCarloSettings,
     },
     state::State,
-    styles::{ALLOW_FPS_COUNTER, CAMERA_MOVE_SPEED, CAMERA_SCROLL_SPEED, DEFAULT_EXPLORATION_FACTOR, UI_DIVIDER_THICKNESS, UI_NAVBAR_HEIGHT, UI_SCROLL_SPEED},
+    styles::{
+        ALLOW_FPS_COUNTER, CAMERA_MOVE_SPEED, CAMERA_SCROLL_SPEED, DEFAULT_EXPLORATION_FACTOR,
+        UI_DIVIDER_THICKNESS, UI_NAVBAR_HEIGHT, UI_SCROLL_SPEED,
+    },
     ui::{textbox::Textbox, ui::UI, ui_tab::UITab},
 };
 
@@ -95,7 +98,7 @@ pub fn handle_input(
                         ui.scroll_offset_keybinds = 0.0;
                     }
                 }
-            },
+            }
             UITab::Symbols => {}
             UITab::None => {}
         }
@@ -138,7 +141,7 @@ pub fn handle_input(
     if rl.is_key_pressed(KeyboardKey::KEY_ENTER) {
         g.centre_camera(state.game_rect);
     }
-    
+
     // When the backspace key is pressed, either delete the last character, or unplay the last move
     if rl.is_key_pressed(KeyboardKey::KEY_BACKSPACE) {
         match state.typing {
@@ -193,7 +196,7 @@ pub fn handle_input(
     // Handle all typing inputs
     handle_typing(rl, state, ui);
 
-    // Handle the deserialisation of a dropped file 
+    // Handle the deserialisation of a dropped file
     if rl.is_file_dropped() {
         let paths = rl.load_dropped_files();
         let paths = paths.paths();
@@ -216,7 +219,7 @@ pub fn handle_input(
                     player_1: new_game.player_1,
                     player_2: new_game.player_2,
                 };
-                
+
                 // Update the state to reflect the new game
                 g.update_positions();
                 g.centre_camera(state.game_rect);
@@ -224,17 +227,15 @@ pub fn handle_input(
                 ui.state.player_1 = g.player_1.symbol;
                 ui.state.player_2 = g.player_2.symbol;
                 update_window_title(rl, rlthread, g);
-            
             }
             Err(_) => {
                 println!("Could not read game from file");
                 ui.state.is_ai_modified = true
             }
         }
-    
     }
 
-    hovered_cell    
+    hovered_cell
 }
 
 /// Handle typing inputs
@@ -272,7 +273,7 @@ fn handle_typing(rl: &mut RaylibHandle, state: &mut State, ui: &mut UI) {
             Textbox::None => {}
         }
     }
-    
+
     // Handle the 2 key
     if rl.is_key_pressed(KeyboardKey::KEY_TWO) || rl.is_key_pressed(KeyboardKey::KEY_KP_2) {
         match state.typing {

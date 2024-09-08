@@ -1,4 +1,3 @@
-
 use raylib::{
     color::Color,
     drawing::RaylibDraw,
@@ -7,7 +6,17 @@ use raylib::{
     RaylibHandle, RaylibThread,
 };
 
-use crate::{game::{game::{Game, Turn}, player::Player, symbol::Symbol}, styles::{BARBEQUE, COLOUR_BOARD_BG_GREYED, COLOUR_CELL_BG_GREYED, COLOUR_DRAW_FG, CROSS, DO_COLOURED_GREYS, FISH, IRELAND, NOUGHT, THORN, UI_PANEL_WIDTH}};
+use crate::{
+    game::{
+        game::{Game, Turn},
+        player::Player,
+        symbol::Symbol,
+    },
+    styles::{
+        BARBEQUE, COLOUR_BOARD_BG_GREYED, COLOUR_CELL_BG_GREYED, COLOUR_DRAW_FG, CROSS,
+        DO_COLOURED_GREYS, FISH, IRELAND, NOUGHT, THORN, UI_PANEL_WIDTH,
+    },
+};
 
 /// Draws a draw (`Value::Draw`) into the given rectangle 'rect' onto `d`.
 pub fn draw_draw<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
@@ -113,12 +122,7 @@ pub fn get_rgb_from_rgba(fg: Color, bg: Color) -> Color {
     let g = (fg.g as f32 * alpha + bg.g as f32 * (1.0 - alpha)) as u8;
     let b = (fg.b as f32 * alpha + bg.b as f32 * (1.0 - alpha)) as u8;
 
-    Color {
-        r,
-        g,
-        b,
-        a: 255,
-    }
+    Color { r, g, b, a: 255 }
 }
 
 /// Dynamically change the window title based on the current game depth and selected symbols
@@ -128,7 +132,7 @@ pub fn update_window_title(rl: &mut RaylibHandle, rlthread: &mut RaylibThread, g
     for _ in 0..g.depth - 1 {
         out += "Super "
     }
-    
+
     out += &(g.player_2.symbol.name() + " and " + &g.player_1.symbol.name());
 
     rl.set_window_title(rlthread, &out)

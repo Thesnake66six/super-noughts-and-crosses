@@ -1,6 +1,9 @@
 use raylib::{drawing::RaylibDraw, math::Rectangle};
 
-use crate::{common::{draw_draw, get_greyed_colour_cell}, styles::{COLOUR_CELL_BG,  COLOUR_DRAW_BG, COLOUR_DRAW_BGA}};
+use crate::{
+    common::{draw_draw, get_greyed_colour_cell},
+    styles::{COLOUR_CELL_BG, COLOUR_DRAW_BG, COLOUR_DRAW_BGA},
+};
 
 use super::{game::Turn, legal::Legal, player::Player};
 

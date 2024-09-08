@@ -8,7 +8,7 @@ use crate::game::{
     value::Value,
 };
 
-use super::{monte_carlo_policy::MonteCarloPolicy, node::MonteCarloNode};
+use super::{monte_carlo_node::MonteCarloNode, monte_carlo_policy::MonteCarloPolicy};
 
 #[derive(Debug)]
 /// The Monte Carlo manager struct
