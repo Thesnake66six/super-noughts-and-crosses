@@ -224,11 +224,8 @@ impl Board {
         player_2: &Player,
     ) {
         let minsize_x = 100.0 / on_screen_rect.width;
-        dbg!(minsize_x);
         let minsize_y = 100.0 / on_screen_rect.height;
-        dbg!(minsize_y);
         if rect.width < minsize_x || rect.height < minsize_y {
-            dbg!("Occluded!");
             return;
         }
 
@@ -236,7 +233,6 @@ impl Board {
             || rect.width < minsize_x
             || rect.height < minsize_y
         {
-            dbg!("Occluded!");
             return;
         }
         let mut t: Option<usize> = None;

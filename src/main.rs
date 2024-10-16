@@ -182,14 +182,14 @@ fn main() -> Result<()> {
                     Message::Thoughts(th) => {
                         if state.waiting_for_thoughts {
                             state.currrent_thoughts = Some(th);
-                            println!("{:?}", state.currrent_thoughts);
+                            // println!("{:?}", state.currrent_thoughts);
                         }
                     }
                     Message::Move(mv) => {
                         if state.waiting_for_move {
                             if let Some(y) = mv {
                                 state.move_queue.insert(0, y);
-                                println!("{:?}", state.move_queue);
+                                // println!("{:?}", state.move_queue);
                             }
                         }
                     }
@@ -205,8 +205,8 @@ fn main() -> Result<()> {
         // If the delay between moves is 0, play the next queued move
         if state.move_delay <= 0.0 {
             if let Some(mv) = state.move_queue.pop() {
-                println!("Some move");
-                dbg!(&state.move_queue);
+                // println!("Some move");
+                // dbg!(&state.move_queue);
                 g.play(&mv).unwrap();
                 state.waiting_for_move = false;
             }

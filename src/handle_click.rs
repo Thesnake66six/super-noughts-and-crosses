@@ -191,21 +191,21 @@ fn handle_settings_tab_click(
         state.waiting_for_thoughts = true;
         state.thoughts_timer = DEFAULT_THOUGHTS_DELAY;
 
-    // If the AI strength buttons are ckicle
+    // If the AI strength buttons are clicked
     } else if ui.settings_elements.ai_1.check_collision_point_rec(offset) {
         ui.state.ai_strength = 1;
         ui.state.max_sims =
-            COMPUTER_LEVEL_1_SIMS * (COMPUTER_SIM_SCALING.pow((g.depth - 1).try_into().unwrap()));
+            COMPUTER_LEVEL_1_SIMS * (COMPUTER_SIM_SCALING.pow((ui.state.depth - 1).try_into().unwrap()));
         ui.state.is_ai_modified = false
     } else if ui.settings_elements.ai_2.check_collision_point_rec(offset) {
         ui.state.ai_strength = 2;
         ui.state.max_sims =
-            COMPUTER_LEVEL_2_SIMS * (COMPUTER_SIM_SCALING.pow((g.depth - 1).try_into().unwrap()));
+            COMPUTER_LEVEL_2_SIMS * (COMPUTER_SIM_SCALING.pow((ui.state.depth - 1).try_into().unwrap()));
         ui.state.is_ai_modified = false
     } else if ui.settings_elements.ai_3.check_collision_point_rec(offset) {
         ui.state.ai_strength = 3;
         ui.state.max_sims =
-            COMPUTER_LEVEL_3_SIMS * (COMPUTER_SIM_SCALING.pow((g.depth - 1).try_into().unwrap()));
+            COMPUTER_LEVEL_3_SIMS * (COMPUTER_SIM_SCALING.pow((ui.state.depth - 1).try_into().unwrap()));
         ui.state.is_ai_modified = false
     } else if ui
         .settings_elements
