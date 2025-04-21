@@ -2,7 +2,7 @@ use crate::{
     game::symbol::Symbol,
     styles::{
         COMPUTER_DEFAULT_STRENGTH, COMPUTER_LEVEL_1_SIMS, COMPUTER_LEVEL_2_SIMS,
-        COMPUTER_LEVEL_3_SIMS, COMPUTER_SIM_SCALING,
+        COMPUTER_LEVEL_3_SIMS, COMPUTER_SIM_SCALING, DEFAULT_MAX_THREADS,
     },
     BOARD_DEFAULT_DEPTH, BOARD_DEFAULT_PLAYERS, DEFAULT_MAX_TIME,
 };
@@ -14,6 +14,7 @@ pub struct UIState {
     pub max_sims: usize,
     pub max_time: usize,
     pub is_ai_modified: bool,
+    pub ai_threads: usize,
     pub player_1: Symbol,
     pub player_2: Symbol,
 }
@@ -35,6 +36,7 @@ impl UIState {
             },
             max_time: DEFAULT_MAX_TIME,
             is_ai_modified: false,
+            ai_threads: DEFAULT_MAX_THREADS,
             player_1: Symbol::Cross,
             player_2: Symbol::Nought,
         }

@@ -28,6 +28,14 @@ impl MonteCarloNode {
 
     /// Calculates the UCB1 value for the node
     pub fn ucb1(&self, exploration_factor: f32, parent_playouts: f32, opt_for: Turn) -> f32 {
+        // eprintln!(
+        //     "({} / {}) + sqrt(ln({}) * {} / {} ) = {}",
+        //     self.score(opt_for),
+        //     self.playouts,
+        //     parent_playouts, exploration_factor, self.playouts,
+        //     (self.score(opt_for) / self.playouts)
+        //         + (parent_playouts.ln() * exploration_factor / self.playouts).sqrt()
+        // );
         (self.score(opt_for) / self.playouts)
             + (parent_playouts.ln() * exploration_factor / self.playouts).sqrt()
     }

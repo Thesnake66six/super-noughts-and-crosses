@@ -200,6 +200,17 @@ impl UI {
         };
         self.settings_elements.ai_settings = r;
 
+        // Calculate the position of the threads buttons
+
+        let r = Rectangle {
+            x: r.x,
+            y: r.y + r.height + padding,
+            width: r.width,
+            height: 100.0,
+        };
+
+        self.settings_elements.threads = r;
+
         // Calculate the position of the Rules button
         let r = Rectangle {
             x: r.x,
@@ -283,7 +294,7 @@ impl UI {
         };
         self.symbols_elements.player_2 = r;
 
-        // Calculate the positions of the clickable content -------
+        // -------- Calculate the positions of the clickable content ------- //
 
         let padding = UI_CONTENT_PADDING * self.constant_elements.inner_content.width;
 
@@ -379,6 +390,25 @@ impl UI {
             height: button_side,
         };
         self.settings_elements.ai_max_time = r;
+
+        // Calculate the positions of the threads buttons
+        let th = self.settings_elements.threads;
+
+        let r = Rectangle {
+            x: th.x + th.width - 2.0 * padding - 2.0 * button_side,
+            y: th.y + padding,
+            width: button_side,
+            height: button_side,
+        };
+        self.settings_elements.threads_minus = r;
+
+        let r = Rectangle {
+            x: r.x + r.width + padding,
+            y: r.y,
+            width: r.width,
+            height: r.height,
+        };
+        self.settings_elements.threads_plus = r;
 
         let p1 = self.symbols_elements.player_1;
         let b = Rectangle {
@@ -1136,6 +1166,87 @@ impl UI {
             },
             50.0,
             0.0,
+            Color::BLACK,
+        );
+
+        // Draw the threads selector
+        let mut th = self.settings_elements.threads;
+        th.y += self.scroll_offset_settings;
+        let button_side = dp.height - 2.0 * padding;
+        let text_rec = Rectangle {
+            x: th.x + padding,
+            y: th.y + padding,
+            width: dp.width - 4.0 * padding - 2.0 * button_side,
+            height: button_side,
+        };
+        let text = "Threads: ".to_owned() + &self.state.ai_threads.to_string();
+
+        // Draw the background
+        d.draw_rectangle_rec(th, COLOUR_UI_ELEMENT);
+
+        // Change the colour of the text based on the current depth
+        let colour = if state.num_cpus < self.state.ai_threads {
+            Color::RED
+        } else {
+            Color::BLACK
+        };
+
+        // Draw the current threads text
+        d.draw_text_ex(
+            &state.fonts.regular,
+            &text,
+            Vector2 {
+                x: text_rec.x,
+                y: text_rec.y,
+            },
+            50.0,
+            0.0,
+            colour,
+        );
+
+        // Draw the buttons
+        let mut brec = self.settings_elements.threads_plus;
+        brec.y += self.scroll_offset_settings;
+        d.draw_rectangle_rec(brec, COLOUR_UI_BUTTON);
+        let p = button_side * UI_CONTENT_PADDING * 2.0;
+        d.draw_line_ex(
+            Vector2 {
+                x: brec.x + p,
+                y: brec.y + 0.5 * brec.height,
+            },
+            Vector2 {
+                x: brec.x + brec.width - p,
+                y: brec.y + 0.5 * brec.height,
+            },
+            UI_BUTTON_LINE_THICKNESS as f32,
+            Color::BLACK,
+        );
+        d.draw_line_ex(
+            Vector2 {
+                x: brec.x + 0.5 * brec.width,
+                y: brec.y + p,
+            },
+            Vector2 {
+                x: brec.x + 0.5 * brec.width,
+                y: brec.y + brec.height - p,
+            },
+            UI_BUTTON_LINE_THICKNESS as f32,
+            Color::BLACK,
+        );
+
+        let mut brec = self.settings_elements.threads_minus;
+        brec.y += self.scroll_offset_settings;
+        d.draw_rectangle_rec(brec, COLOUR_UI_BUTTON);
+        d.draw_line_ex(
+            Vector2 {
+                x: brec.x + p,
+                y: brec.y + 0.5 * brec.height,
+            },
+            Vector2 {
+                x: brec.x + brec.width - p,
+                y: brec.y + 0.5 * brec.height,
+            },
+            UI_BUTTON_LINE_THICKNESS as f32,
             Color::BLACK,
         );
 

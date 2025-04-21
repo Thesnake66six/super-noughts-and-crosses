@@ -33,6 +33,8 @@ pub struct State {
     /// Stores whether previous attempts to export a game have been successful
     pub can_export: bool,
     /// Stores the rectangle into which the game should be drawn
+    pub num_cpus: usize,
+    /// Stores the rectangle into which the game should be drawn
     pub game_rect: Rectangle,
     /// Stores the rectangle into which the ui should be drawn
     pub ui_rect: Rectangle,

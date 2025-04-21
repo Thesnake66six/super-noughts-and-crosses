@@ -13,6 +13,7 @@ pub const DEFAULT_SHOW_FPS_COUNTER: bool = false;
 pub const ALLOW_FPS_COUNTER: bool = true;
 
 /// Enables the logging of tree graphs
+// pub const OUTPUT_GRAPHVIS_FILES: bool = true;
 pub const OUTPUT_GRAPHVIS_FILES: bool = false;
 
 /// Enables the automatic compilation of tree graphs to .svg files
@@ -56,6 +57,9 @@ pub const DEFAULT_EXPLORATION_FACTOR: f32 = SQRT_2 / 2.0;
 
 /// The time between the computer making a move
 pub const DEFAULT_MAX_TIME: usize = 10;
+
+/// The default number of threads used in move calculation
+pub const DEFAULT_MAX_THREADS: usize = 4;
 
 /// The default value for `Max Time`
 pub const COMPUTER_RESPONSE_DELAY: f32 = 0.1;

@@ -1,6 +1,11 @@
-use crate::game::game::Turn;
+use ego_tree::NodeRef;
 
-use super::monte_carlo_settings::MonteCarloSettings;
+use crate::game::{
+    game::{Game, Turn},
+    value::Value,
+};
+
+use super::{monte_carlo_node::MonteCarloNode, monte_carlo_settings::MonteCarloSettings};
 
 /// Defines the messages that may be passed between the main and Monte Carlo threads
 pub enum Message {
@@ -31,4 +36,9 @@ pub struct Thoughts {
 
     /// Number of simulations carried out on a move
     pub score: f32,
+}
+
+pub enum ExplorationRequest {
+    Stop,
+    Return { result: f32 },
 }

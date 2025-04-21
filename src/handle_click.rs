@@ -194,18 +194,18 @@ fn handle_settings_tab_click(
     // If the AI strength buttons are clicked
     } else if ui.settings_elements.ai_1.check_collision_point_rec(offset) {
         ui.state.ai_strength = 1;
-        ui.state.max_sims =
-            COMPUTER_LEVEL_1_SIMS * (COMPUTER_SIM_SCALING.pow((ui.state.depth - 1).try_into().unwrap()));
+        ui.state.max_sims = COMPUTER_LEVEL_1_SIMS
+            * (COMPUTER_SIM_SCALING.pow((ui.state.depth - 1).try_into().unwrap()));
         ui.state.is_ai_modified = false
     } else if ui.settings_elements.ai_2.check_collision_point_rec(offset) {
         ui.state.ai_strength = 2;
-        ui.state.max_sims =
-            COMPUTER_LEVEL_2_SIMS * (COMPUTER_SIM_SCALING.pow((ui.state.depth - 1).try_into().unwrap()));
+        ui.state.max_sims = COMPUTER_LEVEL_2_SIMS
+            * (COMPUTER_SIM_SCALING.pow((ui.state.depth - 1).try_into().unwrap()));
         ui.state.is_ai_modified = false
     } else if ui.settings_elements.ai_3.check_collision_point_rec(offset) {
         ui.state.ai_strength = 3;
-        ui.state.max_sims =
-            COMPUTER_LEVEL_3_SIMS * (COMPUTER_SIM_SCALING.pow((ui.state.depth - 1).try_into().unwrap()));
+        ui.state.max_sims = COMPUTER_LEVEL_3_SIMS
+            * (COMPUTER_SIM_SCALING.pow((ui.state.depth - 1).try_into().unwrap()));
         ui.state.is_ai_modified = false
     } else if ui
         .settings_elements
@@ -221,6 +221,24 @@ fn handle_settings_tab_click(
         state.typing = Textbox::MaxTime;
     } else if ui.settings_elements.rules.check_collision_point_rec(offset) {
         let _ = open_url(RULES_URL);
+
+        // Increment threads count if plus clicked
+    } else if ui
+        .settings_elements
+        .threads_plus
+        .check_collision_point_rec(offset)
+    {
+        ui.state.ai_threads += 1;
+    // Decrement threads count if minus clicked
+    } else if ui
+        .settings_elements
+        .threads_minus
+        .check_collision_point_rec(offset)
+    {
+        ui.state.ai_threads -= 1;
+        if ui.state.ai_threads <= 1 {
+            ui.state.ai_threads = 1;
+        }
     } else if ui
         .settings_elements
         .keybinds

@@ -13,6 +13,8 @@ pub struct MonteCarloSettings {
     pub timeout: Duration,
     /// The maximum number of simulations allowed for calculation
     pub max_sims: usize,
+    /// The maximum number of threads allowed for calculation
+    pub threads: usize,
     /// The exploration factor for the UCB1 algorithm
     pub exploration_factor: f32,
     /// The player for which the move should be optimised

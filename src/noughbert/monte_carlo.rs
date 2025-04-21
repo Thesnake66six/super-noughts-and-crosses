@@ -1,5 +1,5 @@
 use core::panic;
-use std::fmt::Debug;
+use std::{collections::HashMap, fmt::Debug};
 
 use ego_tree::{NodeId, Tree};
 
@@ -19,6 +19,8 @@ pub struct MonteCarloManager {
     pub tree: Tree<MonteCarloNode>,
     /// The number of simulations that have been run
     pub sims: usize,
+    /// The number of simulations that have been started
+    pub sims_requested: usize,
 }
 
 impl MonteCarloManager {
@@ -29,6 +31,7 @@ impl MonteCarloManager {
             g,
             tree: ego_tree::Tree::new(MonteCarloNode::new(vec![], *moves_count, !t)),
             sims: 0,
+            sims_requested: 0,
         }
     }
 
@@ -62,11 +65,13 @@ impl MonteCarloManager {
                     best_score = ucb1;
                 } else if ucb1 == best_score {
                     best_node_ids.insert(best_node_ids.len(), node.id());
+                } else if ucb1 <= f32::MIN {
+                    eprintln!("Node {:?} has UCB1 of {ucb1}", node.id())
                 }
             }
 
             // Choose a random next best node
-            current_node_id = fastrand::choice(best_node_ids).unwrap();
+            current_node_id = fastrand::choice(best_node_ids).unwrap(); // This panics if node has no children with UCB1 higher than f32::MIN
             current_node = self.tree.get(current_node_id).unwrap();
 
             match self.g.play(&current_node.value().play) {
@@ -186,7 +191,6 @@ impl MonteCarloManager {
 
         // Adjust the value of the node based on the playout result
 
-        node_mut.value().playouts += 1.0;
         let val = if self.g.board.check() == opt_for.val() {
             1.0
         } else if self.g.board.check() == Value::Draw {
@@ -194,7 +198,6 @@ impl MonteCarloManager {
         } else {
             -1.0
         };
-        node_mut.value().score += val;
 
         // Unplay all moves made
         for _ in 0..count {
@@ -206,10 +209,35 @@ impl MonteCarloManager {
     }
 
     /// Propagates the value up the tree
-    pub fn backpropogate(&mut self, node_id: NodeId, val: f32) {
-        let node = self.tree.get(node_id).unwrap();
-
+    pub fn backpropogate_value(&mut self, node_id: NodeId, val: f32) {
+        // Apply result to the leaf node
+        let mut node_mut = self.tree.get_mut(node_id).unwrap();
+        node_mut.value().score += val;
+        
         // Loop over each parent node of the selected node
+        let node = self.tree.get(node_id).unwrap();
+        for ancestor in node
+            .ancestors()
+            .map(|x| x.id())
+            .collect::<Vec<_>>()
+            .iter()
+            .rev()
+        {
+            // Adjust the value of the parent node
+            let mut anode = self.tree.get_mut(*ancestor).unwrap();
+            anode.value().score += val;
+        }
+    }
+
+    /// Propagates the value up the tree
+    pub fn backpropogate_playouts(&mut self, node_id: NodeId) {
+        // Apply result to the leaf node
+
+        let mut node_mut = self.tree.get_mut(node_id).unwrap();
+        node_mut.value().playouts += 1.0;
+        
+        // Loop over each parent node of the selected node
+        let node = self.tree.get(node_id).unwrap();
         for ancestor in node
             .ancestors()
             .map(|x| x.id())
@@ -220,7 +248,6 @@ impl MonteCarloManager {
             // Adjust the value of the parent node
             let mut anode = self.tree.get_mut(*ancestor).unwrap();
             anode.value().playouts += 1.0;
-            anode.value().score += val;
         }
     }
 

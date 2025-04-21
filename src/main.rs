@@ -9,7 +9,6 @@ use styles::{
 };
 
 use crate::{
-    ai_thread::noughbert,
     common::{
         get_board_rect, get_game_rect, get_player_from_symbol, get_ui_rect, update_window_title,
     },
@@ -21,13 +20,12 @@ use crate::{
     handle_input::handle_input,
     noughbert::{
         message::Message, monte_carlo_policy::MonteCarloPolicy,
-        monte_carlo_settings::MonteCarloSettings,
+        monte_carlo_settings::MonteCarloSettings, noughbert::noughbert,
     },
     state::State,
     ui::{textbox::Textbox, ui::UI},
 };
 
-mod ai_thread;
 mod common;
 mod fonts;
 mod game;
@@ -115,6 +113,7 @@ fn main() -> Result<()> {
         currrent_thoughts: None,
         typing: Textbox::None,
         can_export: true,
+        num_cpus: num_cpus::get(),
         game_rect: get_game_rect(&rl),
         ui_rect: get_ui_rect(&rl),
         fonts: Fonts {
@@ -134,6 +133,8 @@ fn main() -> Result<()> {
     g.player_1 = get_player_from_symbol(&ui.state.player_1);
     g.player_2 = get_player_from_symbol(&ui.state.player_2);
     update_window_title(&mut rl, &mut thread, &g);
+
+    ui.state.ai_threads = state.num_cpus;
 
     println!("//------Look Ma, I'm a hacker now!------//");
 
@@ -157,6 +158,7 @@ fn main() -> Result<()> {
                     game: g.clone(),
                     timeout: Duration::from_secs(ui.state.max_time as u64),
                     max_sims: ui.state.max_sims,
+                    threads: ui.state.ai_threads,
                     exploration_factor: DEFAULT_EXPLORATION_FACTOR,
                     opt_for: g.turn,
                     carry_forward: false,

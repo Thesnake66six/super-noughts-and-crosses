@@ -175,6 +175,7 @@ pub fn handle_input(
                 game: g.clone(),
                 timeout: Duration::from_secs(ui.state.max_time as u64),
                 max_sims: ui.state.max_sims,
+                threads: ui.state.ai_threads,
                 exploration_factor: DEFAULT_EXPLORATION_FACTOR,
                 opt_for: g.turn,
                 carry_forward: false,
