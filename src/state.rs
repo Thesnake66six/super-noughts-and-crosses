@@ -1,8 +1,8 @@
 use raylib::math::{Rectangle, Vector2};
 
 use crate::{
+    ai::message::{Message, Thoughts},
     fonts::Fonts,
-    noughbert::message::{Message, Thoughts},
     ui::textbox::Textbox,
 };
 

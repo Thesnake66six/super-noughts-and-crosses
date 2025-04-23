@@ -3,9 +3,9 @@ use std::fs;
 use raylib::{ffi::MouseButton, math::Vector2, open_url, RaylibHandle, RaylibThread};
 
 use crate::{
+    ai::message::Message,
     common::{get_board_rect, get_player_from_symbol, update_window_title},
     game::game::{Game, Turn},
-    noughbert::message::Message,
     state::State,
     styles::{
         COMPUTER_LEVEL_1_SIMS, COMPUTER_LEVEL_2_SIMS, COMPUTER_LEVEL_3_SIMS,

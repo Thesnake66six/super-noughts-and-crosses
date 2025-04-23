@@ -1,4 +1,4 @@
-use std::sync::mpsc::{Receiver, SyncSender};
+use std::sync::mpsc::{self, Receiver, SyncSender, TryRecvError};
 
 use ego_tree::NodeId;
 
@@ -7,11 +7,10 @@ use crate::game::{
     value::Value,
 };
 
-use super::message::ExplorationRequest;
+use super::{comms::Comms, message::ExplorationRequest};
 
 pub fn simulation_thread(
-    rx: Receiver<ExplorationRequest>,
-    tx: SyncSender<ExplorationRequest>,
+    noughbert: Comms<ExplorationRequest>,
     id: NodeId,
     mut game: Game,
     opt_for: Turn,
@@ -19,7 +18,7 @@ pub fn simulation_thread(
     // eprintln!("Thread {:?}: Starting simulation", id);
     while game.board.check() == Value::None {
         // Check for incoming messages
-        match rx.try_recv() {
+        match noughbert.try_recv() {
             Ok(m) => match m {
                 ExplorationRequest::Stop => {
                     // eprintln!("Thread {:?}: Stopping", id)
@@ -27,8 +26,8 @@ pub fn simulation_thread(
                 ExplorationRequest::Return { result: _ } => {}
             },
             Err(e) => match e {
-                std::sync::mpsc::TryRecvError::Empty => {}
-                std::sync::mpsc::TryRecvError::Disconnected => {
+                TryRecvError::Empty => {}
+                TryRecvError::Disconnected => {
                     eprintln!(
                         "Thread {:?}: Stopping due to disconnect from main thread",
                         id
@@ -50,7 +49,7 @@ pub fn simulation_thread(
     };
 
     // eprintln!("Thread {:?}: Sending result {}", id, val);
-    let _ = tx.send(ExplorationRequest::Return { result: val });
+    let _ = noughbert.send(ExplorationRequest::Return { result: val });
 
     // eprintln!("Thread {:?}: Finished", id)
 }

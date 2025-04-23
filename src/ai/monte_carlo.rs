@@ -1,5 +1,4 @@
 use core::panic;
-use std::{collections::HashMap, fmt::Debug};
 
 use ego_tree::{NodeId, Tree};
 
@@ -213,7 +212,7 @@ impl MonteCarloManager {
         // Apply result to the leaf node
         let mut node_mut = self.tree.get_mut(node_id).unwrap();
         node_mut.value().score += val;
-        
+
         // Loop over each parent node of the selected node
         let node = self.tree.get(node_id).unwrap();
         for ancestor in node
@@ -235,7 +234,7 @@ impl MonteCarloManager {
 
         let mut node_mut = self.tree.get_mut(node_id).unwrap();
         node_mut.value().playouts += 1.0;
-        
+
         // Loop over each parent node of the selected node
         let node = self.tree.get(node_id).unwrap();
         for ancestor in node

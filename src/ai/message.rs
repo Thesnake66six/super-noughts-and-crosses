@@ -1,11 +1,6 @@
-use ego_tree::NodeRef;
+use crate::game::game::Turn;
 
-use crate::game::{
-    game::{Game, Turn},
-    value::Value,
-};
-
-use super::{monte_carlo_node::MonteCarloNode, monte_carlo_settings::MonteCarloSettings};
+use super::monte_carlo_settings::MonteCarloSettings;
 
 /// Defines the messages that may be passed between the main and Monte Carlo threads
 pub enum Message {

@@ -1,33 +1,29 @@
 use std::{
     collections::HashMap,
-    fmt::format,
     fs,
-    sync::mpsc::{self, sync_channel, Receiver, SyncSender},
+    sync::mpsc::{self, sync_channel},
     thread, time,
 };
 
-use ego_tree::{NodeId, NodeRef, Tree};
+use ego_tree::NodeId;
 
 use crate::{
-    game::{
-        game::{Game, Turn},
-        value::Value,
-    },
-    noughbert::{
+    ai::{
         graphvis::output_graphvis_files,
         message::{Message, Thoughts},
         monte_carlo::MonteCarloManager,
         simulation_thread::simulation_thread,
     },
-    styles::{AUTOCOMPILE_GRAPHVIS_FILES, OUTPUT_GRAPHVIS_FILES},
+    game::value::Value,
+    styles::OUTPUT_GRAPHVIS_FILES,
 };
 
-use super::{message::ExplorationRequest, monte_carlo_node::MonteCarloNode};
+use super::{comms::Comms, message::ExplorationRequest};
 
-pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
+pub fn noughbert(main: Comms<Message>) {
     // Count the number of AI simulations
     let mut runs = 0;
-    let mut graphviz_prints = 0;
+    // let mut graphviz_prints = 0;
 
     // Clear and re-create the `./outs` folder
     if OUTPUT_GRAPHVIS_FILES {
@@ -37,7 +33,7 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
 
     loop {
         // Recieve all messages, if a `Message::Start()` is recieved, begin simulation
-        let message = rx.recv().unwrap();
+        let message = main.recv().unwrap();
         let mc_options = match message {
             Message::Start(x) => x,
             Message::Interrupt => continue,
@@ -51,10 +47,7 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
 
         let mut noughbert = MonteCarloManager::new(mc_options.game, mc_options.opt_for);
         let start_time = time::Instant::now();
-        let mut threads: HashMap<
-            usize,
-            (NodeId, Receiver<ExplorationRequest>, SyncSender<ExplorationRequest>),
-        > = HashMap::new();
+        let mut threads: HashMap<usize, (NodeId, Comms<ExplorationRequest>)> = HashMap::new();
         let mut channel_counter = 10;
         let mut interrupt = false;
         let mut interrupt_return = true;
@@ -74,7 +67,7 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
             && !interrupt
         {
             // Recieve all messages; Break if interrupted
-            let message = rx.try_recv();
+            let message = main.try_recv();
             match message {
                 Ok(m) => match m {
                     Message::Start(_) => {}
@@ -84,7 +77,7 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
                     }
                     Message::GetThoughts(t) => {
                         let root = noughbert.tree.root().value();
-                        tx.send(Message::Thoughts(Thoughts {
+                        main.send(Message::Thoughts(Thoughts {
                             sims: noughbert.sims,
                             score: root.score(t),
                         }))
@@ -106,15 +99,15 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
             let mut polled_ids = Vec::new();
             // Poll all active threads
             for thread in threads.iter() {
-                let id = thread.1.0;
+                let id = thread.1 .0;
                 // eprintln!("Polling thread {:?}", id);
                 // let mut node_mut = noughbert.tree.get_mut(id).unwrap();
                 // if node_mut.value().playouts < 1.0 {
-                //     eprintln!("Node {:?} has {} playouts!", node_mut.id(), node_mut.value().playouts)
+                //   eprintln!("Node {:?} has {} playouts!", node_mut.id(), node_mut.value().playouts)
                 // }
-                let trx = &thread.1.1;
+                let tcomms = &thread.1 .1;
 
-                match trx.try_recv() {
+                match tcomms.try_recv() {
                     Ok(v) => match v {
                         ExplorationRequest::Stop => {}
                         ExplorationRequest::Return { result: v } => {
@@ -157,10 +150,10 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
             // Fill the thread pool to the brim, else to the number of remaining sims needed
             let threads_to_spawn = (mc_options.threads - threads.len())
                 .min(mc_options.max_sims - noughbert.sims_requested);
-            // TODO: Should this be printed to the stderr in release? 
+            // TODO: Should this be printed to the stderr in release?
             // if threads_to_spawn != 0 {
-            //     eprintln!("Threads to spawn: Pool Space ({}) or Remaining Sims ({})", mc_options.threads - threads.len(), mc_options.max_sims - noughbert.sims_requested);
-            //     eprintln!("Spawning {} threads this iteration:", threads_to_spawn);
+            //   eprintln!("Threads to spawn: Pool Space ({}) or Remaining Sims ({})", mc_options.threads - threads.len(), mc_options.max_sims - noughbert.sims_requested);
+            //   eprintln!("Spawning {} threads this iteration:", threads_to_spawn);
             // }
             for _ in 0..threads_to_spawn {
                 let (txi, rxi) = sync_channel::<ExplorationRequest>(channel_counter);
@@ -178,7 +171,7 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
                 }
                 let x = noughbert.expand(x.unwrap());
                 noughbert.backpropogate_playouts(x);
-                graphviz_prints += 1;
+                // graphviz_prints += 1;
                 prints_this_run += 1;
                 let node = noughbert.tree.get(x).unwrap();
 
@@ -194,28 +187,27 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
                 let thread_opt_for = mc_options.opt_for;
 
                 // eprintln!(
-                //     "Spawning thread on channel {} to run simulation {} on node {:?}",
-                //     channel_counter.wrapping_sub(2),
-                //     noughbert.sims_requested,
-                //     x
+                //   "Spawning thread on channel {} to run simulation {} on node {:?}",
+                //   channel_counter.wrapping_sub(2),
+                //   noughbert.sims_requested,
+                //   x
                 // );
-
 
                 // Spawn the thread
                 let _ = thread::Builder::new()
                     .name(format!("{:?}", x))
                     .spawn(move || {
-                        simulation_thread(rxo, txi, x, thread_game, thread_opt_for);
+                        simulation_thread(Comms::new(rxo, txi), x, thread_game, thread_opt_for);
                     });
 
-                    threads.insert(channel_counter.wrapping_sub(2), (x, rxi, txo));
-                    
+                threads.insert(channel_counter.wrapping_sub(2), (x, Comms::new(rxi, txo)));
+
                 noughbert.sims_requested += 1;
                 if OUTPUT_GRAPHVIS_FILES {
                     output_graphvis_files(
                         &noughbert.tree,
                         &noughbert.g,
-                        &format!("Run{}Print{prints_this_run}", runs+1),
+                        &format!("Run{}Print{prints_this_run}", runs + 1),
                         mc_options.exploration_factor,
                         mc_options.opt_for,
                     );
@@ -249,7 +241,7 @@ pub fn noughbert(rx: Receiver<Message>, tx: SyncSender<Message>) {
         );
 
         // Send the best move calculated and increment the runs counter
-        tx.send(Message::Move(best_play)).unwrap();
+        main.send(Message::Move(best_play)).unwrap();
         runs += 1;
 
         // If needed, output the node `.svg` files

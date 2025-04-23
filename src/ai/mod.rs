@@ -1,3 +1,5 @@
+pub mod comms;
+pub mod cruzita;
 pub mod graphvis;
 pub mod message;
 pub mod monte_carlo;

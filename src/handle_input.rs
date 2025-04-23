@@ -8,13 +8,13 @@ use raylib::{
 };
 
 use crate::{
-    common::{get_game_rect, get_ui_rect, update_window_title},
-    game::{game::Game, value::Value},
-    handle_click::handle_click,
-    noughbert::{
+    ai::{
         message::Message, monte_carlo_policy::MonteCarloPolicy,
         monte_carlo_settings::MonteCarloSettings,
     },
+    common::{get_game_rect, get_ui_rect, update_window_title},
+    game::{game::Game, value::Value},
+    handle_click::handle_click,
     state::State,
     styles::{
         ALLOW_FPS_COUNTER, CAMERA_MOVE_SPEED, CAMERA_SCROLL_SPEED, DEFAULT_EXPLORATION_FACTOR,

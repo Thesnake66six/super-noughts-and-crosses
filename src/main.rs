@@ -1,5 +1,6 @@
 use std::{sync::mpsc, thread, time::Duration};
 
+use ai::comms::Comms;
 use anyhow::Result;
 use raylib::{core::texture::RaylibTexture2D, prelude::*};
 use styles::{
@@ -9,6 +10,10 @@ use styles::{
 };
 
 use crate::{
+    ai::{
+        message::Message, monte_carlo_policy::MonteCarloPolicy,
+        monte_carlo_settings::MonteCarloSettings, noughbert::noughbert,
+    },
     common::{
         get_board_rect, get_game_rect, get_player_from_symbol, get_ui_rect, update_window_title,
     },
@@ -18,20 +23,16 @@ use crate::{
         value::Value,
     },
     handle_input::handle_input,
-    noughbert::{
-        message::Message, monte_carlo_policy::MonteCarloPolicy,
-        monte_carlo_settings::MonteCarloSettings, noughbert::noughbert,
-    },
     state::State,
     ui::{textbox::Textbox, ui::UI},
 };
 
+mod ai;
 mod common;
 mod fonts;
 mod game;
 mod handle_click;
 mod handle_input;
-mod noughbert;
 mod state;
 mod styles;
 mod ui;
@@ -44,11 +45,10 @@ fn main() -> Result<()> {
     let (tx_1, rx_1) = mpsc::sync_channel::<Message>(1);
 
     let _thread = thread::spawn(move || {
-        noughbert(rx_0, tx_1);
+        noughbert(Comms::new(rx_0, tx_1));
     });
 
-    let rx = rx_1;
-    let tx = tx_0;
+    let noughbert = Comms::new(rx_1, tx_0);
 
     // Initialise Raylib
     let (mut rl, mut thread) = raylib::init()
@@ -170,12 +170,12 @@ fn main() -> Result<()> {
 
         // Send all queued messages
         for message in state.message_queue.drain(0..state.message_queue.len()) {
-            tx.send(message).unwrap();
+            noughbert.send(message).unwrap();
         }
 
         // Recieve any sent messages, and queue all moves
         loop {
-            let msg = rx.try_recv();
+            let msg = noughbert.try_recv();
             match msg {
                 Ok(msg) => match msg {
                     Message::Start(_) => {}
@@ -297,7 +297,7 @@ fn main() -> Result<()> {
         state.thoughts_timer -= delta;
         if state.thoughts_timer < 0.0 {
             state.thoughts_timer = DEFAULT_THOUGHTS_DELAY;
-            tx.send(Message::GetThoughts(Turn::Player2)).unwrap()
+            noughbert.send(Message::GetThoughts(Turn::Player2)).unwrap()
         }
     }
 
