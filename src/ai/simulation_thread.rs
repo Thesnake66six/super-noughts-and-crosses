@@ -7,7 +7,7 @@ use crate::game::{
     value::Value,
 };
 
-use super::{comms::Comms, message::ExplorationRequest};
+use super::{comms::Comms, noughbert_message::ExplorationRequest};
 
 pub fn simulation_thread(
     noughbert: Comms<ExplorationRequest>,

@@ -3,7 +3,7 @@ use std::fs;
 use raylib::{ffi::MouseButton, math::Vector2, open_url, RaylibHandle, RaylibThread};
 
 use crate::{
-    ai::message::Message,
+    ai::noughbert_message::NoughbertMessage,
     common::{get_board_rect, get_player_from_symbol, update_window_title},
     game::game::{Game, Turn},
     state::State,
@@ -66,7 +66,7 @@ pub fn handle_click(
                 let _ = g.play(cell);
                 state
                     .message_queue
-                    .insert(state.message_queue.len(), Message::Interrupt);
+                    .insert(state.message_queue.len(), NoughbertMessage::Interrupt);
                 let x = fastrand::usize(5..20) as f32;
                 state.move_delay = COMPUTER_RESPONSE_DELAY * x / 10.0;
             }
@@ -157,7 +157,7 @@ fn handle_settings_tab_click(
         // Stop any currently calculating moves
         state
             .message_queue
-            .insert(state.message_queue.len(), Message::Interrupt);
+            .insert(state.message_queue.len(), NoughbertMessage::Interrupt);
         // Stop waiting to receive a move
         state.waiting_for_move = false;
         // Set a new game based on the current UI state

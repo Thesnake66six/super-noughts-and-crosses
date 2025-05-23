@@ -9,7 +9,7 @@ use raylib::{
 
 use crate::{
     ai::{
-        message::Message, monte_carlo_policy::MonteCarloPolicy,
+        noughbert_message::NoughbertMessage, monte_carlo_policy::MonteCarloPolicy,
         monte_carlo_settings::MonteCarloSettings,
     },
     common::{get_game_rect, get_ui_rect, update_window_title},
@@ -158,7 +158,7 @@ pub fn handle_input(
                 let _ = g.unplay();
                 state
                     .message_queue
-                    .insert(state.message_queue.len(), Message::Interrupt);
+                    .insert(state.message_queue.len(), NoughbertMessage::Interrupt);
                 ui.state.is_ai_modified = true
             }
         }
@@ -171,7 +171,7 @@ pub fn handle_input(
     {
         state.message_queue.insert(
             state.message_queue.len(),
-            Message::Start(MonteCarloSettings {
+            NoughbertMessage::Start(MonteCarloSettings {
                 game: g.clone(),
                 timeout: Duration::from_secs(ui.state.max_time as u64),
                 max_sims: ui.state.max_sims,

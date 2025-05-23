@@ -11,7 +11,7 @@ use styles::{
 
 use crate::{
     ai::{
-        message::Message, monte_carlo_policy::MonteCarloPolicy,
+        noughbert_message::NoughbertMessage, monte_carlo_policy::MonteCarloPolicy,
         monte_carlo_settings::MonteCarloSettings, noughbert::noughbert,
     },
     common::{
@@ -39,10 +39,10 @@ mod ui;
 
 fn main() -> Result<()> {
     // Main thread comms with Noughbert
-    let (tx_0, rx_0) = mpsc::sync_channel::<Message>(0);
+    let (tx_0, rx_0) = mpsc::sync_channel::<NoughbertMessage>(0);
 
     // Noughbert comms with main thread
-    let (tx_1, rx_1) = mpsc::sync_channel::<Message>(1);
+    let (tx_1, rx_1) = mpsc::sync_channel::<NoughbertMessage>(1);
 
     let _thread = thread::spawn(move || {
         noughbert(Comms::new(rx_0, tx_1));
@@ -154,7 +154,7 @@ fn main() -> Result<()> {
         {
             state.message_queue.insert(
                 state.message_queue.len(),
-                Message::Start(MonteCarloSettings {
+                NoughbertMessage::Start(MonteCarloSettings {
                     game: g.clone(),
                     timeout: Duration::from_secs(ui.state.max_time as u64),
                     max_sims: ui.state.max_sims,
@@ -178,16 +178,16 @@ fn main() -> Result<()> {
             let msg = noughbert.try_recv();
             match msg {
                 Ok(msg) => match msg {
-                    Message::Start(_) => {}
-                    Message::Return() => {}
-                    Message::GetThoughts(_) => {}
-                    Message::Thoughts(th) => {
+                    NoughbertMessage::Start(_) => {}
+                    NoughbertMessage::Return() => {}
+                    NoughbertMessage::GetThoughts(_) => {}
+                    NoughbertMessage::Thoughts(th) => {
                         if state.waiting_for_thoughts {
                             state.currrent_thoughts = Some(th);
                             // println!("{:?}", state.currrent_thoughts);
                         }
                     }
-                    Message::Move(mv) => {
+                    NoughbertMessage::Move(mv) => {
                         if state.waiting_for_move {
                             if let Some(y) = mv {
                                 state.move_queue.insert(0, y);
@@ -195,7 +195,7 @@ fn main() -> Result<()> {
                             }
                         }
                     }
-                    Message::Interrupt => {}
+                    NoughbertMessage::Interrupt => {}
                 },
                 Err(e) => match e {
                     mpsc::TryRecvError::Empty => break,
@@ -297,7 +297,7 @@ fn main() -> Result<()> {
         state.thoughts_timer -= delta;
         if state.thoughts_timer < 0.0 {
             state.thoughts_timer = DEFAULT_THOUGHTS_DELAY;
-            noughbert.send(Message::GetThoughts(Turn::Player2)).unwrap()
+            noughbert.send(NoughbertMessage::GetThoughts(Turn::Player2)).unwrap()
         }
     }
 

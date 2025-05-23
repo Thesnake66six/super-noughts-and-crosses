@@ -9,18 +9,15 @@ use ego_tree::NodeId;
 
 use crate::{
     ai::{
-        graphvis::output_graphvis_files,
-        message::{Message, Thoughts},
-        monte_carlo::MonteCarloManager,
-        simulation_thread::simulation_thread,
+        graphvis::output_graphvis_files, monte_carlo::MonteCarloManager, noughbert_message::NoughbertMessage, simulation_thread::simulation_thread, thoughts::Thoughts
     },
     game::value::Value,
     styles::OUTPUT_GRAPHVIS_FILES,
 };
 
-use super::{comms::Comms, message::ExplorationRequest};
+use super::{comms::Comms, noughbert_message::ExplorationRequest};
 
-pub fn noughbert(main: Comms<Message>) {
+pub fn noughbert(main: Comms<NoughbertMessage>) {
     // Count the number of AI simulations
     let mut runs = 0;
     // let mut graphviz_prints = 0;
@@ -35,12 +32,12 @@ pub fn noughbert(main: Comms<Message>) {
         // Recieve all messages, if a `Message::Start()` is recieved, begin simulation
         let message = main.recv().unwrap();
         let mc_options = match message {
-            Message::Start(x) => x,
-            Message::Interrupt => continue,
-            Message::GetThoughts(_) => continue,
-            Message::Thoughts(_) => continue,
-            Message::Move(_) => continue,
-            Message::Return() => continue,
+            NoughbertMessage::Start(x) => x,
+            NoughbertMessage::Interrupt => continue,
+            NoughbertMessage::GetThoughts(_) => continue,
+            NoughbertMessage::Thoughts(_) => continue,
+            NoughbertMessage::Move(_) => continue,
+            NoughbertMessage::Return() => continue,
         };
 
         println!("Simulation requested");
@@ -70,22 +67,22 @@ pub fn noughbert(main: Comms<Message>) {
             let message = main.try_recv();
             match message {
                 Ok(m) => match m {
-                    Message::Start(_) => {}
-                    Message::Interrupt => {
+                    NoughbertMessage::Start(_) => {}
+                    NoughbertMessage::Interrupt => {
                         interrupt = true;
                         break;
                     }
-                    Message::GetThoughts(t) => {
+                    NoughbertMessage::GetThoughts(t) => {
                         let root = noughbert.tree.root().value();
-                        main.send(Message::Thoughts(Thoughts {
+                        main.send(NoughbertMessage::Thoughts(Thoughts {
                             sims: noughbert.sims,
                             score: root.score(t),
                         }))
                         .unwrap();
                     }
-                    Message::Thoughts(_) => {}
-                    Message::Move(_) => {}
-                    Message::Return() => {
+                    NoughbertMessage::Thoughts(_) => {}
+                    NoughbertMessage::Move(_) => {}
+                    NoughbertMessage::Return() => {
                         interrupt_return = true;
                         break;
                     }
@@ -241,7 +238,7 @@ pub fn noughbert(main: Comms<Message>) {
         );
 
         // Send the best move calculated and increment the runs counter
-        main.send(Message::Move(best_play)).unwrap();
+        main.send(NoughbertMessage::Move(best_play)).unwrap();
         runs += 1;
 
         // If needed, output the node `.svg` files

@@ -1,7 +1,7 @@
 use raylib::math::{Rectangle, Vector2};
 
 use crate::{
-    ai::message::{Message, Thoughts},
+    ai::{noughbert_message::NoughbertMessage, thoughts::Thoughts},
     fonts::Fonts,
     ui::textbox::Textbox,
 };
@@ -17,7 +17,7 @@ pub struct State {
     /// Stores whether the main thread is waiting for thoughts
     pub waiting_for_thoughts: bool,
     /// Stores a queue of messages to be sent to the AI thread
-    pub message_queue: Vec<Message>,
+    pub message_queue: Vec<NoughbertMessage>,
     /// Stores a list of the incoming moves from the AI thread
     pub move_queue: Vec<Vec<usize>>,
     /// Stores a list of the incoming moves from the AI thread

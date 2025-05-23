@@ -1,9 +1,9 @@
 use crate::game::game::Turn;
 
-use super::monte_carlo_settings::MonteCarloSettings;
+use super::{monte_carlo_settings::MonteCarloSettings, thoughts::Thoughts};
 
 /// Defines the messages that may be passed between the main and Monte Carlo threads
-pub enum Message {
+pub enum NoughbertMessage {
     /// Requests that the thread begin simulating
     Start(MonteCarloSettings),
 
@@ -21,16 +21,6 @@ pub enum Message {
 
     /// Stops the calculation of a move
     Interrupt,
-}
-
-/// Struct holding the information returned from a `Message::GetThoughts()` message
-#[derive(Debug, Clone, Copy)]
-pub struct Thoughts {
-    /// Number of simulations carried out on a move
-    pub sims: usize,
-
-    /// Number of simulations carried out on a move
-    pub score: f32,
 }
 
 pub enum ExplorationRequest {
