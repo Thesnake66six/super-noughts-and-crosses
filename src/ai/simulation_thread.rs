@@ -1,6 +1,7 @@
 use std::sync::mpsc::{self, Receiver, SyncSender, TryRecvError};
 
-use ego_tree::NodeId;
+
+use id_tree::NodeId;
 
 use crate::game::{
     game::{Game, Turn},

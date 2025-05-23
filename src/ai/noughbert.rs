@@ -5,7 +5,7 @@ use std::{
     thread, time,
 };
 
-use ego_tree::NodeId;
+use id_tree::NodeId;
 
 use crate::{
     ai::{
@@ -73,7 +73,7 @@ pub fn noughbert(main: Comms<NoughbertMessage>) {
                         break;
                     }
                     NoughbertMessage::GetThoughts(t) => {
-                        let root = noughbert.tree.root().value();
+                        let root = noughbert.tree.get(noughbert.tree.root_node_id().unwrap()).unwrap().data();
                         main.send(NoughbertMessage::Thoughts(Thoughts {
                             sims: noughbert.sims,
                             score: root.score(t),
@@ -96,7 +96,7 @@ pub fn noughbert(main: Comms<NoughbertMessage>) {
             let mut polled_ids = Vec::new();
             // Poll all active threads
             for thread in threads.iter() {
-                let id = thread.1 .0;
+                let id = &thread.1 .0;
                 // eprintln!("Polling thread {:?}", id);
                 // let mut node_mut = noughbert.tree.get_mut(id).unwrap();
                 // if node_mut.value().playouts < 1.0 {
@@ -111,7 +111,7 @@ pub fn noughbert(main: Comms<NoughbertMessage>) {
                             // eprintln!("Thread {:?} returned with value {}, bringing completed sims to {}", id, v, noughbert.sims + 1);
                             // node_mut.value().score += v;
                             noughbert.sims += 1;
-                            noughbert.backpropogate_value(id, v);
+                            noughbert.backpropogate_value(&id, v);
                             polled_ids.insert(polled_ids.len(), *thread.0);
                         }
                     },
@@ -132,12 +132,12 @@ pub fn noughbert(main: Comms<NoughbertMessage>) {
 
             if mc_options.threads == 1 {
                 // Run the MCTS algorithm once
-                let x = noughbert.select(mc_options.exploration_factor, mc_options.opt_for);
+                let x = noughbert.select(mc_options.exploration_factor, mc_options.opt_for).cloned();
                 if x.is_none() {
                     break;
                 }
-                let x = noughbert.expand(x.unwrap());
-                let (x, val) = noughbert.simulate(x, mc_options.opt_for);
+                let x = noughbert.expand(&x.unwrap());
+                let (x, val) = noughbert.simulate(&x, mc_options.opt_for);
                 noughbert.backpropogate_playouts(x);
                 noughbert.backpropogate_value(x, val);
                 // Increment the number of simulations run
@@ -162,25 +162,25 @@ pub fn noughbert(main: Comms<NoughbertMessage>) {
                     channel_counter.wrapping_add(2)
                 };
 
-                let x = noughbert.select(mc_options.exploration_factor, mc_options.opt_for);
+                let x = noughbert.select(mc_options.exploration_factor, mc_options.opt_for).cloned();
                 if x.is_none() {
                     break;
                 }
-                let x = noughbert.expand(x.unwrap());
-                noughbert.backpropogate_playouts(x);
+                let x = noughbert.expand(&x.unwrap());
+                noughbert.backpropogate_playouts(&x);
                 // graphviz_prints += 1;
                 prints_this_run += 1;
-                let node = noughbert.tree.get(x).unwrap();
+                let node = noughbert.tree.get(&x).unwrap();
 
                 // Clone and prime the board based on the selected move
                 let mut thread_game = noughbert.g.clone();
-                for y in node.ancestors().collect::<Vec<_>>().iter().rev() {
-                    if !y.value().play.is_empty() {
-                        let y = &y.value();
+                for y in noughbert.tree.ancestors(&x).unwrap().collect::<Vec<_>>().iter().rev() {
+                    if !y.data().play.is_empty() {
+                        let y = &y.data();
                         thread_game.play(&y.play).unwrap();
                     }
                 }
-                thread_game.play(&node.value().play).unwrap();
+                thread_game.play(&node.data().play).unwrap();
                 let thread_opt_for = mc_options.opt_for;
 
                 // eprintln!(
@@ -191,23 +191,25 @@ pub fn noughbert(main: Comms<NoughbertMessage>) {
                 // );
 
                 // Spawn the thread
+                let x2 = x.clone();
                 let _ = thread::Builder::new()
-                    .name(format!("{:?}", x))
+                    .name(format!("{:?}", &x))
                     .spawn(move || {
-                        simulation_thread(Comms::new(rxo, txi), x, thread_game, thread_opt_for);
+                        simulation_thread(Comms::new(rxo, txi), x.clone(), thread_game, thread_opt_for);
                     });
 
-                threads.insert(channel_counter.wrapping_sub(2), (x, Comms::new(rxi, txo)));
+                threads.insert(channel_counter.wrapping_sub(2), (x2, Comms::new(rxi, txo)));
 
                 noughbert.sims_requested += 1;
                 if OUTPUT_GRAPHVIS_FILES {
-                    output_graphvis_files(
-                        &noughbert.tree,
-                        &noughbert.g,
-                        &format!("Run{}Print{prints_this_run}", runs + 1),
-                        mc_options.exploration_factor,
-                        mc_options.opt_for,
-                    );
+                    // output_graphvis_files(
+                    //     &noughbert.tree,
+                    //     &noughbert.g,
+                    //     &format!("Run{}Print{prints_this_run}", runs + 1),
+                    //     mc_options.exploration_factor,
+                    //     mc_options.opt_for,
+                    // );
+                    println!("Could not be printed; no wrapper for id_tree::Tree")
                 }
             }
         }
@@ -243,13 +245,14 @@ pub fn noughbert(main: Comms<NoughbertMessage>) {
 
         // If needed, output the node `.svg` files
         if OUTPUT_GRAPHVIS_FILES {
-            output_graphvis_files(
-                &noughbert.tree,
-                &noughbert.g,
-                &format!("Run{runs}Final"),
-                mc_options.exploration_factor,
-                mc_options.opt_for,
-            );
+            // output_graphvis_files(
+            //     &noughbert.tree,
+            //     &noughbert.g,
+            //     &format!("Run{runs}Final"),
+            //     mc_options.exploration_factor,
+            //     mc_options.opt_for,
+            // );
+            println!("Could not be printed; no wrapper for id_tree::Tree")
         }
     }
 }
