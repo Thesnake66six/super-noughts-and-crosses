@@ -1,9 +1,9 @@
-use crate::game::game::Turn;
+use crate::{common::Move, game::game::Turn};
 
 #[derive(Debug)]
 pub struct MonteCarloNode {
     /// The move that the node represents
-    pub play: Vec<usize>,
+    pub play: Move,
     /// The number of simulations where this move was made
     pub playouts: f32,
     /// The score of simulations
@@ -16,7 +16,7 @@ pub struct MonteCarloNode {
 
 impl MonteCarloNode {
     /// Constructor function
-    pub fn new(play: Vec<usize>, child_count: usize, turn: Turn) -> MonteCarloNode {
+    pub fn new(play: Move, child_count: usize, turn: Turn) -> MonteCarloNode {
         MonteCarloNode {
             play,
             playouts: 0.0,

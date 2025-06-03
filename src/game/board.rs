@@ -3,7 +3,7 @@ use raylib::{core::math::Rectangle, prelude::*};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    common::get_greyed_colour_board,
+    common::{get_greyed_colour_board, Move},
     styles::{BOARD_CELL_MARGIN, BOARD_LINE_THICK, COLOUR_BOARD_BG, COLOUR_BOARD_FG, INVERT_GREYS},
 };
 
@@ -126,7 +126,7 @@ impl Board {
     }
 
     /// Returns a Vec of all possible moves in the board
-    pub fn moves(&self, pos: &[usize]) -> Vec<Vec<usize>> {
+    pub fn moves(&self, pos: &[usize]) -> Vec<Move> {
         let mut l = vec![];
         for (i, x) in self.cells.iter().enumerate() {
             let mut v = Vec::with_capacity(pos.len() + 1);
@@ -138,7 +138,7 @@ impl Board {
     }
 
     /// Returns a Vec of all possible legal moves in the board
-    pub fn legal_moves(&self, pos: &[usize]) -> Vec<Vec<usize>> {
+    pub fn legal_moves(&self, pos: &[usize]) -> Vec<Move> {
         // Create the output vector
         let mut l = vec![];
 
@@ -178,7 +178,7 @@ impl Board {
         }
     }
 
-    pub fn get_cell_from_pixel(&self, point: Vector2, no_check: bool) -> Option<Vec<usize>> {
+    pub fn get_cell_from_pixel(&self, point: Vector2, no_check: bool) -> Option<Move> {
         // Iterate over every cell in the board.
         for ((cell, rect), i) in self.cells.iter().zip(&self.cell_positions).zip(0..9) {
             // If the point collides with the cell...

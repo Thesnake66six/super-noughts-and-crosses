@@ -9,10 +9,9 @@ use raylib::{
 
 use crate::{
     ai::{
-        noughbert_message::NoughbertMessage, monte_carlo_policy::MonteCarloPolicy,
-        monte_carlo_settings::MonteCarloSettings,
+        monte_carlo_policy::MonteCarloPolicy, monte_carlo_settings::MonteCarloSettings, noughbert_message::NoughbertMessage
     },
-    common::{get_game_rect, get_ui_rect, update_window_title},
+    common::{get_game_rect, get_ui_rect, update_window_title, Move},
     game::{game::Game, value::Value},
     handle_click::handle_click,
     state::State,
@@ -29,7 +28,7 @@ pub fn handle_input(
     g: &mut Game,
     ui: &mut UI,
     state: &mut State,
-) -> Option<Vec<usize>> {
+) -> Option<Move> {
     // Get the mouse position
     let mouse_pos = rl.get_mouse_position();
 

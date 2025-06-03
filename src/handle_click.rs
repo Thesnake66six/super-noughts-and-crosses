@@ -4,7 +4,7 @@ use raylib::{ffi::MouseButton, math::Vector2, open_url, RaylibHandle, RaylibThre
 
 use crate::{
     ai::noughbert_message::NoughbertMessage,
-    common::{get_board_rect, get_player_from_symbol, update_window_title},
+    common::{get_board_rect, get_player_from_symbol, update_window_title, Move},
     game::game::{Game, Turn},
     state::State,
     styles::{
@@ -21,7 +21,7 @@ pub fn handle_click(
     ui: &mut UI,
     state: &mut State,
     mouse_pos: Vector2,
-    hovered_cell: &Option<Vec<usize>>,
+    hovered_cell: &Option<Move>,
 ) {
     if rl.is_mouse_button_pressed(MouseButton::MOUSE_BUTTON_LEFT) {
         state.typing = Textbox::None;

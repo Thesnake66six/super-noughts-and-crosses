@@ -138,7 +138,7 @@ pub fn noughbert(main: Comms<NoughbertMessage>) {
                 }
                 let x = noughbert.expand(&x.unwrap());
                 let (x, val) = noughbert.simulate(&x, mc_options.opt_for);
-                noughbert.backpropogate_playouts(x);
+                noughbert.backpropogate_playouts(x, 1.0);
                 noughbert.backpropogate_value(x, val);
                 // Increment the number of simulations run
                 noughbert.sims += 1;
@@ -167,7 +167,7 @@ pub fn noughbert(main: Comms<NoughbertMessage>) {
                     break;
                 }
                 let x = noughbert.expand(&x.unwrap());
-                noughbert.backpropogate_playouts(&x);
+                noughbert.backpropogate_playouts(&x, 1.0);
                 // graphviz_prints += 1;
                 prints_this_run += 1;
                 let node = noughbert.tree.get(&x).unwrap();

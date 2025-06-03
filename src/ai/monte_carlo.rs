@@ -3,10 +3,10 @@ use core::panic;
 // use ego_tree::{NodeId, Tree};
 use id_tree::{Node, NodeId, Tree, TreeBuilder};
 
-use crate::game::{
+use crate::{common::Move, game::{
     game::{Game, Turn},
     value::Value,
-};
+}};
 
 use super::{monte_carlo_node::MonteCarloNode, monte_carlo_policy::MonteCarloPolicy};
 
@@ -233,18 +233,18 @@ impl MonteCarloManager {
     }
 
     /// Propagates the value up the tree
-    pub fn backpropogate_playouts(&mut self, node_id: &NodeId) {
+    pub fn backpropogate_playouts(&mut self, node_id: &NodeId, val: f32) {
         // Apply result to the leaf node
 
         let node_mut = self.tree.get_mut(node_id).unwrap();
-        node_mut.data_mut().playouts += 1.0;
+        node_mut.data_mut().playouts += val;
 
         // Loop over each parent node of the selected node
         let ancestors: Vec<_> = self.tree.ancestor_ids(node_id).unwrap().cloned().collect();
         for ancestor in ancestors.iter().rev() {
             // Adjust the value of the parent node
             let anode = self.tree.get_mut(ancestor).unwrap();
-            anode.data_mut().playouts += 1.0;
+            anode.data_mut().playouts += val;
         }
     }
 
@@ -254,7 +254,7 @@ impl MonteCarloManager {
         policy: MonteCarloPolicy,
         opt_for: Turn,
         exploration_factor: f32,
-    ) -> Option<Vec<usize>> {
+    ) -> Option<Move> {
         match policy {
             MonteCarloPolicy::Robust => {
                 let node = self.tree.root_node_id().unwrap();

@@ -10,21 +10,11 @@ use raylib::{
 
 use serde::{Deserialize, Serialize};
 
-use crate::styles::{
+use crate::{common::Move, styles::{
     BOARD_CELL_MARGIN, CAMERA_DEFAULT_ZOOM, COLOUR_BOARD_BG, COLOUR_BOARD_BG_GREYED, CROSS, THORN,
-};
+}};
 
 use super::{board::Board, cell::Cell, legal::Legal, player::Player, value::Value};
-
-pub struct Move(Vec<usize>);
-
-impl Deref for Move {
-    type Target = Vec<usize>;
-
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Turn {
@@ -67,9 +57,9 @@ pub struct Game {
     /// The number of human players
     pub players: usize,
     /// A list of all previous moves, and the legal moves that could have been made on that turn
-    pub moves: Vec<Vec<Vec<usize>>>,
+    pub moves: Vec<Vec<Move>>,
     /// The current set of legal moves
-    pub legal: Vec<usize>,
+    pub legal: Move,
     /// Cell renderer for Player 1
     pub player_1: Player,
     /// Cell renderer for Player 2
@@ -234,7 +224,7 @@ impl Game {
     }
 
     /// Gets the coordinate of the next legal move board
-    pub fn get_legal(&self, pos: &[usize]) -> Vec<usize> {
+    pub fn get_legal(&self, pos: &[usize]) -> Move {
         if self.board.check() != Value::None {
             return vec![];
         }
@@ -276,7 +266,7 @@ impl Game {
     }
 
     /// Returns a list of the legal moves
-    pub fn legal_moves(&self) -> Vec<Vec<usize>> {
+    pub fn legal_moves(&self) -> Vec<Move> {
         self.board
             .get(&self.legal)
             .unwrap()
@@ -284,7 +274,7 @@ impl Game {
     }
 
     /// Wrapper function
-    pub fn get_cell_from_pixel(&self, point: Vector2, no_check: bool) -> Option<Vec<usize>> {
+    pub fn get_cell_from_pixel(&self, point: Vector2, no_check: bool) -> Option<Move> {
         self.board.get_cell_from_pixel(point, no_check)
     }
 }

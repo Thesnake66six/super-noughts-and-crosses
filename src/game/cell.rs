@@ -2,8 +2,7 @@ use raylib::{drawing::RaylibDraw, math::Rectangle};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    common::get_greyed_colour_cell,
-    styles::{COLOUR_BOARD_BG, COLOUR_CELL_BG, COLOUR_CELL_HOVER, INVERT_GREYS},
+    common::*, styles::*
 };
 
 use super::{board::Board, game::Turn, legal::Legal, player::Player, value::Value};
@@ -33,7 +32,7 @@ impl Cell {
     }
 
     /// Returns the possible moves within a cell
-    pub fn moves<'a>(&'a self, pos: &'a [usize]) -> Vec<Vec<usize>> {
+    pub fn moves<'a>(&'a self, pos: &'a [usize]) -> Vec<Move> {
         match self {
             Cell::None => vec![pos.to_vec()],
             Cell::Player1 => vec![pos.to_vec()],
@@ -43,7 +42,7 @@ impl Cell {
     }
 
     /// Returns the possible legal moves within a cell
-    pub fn legal_moves<'a>(&'a self, pos: &'a [usize]) -> Vec<Vec<usize>> {
+    pub fn legal_moves<'a>(&'a self, pos: &'a [usize]) -> Vec<Move> {
         match self {
             Cell::None => vec![pos.to_vec()],
             Cell::Player1 => vec![],

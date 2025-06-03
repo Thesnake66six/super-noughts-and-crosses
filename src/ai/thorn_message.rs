@@ -1,4 +1,4 @@
-use crate::game::game::Turn;
+use crate::{common::Move, game::game::Turn};
 
 use super::{monte_carlo_settings::MonteCarloSettings, thoughts::Thoughts};
 
@@ -13,7 +13,7 @@ pub enum ThornMessage {
     Thoughts(Thoughts),
 
     /// Sends a move
-    Move(Option<Vec<usize>>),
+    Move(Option<Move>),
 
     /// Calls for the tree to be clipped
 
