@@ -12,9 +12,21 @@ pub const DEFAULT_SHOW_FPS_COUNTER: bool = false;
 /// Enables the FPS counter keybind
 pub const ALLOW_FPS_COUNTER: bool = true;
 
+/// An enum representing the possible graphvis debug levels
+#[derive(Debug, PartialEq, Eq)]
+pub enum GraphvisOutputLevel {
+    /// Prints after every recieved playout
+    Full,
+
+    /// Prints after every set of simulations
+    FinalsOnly,
+
+    /// Does not print
+    None,
+}
 /// Enables the logging of tree graphs
 // pub const OUTPUT_GRAPHVIS_FILES: bool = true;
-pub const OUTPUT_GRAPHVIS_FILES: bool = false;
+pub const OUTPUT_GRAPHVIS_FILES: GraphvisOutputLevel = GraphvisOutputLevel::FinalsOnly;
 
 /// Enables the automatic compilation of tree graphs to .svg files
 pub const AUTOCOMPILE_GRAPHVIS_FILES: bool = true;

@@ -12,7 +12,7 @@ use crate::{
         graphvis::output_graphvis_files, monte_carlo::MonteCarloManager, noughbert_message::NoughbertMessage, simulation_thread::simulation_thread, thoughts::Thoughts
     },
     game::value::Value,
-    styles::OUTPUT_GRAPHVIS_FILES,
+    styles::{GraphvisOutputLevel, OUTPUT_GRAPHVIS_FILES},
 };
 
 use super::{comms::Comms, noughbert_message::ExplorationRequest};
@@ -23,7 +23,7 @@ pub fn noughbert(main: Comms<NoughbertMessage>) {
     // let mut graphviz_prints = 0;
 
     // Clear and re-create the `./outs` folder
-    if OUTPUT_GRAPHVIS_FILES {
+    if OUTPUT_GRAPHVIS_FILES != GraphvisOutputLevel::None {
         let _ = fs::remove_dir_all("./outs");
         let _ = fs::create_dir("./outs");
     }
@@ -201,15 +201,14 @@ pub fn noughbert(main: Comms<NoughbertMessage>) {
                 threads.insert(channel_counter.wrapping_sub(2), (x2, Comms::new(rxi, txo)));
 
                 noughbert.sims_requested += 1;
-                if OUTPUT_GRAPHVIS_FILES {
-                    // output_graphvis_files(
-                    //     &noughbert.tree,
-                    //     &noughbert.g,
-                    //     &format!("Run{}Print{prints_this_run}", runs + 1),
-                    //     mc_options.exploration_factor,
-                    //     mc_options.opt_for,
-                    // );
-                    println!("Could not be printed; no wrapper for id_tree::Tree")
+                if OUTPUT_GRAPHVIS_FILES == GraphvisOutputLevel::Full {
+                    output_graphvis_files(
+                        &noughbert.tree,
+                        &noughbert.g,
+                        &format!("Run{}Print{prints_this_run}", runs + 1),
+                        mc_options.exploration_factor,
+                        mc_options.opt_for,
+                    );
                 }
             }
         }
@@ -244,15 +243,14 @@ pub fn noughbert(main: Comms<NoughbertMessage>) {
         runs += 1;
 
         // If needed, output the node `.svg` files
-        if OUTPUT_GRAPHVIS_FILES {
-            // output_graphvis_files(
-            //     &noughbert.tree,
-            //     &noughbert.g,
-            //     &format!("Run{runs}Final"),
-            //     mc_options.exploration_factor,
-            //     mc_options.opt_for,
-            // );
-            println!("Could not be printed; no wrapper for id_tree::Tree")
+        if OUTPUT_GRAPHVIS_FILES != GraphvisOutputLevel::None {
+            output_graphvis_files(
+                &noughbert.tree,
+                &noughbert.g,
+                &format!("Run{runs}Final"),
+                mc_options.exploration_factor,
+                mc_options.opt_for,
+            );
         }
     }
 }

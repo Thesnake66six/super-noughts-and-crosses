@@ -1,6 +1,6 @@
 use crate::{common::Move, game::game::Turn};
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct MonteCarloNode {
     /// The move that the node represents
     pub play: Move,
