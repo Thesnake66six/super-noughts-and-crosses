@@ -149,3 +149,5 @@ pub fn get_player_from_symbol(symbol: &Symbol) -> Player {
         Symbol::Ireland => IRELAND,
     }
 }
+
+pub type Move = Vec<usize>;
