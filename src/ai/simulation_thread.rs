@@ -30,8 +30,7 @@ pub fn simulation_thread(
                 TryRecvError::Empty => {}
                 TryRecvError::Disconnected => {
                     eprintln!(
-                        "Thread {:?}: Stopping due to disconnect from main thread",
-                        id
+                        "Thread {id:?}: Stopping due to disconnect from main thread"
                     )
                 }
             },

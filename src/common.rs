@@ -18,6 +18,8 @@ use crate::{
     },
 };
 
+pub type Move = Vec<usize>;
+
 /// Draws a draw (`Value::Draw`) into the given rectangle 'rect' onto `d`.
 pub fn draw_draw<T: RaylibDraw>(rect: Rectangle, d: &mut T) {
     // Calculating the spacing between the lines.
@@ -149,5 +151,3 @@ pub fn get_player_from_symbol(symbol: &Symbol) -> Player {
         Symbol::Ireland => IRELAND,
     }
 }
-
-pub type Move = Vec<usize>;

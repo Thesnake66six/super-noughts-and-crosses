@@ -136,8 +136,6 @@ fn main() -> Result<()> {
 
     ui.state.ai_threads = state.num_cpus;
 
-    println!("//------Look Ma, I'm a hacker now!------//");
-
     while !rl.window_should_close() {
         // Get the time it took to render the last frame
         let delta = rl.get_frame_time();

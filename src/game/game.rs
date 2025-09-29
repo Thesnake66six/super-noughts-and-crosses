@@ -10,21 +10,11 @@ use raylib::{
 
 use serde::{Deserialize, Serialize};
 
-use crate::styles::{
+use crate::{common::Move, styles::{
     BOARD_CELL_MARGIN, CAMERA_DEFAULT_ZOOM, COLOUR_BOARD_BG, COLOUR_BOARD_BG_GREYED, CROSS, THORN,
-};
+}};
 
 use super::{board::Board, cell::Cell, legal::Legal, player::Player, value::Value};
-
-pub struct Move(Vec<usize>);
-
-impl Deref for Move {
-    type Target = Vec<usize>;
-
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Turn {
@@ -67,7 +57,7 @@ pub struct Game {
     /// The number of human players
     pub players: usize,
     /// A list of all previous moves, and the legal moves that could have been made on that turn
-    pub moves: Vec<Vec<Vec<usize>>>,
+    pub moves: Vec<Vec<Move>>,
     /// The current set of legal moves
     pub legal: Vec<usize>,
     /// Cell renderer for Player 1
